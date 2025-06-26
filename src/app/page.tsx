@@ -627,6 +627,189 @@ export default function Home() {
           
         </div>
       </section>
+
+      {/* A Closer Look 区域 */}
+      <section className="w-full bg-white py-32">
+        <div className="max-w-[1440px] mx-auto px-20">
+          
+          {/* 标题 */}
+          <div className="text-center mb-20">
+            <h2 
+              style={{
+                color: 'var(--06, #000)',
+                textAlign: 'center',
+                fontFeatureSettings: '"liga" off, "clig" off',
+                fontFamily: 'var(--font-inter), Inter, sans-serif',
+                fontSize: '64px',
+                fontStyle: 'normal',
+                fontWeight: 700,
+                lineHeight: '130%',
+                letterSpacing: '-2px'
+              }}
+            >
+              A Closer Look
+            </h2>
+          </div>
+
+          {/* Mobile/Desktop 切换按钮 */}
+          <div className="flex justify-center mb-16">
+            <div 
+              style={{
+                display: 'flex',
+                padding: '4px',
+                alignItems: 'center',
+                borderRadius: '62px',
+                background: 'var(--05, #E9F6FF)',
+                boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.05), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.04), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.03), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.03), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.01)',
+                width: '368px',
+                height: '60px'
+              }}
+            >
+              <button 
+                className="rounded-full text-white font-medium transition-all duration-200"
+                style={{ 
+                  backgroundColor: '#22A0FB',
+                  width: '180px',
+                  height: '52px',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Mobile
+              </button>
+              <button 
+                className="rounded-full text-gray-600 font-medium hover:text-gray-800 transition-colors flex-1"
+                style={{
+                  height: '52px',
+                  border: 'none',
+                  background: 'transparent',
+                  cursor: 'pointer'
+                }}
+              >
+                Desktop
+              </button>
+            </div>
+          </div>
+
+          {/* 手机展示区域 */}
+          <div className="relative flex justify-center items-center" style={{ height: '800px' }}>
+            
+            {/* 背景圆形托盘 */}
+            <div className="absolute inset-0 flex justify-center items-center" style={{ transform: 'translateY(100px)' }}>
+              <Image 
+                src="/feature/feature_circle_pad.png"
+                alt="Circle background"
+                width={600}
+                height={600}
+                className="w-auto h-auto"
+                style={{ maxHeight: '600px' }}
+              />
+            </div>
+
+            {/* 手机阴影 */}
+            <div className="absolute" style={{ bottom: '50px' }}>
+              <Image 
+                src="/feature/feature_shadow.svg"
+                alt="Phone shadow"
+                width={422}
+                height={615}
+                className="w-auto h-auto opacity-30"
+              />
+            </div>
+
+            {/* 手机原型 */}
+            <div className="relative z-10">
+              <Image 
+                src="/feature/feature_iphone_mockup.png"
+                alt="iPhone mockup showing Filo app"
+                width={400}
+                height={600}
+                className="w-auto h-auto"
+                style={{ maxHeight: '600px' }}
+              />
+            </div>
+
+            {/* 功能标签 */}
+            <div className="absolute left-[230px] top-[412px]">
+              <div className="flex flex-col items-start" style={{gap: '8px'}}>
+                <Image src="/feature/feature_line2.svg" alt="line" width={300} height={1} />
+                <p 
+                  style={{
+                    color: 'var(--02, #22A0FB)',
+                    fontFeatureSettings: '"liga" off, "clig" off',
+                    fontFamily: 'Inter',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: '130%',
+                  }}
+                >
+                  Take actions
+                </p>
+              </div>
+            </div>
+
+            <div className="absolute right-[217px] top-[248px]">
+              <div className="flex flex-col items-end" style={{gap: '8px'}}>
+                <Image src="/feature/feature_line1.svg" alt="line" width={470} height={1} />
+                <p 
+                  style={{
+                    color: 'var(--02, #22A0FB)',
+                    fontFeatureSettings: '"liga" off, "clig" off',
+                    fontFamily: 'Inter',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: '130%',
+                  }}
+                >
+                  Summarize what matters
+                </p>
+              </div>
+            </div>
+
+            <div className="absolute right-[230px] top-[548px]">
+              <div className="flex flex-col items-end" style={{gap: '8px'}}>
+                <Image src="/feature/feature_line3.svg" alt="line" width={420} height={1} />
+                <p 
+                  style={{
+                    color: 'var(--02, #22A0FB)',
+                    fontFeatureSettings: '"liga" off, "clig" off',
+                    fontFamily: 'Inter',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: '130%',
+                  }}
+                >
+                  Sync to-dos
+                </p>
+              </div>
+            </div>
+
+            <div className="absolute left-[230px] top-[612px]">
+              <div className="flex flex-col items-start" style={{gap: '8px'}}>
+                <Image src="/feature/feature_line4.svg" alt="line" width={300} height={1} />
+                <p 
+                  style={{
+                    color: 'var(--02, #22A0FB)',
+                    fontFeatureSettings: '"liga" off, "clig" off',
+                    fontFamily: 'Inter',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: '130%',
+                  }}
+                >
+                  Chat with AI
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
     </div>
   );
 }
