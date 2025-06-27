@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react";
 export default function Home() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isGetFiloDropdownOpen, setIsGetFiloDropdownOpen] = useState(false);
+  const [expandedFaqs, setExpandedFaqs] = useState<Set<number>>(new Set());
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const getFiloTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -195,6 +196,19 @@ export default function Home() {
   // 处理Get Filo按钮点击
   const handleGetFiloButtonClick = () => {
     setIsGetFiloDropdownOpen(!isGetFiloDropdownOpen);
+  };
+
+  // 处理FAQ折叠展开
+  const handleFaqToggle = (index: number) => {
+    setExpandedFaqs(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -511,8 +525,16 @@ export default function Home() {
                       {/* Apple Silicon 选项 */}
                       <a 
                         href="https://download.filomail.com/mac_upgrade/versions/latest/prod/arm64/Filo-arm64.dmg" 
-                        className="block w-full hover:opacity-80 transition-opacity"
-                        style={{ alignSelf: 'stretch' }}
+                        className="block w-full transition-all duration-200"
+                        style={{ alignSelf: 'stretch', borderRadius: '12px', padding: '8px 12px' }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = 'rgba(34, 160, 251, 0.1)';
+                          e.currentTarget.style.transform = 'translateX(4px)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                          e.currentTarget.style.transform = 'translateX(0px)';
+                        }}
                       >
                         <div 
                           style={{
@@ -533,9 +555,17 @@ export default function Home() {
                       
                       {/* Intel 选项 */}
                       <a 
-                        href="#" 
-                        className="block w-full hover:opacity-80 transition-opacity"
-                        style={{ alignSelf: 'stretch' }}
+                        href="https://download.filomail.com/mac_upgrade/versions/latest/prod/x64/Filo-x64.dmg" 
+                        className="block w-full transition-all duration-200"
+                        style={{ alignSelf: 'stretch', borderRadius: '12px', padding: '8px 12px' }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = 'rgba(34, 160, 251, 0.1)';
+                          e.currentTarget.style.transform = 'translateX(4px)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                          e.currentTarget.style.transform = 'translateX(0px)';
+                        }}
                       >
                         <div 
                           style={{
@@ -585,7 +615,7 @@ export default function Home() {
                 // onMouseDown={handleUserInteraction}
                 // onTouchStart={handleUserInteraction}
               >
-                <div className="flex gap-[40px] px-4" style={{ width: 'max-content', paddingTop: '20px', paddingBottom: '120px' }}>
+                <div className="flex gap-[40px] px-4" style={{ width: 'max-content', paddingTop: '20px', paddingBottom: '80px' }}>
                   
                   {/* 卡片 1 */}
                   <div 
@@ -901,7 +931,7 @@ export default function Home() {
         </section>
 
         {/* A Closer Look 区域 */}
-        <section className="w-full bg-white py-32">
+        <section className="w-full bg-white py-24">
           <div className="max-w-[1440px] mx-auto px-20">
             
             {/* 标题 */}
@@ -1152,7 +1182,7 @@ export default function Home() {
           data-section="email-task"
           style={{
             width: '100%',
-            padding: '160px 0px 240px 0px',
+            padding: '120px 0px 160px 0px',
             background: 'var(--09, #FCFAFA)',
             display: 'flex',
             justifyContent: 'center'
@@ -1164,7 +1194,7 @@ export default function Home() {
               width: '1440px',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '160px'
+              gap: '120px'
             }}
           >
             {/* 主标题 */}
@@ -1341,7 +1371,7 @@ export default function Home() {
             paddingBottom: '0px',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '160px',
+            gap: '120px',
             background: 'var(--09, #FCFAFA)'
           }}
         >
@@ -1587,8 +1617,8 @@ export default function Home() {
           style={{
             display: 'flex',
             width: '100%',
-            paddingTop: '160px',
-            paddingBottom: '240px',
+            paddingTop: '120px',
+            paddingBottom: '160px',
             flexDirection: 'column',
             alignItems: 'center',
             gap: '80px',
@@ -1803,7 +1833,7 @@ export default function Home() {
                       alignItems: 'flex-start',
                       background: 'transparent',
                       minWidth: '300px',
-                      paddingLeft: '22px' // 与按钮内文字对齐
+                      paddingLeft: '14px' // 向左移动8像素 (22px - 8px = 14px)
                     }}
                   >
                     {/* 左侧引导线 */}
@@ -1821,11 +1851,21 @@ export default function Home() {
                     {/* Download for iOS */}
                     <a 
                       href="https://apple.co/43FINlq" 
-                      className="block hover:opacity-70 transition-opacity dropdown-item-animate dropdown-item-delay-1"
+                      className="block transition-all duration-200 dropdown-item-animate dropdown-item-delay-1"
                       style={{ 
                         textDecoration: 'none',
-                        marginBottom: '20px',
-                        whiteSpace: 'nowrap'
+                        marginBottom: '0px',
+                        whiteSpace: 'nowrap',
+                        borderRadius: '8px',
+                        padding: '11px 10px'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.08)';
+                        e.currentTarget.style.transform = 'translateX(4px)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.transform = 'translateX(0px)';
                       }}
                     >
                       <div 
@@ -1846,11 +1886,21 @@ export default function Home() {
                     {/* Download for macOS (Apple Silicon) */}
                     <a 
                       href="https://download.filomail.com/mac_upgrade/versions/latest/prod/arm64/Filo-arm64.dmg" 
-                      className="block hover:opacity-70 transition-opacity dropdown-item-animate dropdown-item-delay-2"
+                      className="block transition-all duration-200 dropdown-item-animate dropdown-item-delay-2"
                       style={{ 
                         textDecoration: 'none',
-                        marginBottom: '20px',
-                        whiteSpace: 'nowrap'
+                        marginBottom: '0px',
+                        whiteSpace: 'nowrap',
+                        borderRadius: '8px',
+                        padding: '11px 10px'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.08)';
+                        e.currentTarget.style.transform = 'translateX(4px)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.transform = 'translateX(0px)';
                       }}
                     >
                       <div 
@@ -1870,11 +1920,21 @@ export default function Home() {
                     
                     {/* Download for macOS (Intel) */}
                     <a 
-                      href="#" 
-                      className="block hover:opacity-70 transition-opacity dropdown-item-animate dropdown-item-delay-3"
+                      href="https://download.filomail.com/mac_upgrade/versions/latest/prod/x64/Filo-x64.dmg" 
+                      className="block transition-all duration-200 dropdown-item-animate dropdown-item-delay-3"
                       style={{ 
                         textDecoration: 'none',
-                        whiteSpace: 'nowrap'
+                        whiteSpace: 'nowrap',
+                        borderRadius: '8px',
+                        padding: '11px 10px'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.08)';
+                        e.currentTarget.style.transform = 'translateX(4px)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.transform = 'translateX(0px)';
                       }}
                     >
                       <div 
@@ -1935,6 +1995,420 @@ export default function Home() {
                   alt="Claude"
                   width={220}
                   height={48}
+                  className="w-auto h-auto"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 隐私安全区域 */}
+        <div 
+          className={`scroll-animate ${visibleSections.has('privacy') ? 'visible' : ''}`}
+          data-section="privacy"
+          style={{
+            width: '100%',
+            height: '700px',
+            background: '#F4ECE2',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <div 
+            style={{
+              display: 'flex',
+              width: '100%',
+              maxWidth: '1200px',
+              height: '100%',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '120px',
+              padding: '0 60px'
+            }}
+          >
+            {/* 左侧储物柜图片 */}
+            <div
+              style={{
+                flex: '1',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Image 
+                src="/icons/ui/ui_locker_image.png"
+                alt="Secure storage lockers"
+                width={491}
+                height={364}
+                className="w-auto h-auto"
+                style={{ 
+                  width: '491px',
+                  height: '364px',
+                  objectFit: 'cover',
+                  borderRadius: '30px',
+                  background: 'url(/icons/ui/ui_locker_image.png) lightgray -61px 0px / 112.424% 101.099% no-repeat, #D9D9D9'
+                }}
+              />
+            </div>
+
+            {/* 右侧文字内容 */}
+            <div 
+              style={{
+                flex: '1',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '40px'
+              }}
+            >
+              {/* 大标题 */}
+              <h2 
+                style={{
+                  color: 'var(--06, #000)',
+                  textAlign: 'center',
+                  fontFamily: 'Inter',
+                  fontSize: '80px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '120%',
+                  letterSpacing: '-2.4px',
+                  margin: 0
+                }}
+              >
+                No peeking,<br />promise
+              </h2>
+
+              {/* 中间 tagline */}
+              <p 
+                style={{
+                  width: '380px',
+                  color: '#9B601A',
+                  textAlign: 'center',
+                  fontFeatureSettings: '"liga" off, "clig" off',
+                  fontFamily: 'Georgia',
+                  fontSize: '20px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: '150%',
+                  letterSpacing: '1px',
+                  margin: 0
+                }}
+              >
+                Your privacy matters to us just as much as it does to you.
+              </p>
+
+              {/* 第三段文字 */}
+              <p 
+                style={{
+                  width: '520px',
+                  color: 'var(--07, #707070)',
+                  textAlign: 'center',
+                  fontFeatureSettings: '"liga" off, "clig" off',
+                  fontFamily: 'Inter',
+                  fontSize: '18px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: '150%',
+                  margin: 0
+                }}
+              >
+                Filo is <a 
+                  href="https://appdefensealliance.dev/casa" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{
+                    color: 'var(--07, #707070)',
+                    textDecoration: 'underline',
+                    fontFeatureSettings: '"liga" off, "clig" off',
+                    fontFamily: 'Inter',
+                    fontSize: '18px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '150%'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '0.7';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '1';
+                  }}
+                >CASA Tier 3-verified</a>, meeting world-class security standards. Your emails are only processed to support smart features — never shared or used to train external AI.
+              </p>
+
+              {/* See Our Data Promise 按钮 */}
+              <button 
+                onClick={() => {
+                  // 目前只有点击效果，后续添加页面跳转
+                  console.log('See Our Data Promise clicked');
+                }}
+                style={{
+                  display: 'flex',
+                  padding: '8px 22px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '10px',
+                  borderRadius: '100px',
+                  border: '0.5px solid var(--06, #000)',
+                  background: 'transparent',
+                  color: 'var(--06, #000)',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--06, #000)';
+                  e.currentTarget.style.color = 'white';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.color = 'var(--06, #000)';
+                }}
+              >
+                <span
+                  style={{
+                    color: 'inherit',
+                    fontFeatureSettings: '"liga" off, "clig" off',
+                    fontFamily: 'Inter',
+                    fontSize: '18px',
+                    fontStyle: 'normal',
+                    fontWeight: 500,
+                    lineHeight: '150%'
+                  }}
+                >
+                  See Our Data Promise
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* FAQ 区域 */}
+        <div 
+          className={`scroll-animate ${visibleSections.has('faq') ? 'visible' : ''}`}
+          data-section="faq"
+          style={{
+            width: '100%',
+            background: '#000',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '80px 60px'
+          }}
+        >
+          <div 
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '80px',
+              width: '100%',
+              maxWidth: '1000px'
+            }}
+          >
+            {/* FAQ 标题 */}
+            <h2 
+              style={{
+                color: '#FFF',
+                textAlign: 'center',
+                fontFamily: 'Inter',
+                fontSize: '80px',
+                fontStyle: 'normal',
+                fontWeight: 700,
+                lineHeight: '120%',
+                letterSpacing: '-3px',
+                margin: 0
+              }}
+            >
+              Questions?
+            </h2>
+
+            {/* FAQ 列表 */}
+            <div 
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                width: '100%',
+                gap: '1px'
+              }}
+            >
+              {[
+                {
+                  question: "How does Filo work?",
+                  answer: "Just tell Filo what you need—like \"Help me remove all marketing emails to the trash\"—and it takes care of the rest. No coding, no fuss."
+                },
+                {
+                  question: "What kinds of tasks can I ask Filo to perform?",
+                  answer: "Filo can help you clean up unwanted emails, sort your inbox, schedule tasks, and more. We're continuously adding new features based on your feedback."
+                },
+                {
+                  question: "Is my data secure with Filo?",
+                  answer: "We don't store any user data anywhere. All email service information is provided by Google, so if you trust Gmail's security, then you can trust Filo too. You can learn how we protect your data here."
+                },
+                {
+                  question: "How can I share feedback?",
+                  answer: "We'd love to hear from you! Join our Discord server and drop your suggestions or bug reports in #📩｜feedback. Need help? Head over to #🛠｜support—our team's there for you."
+                }
+              ].map((faq, index) => (
+                <div 
+                  key={index}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  {/* 问题按钮 */}
+                  <button
+                    onClick={() => handleFaqToggle(index)}
+                    style={{
+                      width: '100%',
+                      padding: '30px',
+                      background: 'transparent',
+                      border: 'none',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: '#FFF',
+                        textAlign: 'center',
+                        fontFamily: 'Inter',
+                        fontSize: '24px',
+                        fontStyle: 'normal',
+                        fontWeight: 600,
+                        lineHeight: '130%',
+                        flex: 1
+                      }}
+                    >
+                      {faq.question}
+                    </span>
+                    
+                    {/* 展开/收起图标 */}
+                    <svg 
+                      width="24" 
+                      height="24" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{
+                        transform: expandedFaqs.has(index) ? 'rotate(90deg)' : 'rotate(0deg)',
+                        transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                        flexShrink: 0,
+                        marginLeft: '20px'
+                      }}
+                    >
+                      <path 
+                        d="M15 18L9 12L15 6" 
+                        stroke="#FFF" 
+                        strokeWidth="2" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+
+                  {/* 答案内容 */}
+                  <div
+                    style={{
+                      maxHeight: expandedFaqs.has(index) ? '500px' : '0px',
+                      opacity: expandedFaqs.has(index) ? 1 : 0,
+                      overflow: 'hidden',
+                      transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                  >
+                    <div 
+                      style={{
+                        padding: '0 30px 30px 30px',
+                        color: '#CCC',
+                        fontFamily: 'Inter',
+                        fontSize: '18px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '150%'
+                      }}
+                    >
+                      {faq.answer}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* 底部图像区域 */}
+        <div className="bg-white pt-60 pb-16">
+          <div className="max-w-[1200px] mx-auto px-8">
+            {/* 标题 */}
+            <h2 
+              className="text-center mb-12"
+              style={{
+                color: 'var(--06, #000)',
+                textAlign: 'center',
+                fontFeatureSettings: '"liga" off, "clig" off',
+                fontFamily: 'Inter',
+                fontSize: '80px',
+                fontStyle: 'normal',
+                fontWeight: 700,
+                lineHeight: '130%',
+                letterSpacing: '-3px'
+              }}
+            >
+              The Start of Filo
+            </h2>
+            
+            {/* 中间文本 */}
+            <div className="flex justify-center mb-20">
+              <p 
+                className="text-center"
+                style={{
+                  width: '420px',
+                  color: 'var(--07, #707070)',
+                  textAlign: 'center',
+                  fontFeatureSettings: '"liga" off, "clig" off',
+                  fontFamily: 'Inter',
+                  fontSize: '18px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: '150%'
+                }}
+              >
+                We're not backed by Silicon Valley fame, no keynote stages, no hype cycles — just a small team who loves crafting digital tools that make life a bit easier. When AI took off, we saw a chance to build something simpler, smarter, and more human. That's why we made Filo: not to disrupt the world, just to make email suck less.
+              </p>
+            </div>
+            
+            {/* 图像区域 */}
+            <div className="flex justify-between items-center">
+              {/* 左侧植物图 */}
+              <div className="flex-shrink-0">
+                <Image 
+                  src="/icons/ui/ui_illustration_plant.svg" 
+                  alt="Plant illustration" 
+                  width={226}
+                  height={351}
+                  className="w-auto h-auto"
+                />
+              </div>
+              
+              {/* 右侧办公室图 */}
+              <div className="flex-shrink-0">
+                <Image 
+                  src="/icons/ui/ui_illustration_office.svg" 
+                  alt="Office illustration" 
+                  width={688}
+                  height={272}
                   className="w-auto h-auto"
                 />
               </div>
