@@ -6,9 +6,11 @@ import { useState, useRef, useEffect } from "react";
 export default function Home() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isGetFiloDropdownOpen, setIsGetFiloDropdownOpen] = useState(false);
+  const [isBottomCtaDropdownOpen, setIsBottomCtaDropdownOpen] = useState(false);
   const [expandedFaqs, setExpandedFaqs] = useState<Set<number>>(new Set());
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const getFiloTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const bottomCtaTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
   const lastInteractionRef = useRef<number>(Date.now());
@@ -209,6 +211,27 @@ export default function Home() {
       }
       return newSet;
     });
+  };
+
+  // 处理底部CTA按钮鼠标进入
+  const handleBottomCtaMouseEnter = () => {
+    if (bottomCtaTimeoutRef.current) {
+      clearTimeout(bottomCtaTimeoutRef.current);
+      bottomCtaTimeoutRef.current = null;
+    }
+    setIsBottomCtaDropdownOpen(true);
+  };
+
+  // 处理底部CTA按钮鼠标离开
+  const handleBottomCtaMouseLeave = () => {
+    bottomCtaTimeoutRef.current = setTimeout(() => {
+      setIsBottomCtaDropdownOpen(false);
+    }, 100); // 100ms 延迟，给用户时间移动到下拉菜单
+  };
+
+  // 处理底部CTA按钮点击
+  const handleBottomCtaButtonClick = () => {
+    setIsBottomCtaDropdownOpen(!isBottomCtaDropdownOpen);
   };
 
   return (
@@ -2303,7 +2326,7 @@ export default function Home() {
                       fill="none" 
                       xmlns="http://www.w3.org/2000/svg"
                       style={{
-                        transform: expandedFaqs.has(index) ? 'rotate(90deg)' : 'rotate(0deg)',
+                        transform: expandedFaqs.has(index) ? 'rotate(-90deg)' : 'rotate(0deg)',
                         transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
                         flexShrink: 0,
                         marginLeft: '20px'
@@ -2349,7 +2372,7 @@ export default function Home() {
         </div>
 
         {/* 底部图像区域 */}
-        <div className="bg-white pt-60 pb-16">
+        <div className="bg-white pt-60" style={{ paddingBottom: '40px' }}>
           <div className="max-w-[1200px] mx-auto px-8">
             {/* 标题 */}
             <h2 
@@ -2390,28 +2413,415 @@ export default function Home() {
             </div>
             
             {/* 图像区域 */}
-            <div className="flex justify-between items-center">
-              {/* 左侧植物图 */}
-              <div className="flex-shrink-0">
-                <Image 
-                  src="/icons/ui/ui_illustration_plant.svg" 
-                  alt="Plant illustration" 
-                  width={226}
-                  height={351}
-                  className="w-auto h-auto"
-                />
+            <div className="relative">
+              <div className="flex justify-between items-start">
+                {/* 左侧植物图 */}
+                <div className="flex-shrink-0 relative z-30" style={{ marginTop: '-65px' }}>
+                  <Image 
+                    src="/icons/ui/ui_illustration_plant.svg" 
+                    alt="Plant illustration" 
+                    width={226}
+                    height={351}
+                    className="w-auto h-auto"
+                  />
+                </div>
+                
+                {/* 右侧办公室图 */}
+                <div className="flex-shrink-0 relative z-30" style={{ marginTop: '99px' }}>
+                  <Image 
+                    src="/icons/ui/ui_illustration_office.svg" 
+                    alt="Office illustration" 
+                    width={688}
+                    height={272}
+                    className="w-auto h-auto"
+                  />
+                </div>
               </div>
               
-              {/* 右侧办公室图 */}
-              <div className="flex-shrink-0">
+              {/* 第一个蓝色矩形 - 在图片下方 */}
+              <div 
+                style={{
+                  position: 'absolute',
+                  bottom: '-40px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: '100vw',
+                  height: '182px',
+                  background: '#E9F6FF',
+                  zIndex: 1
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* 最底部蓝色区域 */}
+        <div 
+          style={{
+            width: '100%',
+            height: 'auto',
+            minHeight: '300px',
+            background: '#E9F6FF',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            padding: '80px 20px 20px 20px',
+            position: 'relative',
+            zIndex: 1,
+            marginTop: '-80px'
+          }}
+        >
+                    <div className="max-w-[1280px] mx-auto w-full">
+            <h2 
+              style={{
+                alignSelf: 'stretch',
+                color: 'var(--06, #000)',
+                fontFamily: 'Inter',
+                fontSize: '50px',
+                fontStyle: 'normal',
+                fontWeight: 600,
+                lineHeight: '130%',
+                letterSpacing: '-2px',
+                margin: '0 0 30px 0',
+                textAlign: 'left'
+              }}
+            >
+              Inbox to Done
+            </h2>
+            
+            <div className="flex gap-[30px] items-start">
+              {/* App Store 按钮 */}
+              <a 
+                href="https://apple.co/43FINlq" 
+                className="inline-block transition-all duration-300 hover:brightness-110"
+                style={{
+                  width: '133px',
+                  height: '53px',
+                  borderRadius: '16px',
+                  border: '1.5px solid var(--14, rgba(0, 0, 0, 0.04))',
+                  background: 'var(--02, #22A0FB)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '0 24px'
+                }}
+              >
+                <div style={{ 
+                  width: '105px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <span style={{ 
+                    color: 'var(--10, #FFF)',
+                    fontFamily: 'Inter',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: 600,
+                    lineHeight: '130%',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    Filo for iOS
+                  </span>
+                </div>
+              </a>
+              
+              {/* macOS 按钮带下拉菜单 */}
+              <div 
+                className="relative"
+                onMouseEnter={handleBottomCtaMouseEnter}
+                onMouseLeave={handleBottomCtaMouseLeave}
+              >
+                <button 
+                  onClick={handleBottomCtaButtonClick}
+                  className="transition-all duration-300 hover:brightness-110"
+                  style={{
+                    width: '161px',
+                    height: '53px',
+                    borderRadius: '16px',
+                    border: '1.5px solid var(--14, rgba(0, 0, 0, 0.04))',
+                    background: 'var(--02, #22A0FB)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '0 24px'
+                  }}
+                >
+                  <div style={{ 
+                    width: '133px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <span style={{
+                      color: 'var(--10, #FFF)',
+                      fontFamily: 'Inter',
+                      fontSize: '16px',
+                      fontStyle: 'normal',
+                      fontWeight: 600,
+                      lineHeight: '130%',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      Filo for macOS
+                    </span>
+                  </div>
+                </button>
+                
+                {/* Dropdown 菜单 */}
+                {isBottomCtaDropdownOpen && (
+                  <div 
+                    className="absolute top-full left-0 mt-2 z-30 dropdown-animate"
+                    style={{
+                      width: '161px',
+                      display: 'flex',
+                      padding: '16px',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      gap: '12px',
+                      alignSelf: 'stretch',
+                      borderRadius: '12px',
+                      background: '#FFFFFF',
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)'
+                    }}
+                  >
+                    {/* Apple Silicon 选项 */}
+                    <a 
+                      href="https://download.filomail.com/mac_upgrade/versions/latest/prod/arm64/Filo-arm64.dmg" 
+                      className="block w-full transition-all duration-200 dropdown-item-animate dropdown-item-delay-1"
+                      style={{ alignSelf: 'stretch', borderRadius: '6px', padding: '6px 8px' }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(34, 160, 251, 0.1)';
+                        e.currentTarget.style.transform = 'translateX(2px)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.transform = 'translateX(0px)';
+                      }}
+                    >
+                      <div 
+                        style={{
+                          alignSelf: 'stretch',
+                          textAlign: 'left',
+                          color: '#22A0FB',
+                          fontFeatureSettings: '"liga" off, "clig" off',
+                          fontFamily: 'var(--font-inter), Inter, sans-serif',
+                          fontSize: '14px',
+                          fontStyle: 'normal',
+                          fontWeight: 600,
+                          lineHeight: '130%'
+                        }}
+                      >
+                        Apple Silicon
+                      </div>
+                    </a>
+                    
+                    {/* Intel 选项 */}
+                    <a 
+                      href="https://download.filomail.com/mac_upgrade/versions/latest/prod/x64/Filo-x64.dmg" 
+                      className="block w-full transition-all duration-200 dropdown-item-animate dropdown-item-delay-2"
+                      style={{ alignSelf: 'stretch', borderRadius: '6px', padding: '6px 8px' }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(34, 160, 251, 0.1)';
+                        e.currentTarget.style.transform = 'translateX(2px)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.transform = 'translateX(0px)';
+                      }}
+                    >
+                      <div 
+                        style={{
+                          alignSelf: 'stretch',
+                          textAlign: 'left',
+                          color: '#22A0FB',
+                          fontFeatureSettings: '"liga" off, "clig" off',
+                          fontFamily: 'var(--font-inter), Inter, sans-serif',
+                          fontSize: '14px',
+                          fontStyle: 'normal',
+                          fontWeight: 600,
+                          lineHeight: '130%'
+                        }}
+                      >
+                        Intel
+                      </div>
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+        {/* 分割线 */}
+        <div 
+          style={{
+            width: '100%',
+            background: '#E9F6FF',
+            display: 'flex',
+            justifyContent: 'center',
+            padding: '0 20px'
+          }}
+        >
+          <div 
+            style={{
+              width: '1280px',
+              height: '0.5px',
+              background: 'var(--06, #000)',
+              alignSelf: 'stretch'
+            }}
+          />
+        </div>
+
+        {/* 页脚区域 */}
+        <div 
+          style={{
+            width: '100%',
+            background: '#E9F6FF',
+            padding: '20px 20px 40px 20px'
+          }}
+        >
+          <div className="max-w-[1280px] mx-auto w-full flex justify-between items-center">
+            {/* 左侧链接 */}
+            <div className="flex items-center" style={{ gap: '24px' }}>
+              <a 
+                href="#" 
+                style={{
+                  color: 'var(--06, #000)',
+                  fontFamily: 'Inter',
+                  fontSize: '13px',
+                  fontStyle: 'normal',
+                  fontWeight: 500,
+                  lineHeight: '130%',
+                  letterSpacing: '-0.3px',
+                  textDecoration: 'none',
+                  transition: 'opacity 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '0.7';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '1';
+                }}
+              >
+                Terms of Service
+              </a>
+              <a 
+                href="#" 
+                style={{
+                  color: 'var(--06, #000)',
+                  fontFamily: 'Inter',
+                  fontSize: '13px',
+                  fontStyle: 'normal',
+                  fontWeight: 500,
+                  lineHeight: '130%',
+                  letterSpacing: '-0.3px',
+                  textDecoration: 'none',
+                  transition: 'opacity 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '0.7';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '1';
+                }}
+              >
+                Privacy Policy
+              </a>
+              <a 
+                href="#" 
+                style={{
+                  color: 'var(--06, #000)',
+                  fontFamily: 'Inter',
+                  fontSize: '13px',
+                  fontStyle: 'normal',
+                  fontWeight: 500,
+                  lineHeight: '130%',
+                  letterSpacing: '-0.3px',
+                  textDecoration: 'none',
+                  transition: 'opacity 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '0.7';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '1';
+                }}
+              >
+                User Data
+              </a>
+              <span style={{
+                color: 'var(--07, #707070)',
+                fontFamily: 'Inter',
+                fontSize: '13px',
+                fontStyle: 'normal',
+                fontWeight: 500,
+                lineHeight: '130%',
+                letterSpacing: '-0.3px'
+              }}>
+                © 2025 Filo AI
+              </span>
+            </div>
+
+            {/* 右侧社交媒体图标 */}
+            <div className="flex items-center" style={{ gap: '30px' }}>
+              <a 
+                href="https://discord.gg/filo-mail" 
+                className="transition-all duration-300 hover:scale-110"
+                style={{
+                  width: '32px',
+                  height: '33px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
                 <Image 
-                  src="/icons/ui/ui_illustration_office.svg" 
-                  alt="Office illustration" 
-                  width={688}
-                  height={272}
+                  src="/icons/brand/brand_discord_icon.svg"
+                  alt="Discord"
+                  width={32}
+                  height={33}
                   className="w-auto h-auto"
                 />
-              </div>
+              </a>
+              <a 
+                href="https://x.com/Filo_Mail" 
+                className="transition-all duration-300 hover:scale-110"
+                style={{
+                  width: '32px',
+                  height: '33px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <Image 
+                  src="/icons/brand/brand_x_icon.svg"
+                  alt="X (Twitter)"
+                  width={32}
+                  height={33}
+                  className="w-auto h-auto"
+                />
+              </a>
+              <a 
+                href="https://feedback.filomail.com/" 
+                className="transition-all duration-300 hover:scale-110"
+                style={{
+                  width: '32px',
+                  height: '33px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M28 9.5C28 5.91015 25.0899 3 21.5 3H10.5C6.91015 3 4 5.91015 4 9.5V17.5C4 21.0899 6.91015 24 10.5 24H12V28.5C12 28.8978 12.158 29.2794 12.4393 29.5607C12.7206 29.842 13.1022 30 13.5 30C13.7652 30 14.0196 29.8946 14.2071 29.7071L19.7071 24.2071C19.8946 24.0196 20 23.7652 20 23.5C20 23.2348 19.8946 22.9804 19.7071 22.7929C19.5196 22.6054 19.2652 22.5 19 22.5H10.5C7.73858 22.5 5.5 20.2614 5.5 17.5V9.5C5.5 6.73858 7.73858 4.5 10.5 4.5H21.5C24.2614 4.5 26.5 6.73858 26.5 9.5V17.5C26.5 20.2614 24.2614 22.5 21.5 22.5H19C18.5858 22.5 18.25 22.8358 18.25 23.25C18.25 23.6642 18.5858 24 19 24H21.5C25.0899 24 28 21.0899 28 17.5V9.5Z" fill="black"/>
+                  <circle cx="11" cy="13.5" r="1.5" fill="black"/>
+                  <circle cx="16" cy="13.5" r="1.5" fill="black"/>
+                  <circle cx="21" cy="13.5" r="1.5" fill="black"/>
+                </svg>
+              </a>
             </div>
           </div>
         </div>
