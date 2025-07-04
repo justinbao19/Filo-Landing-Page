@@ -1,6 +1,19 @@
 {
     "home": {
         "title": "Filo",
-        "description": "Filo is a platform for creating and sharing AI-powered content."
+        "description": "Filo is a platform for creating and sharing AI-powered content.",
+        "slogan": "Inbox to Done",
+        "sloganDescription": "Turn overwhelming emails into crystal-clear summaries, quick replies and AI-generated to-dos in one sec.",
+        "inputScrollText1": "More casual but still respectful",
+        "inputScrollText2": "Split into two 3 paragraphs",
+        "inputScrollText3": "Add a quick thanks for checking in",
+        "inputScrollText4": "Mention I'll send the photos by Sunday",
+        "appleSilicon": "Apple Silicon",
+        "Intel": "Intel",
+        "understandItAll": "Understand It All",
+        "promoCondensed": "Promo, Condensed",
+        "whatDoISay": "What do I say?",
+        "bossBombDefused": "Boss Bomb Defused",
+        "goodbyeAutoBill": "Goodbye Auto-Bill"
     }
 }
