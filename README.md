@@ -185,7 +185,7 @@ import Image from "next/image";
 - 使用TypeScript严格模式
 - 遵循ESLint配置
 - 组件使用函数式写法
-- 样式优先使用Tailwind CSS
+- 样式优先使用Tailwind CSS.
 
 ### 性能优化
 
