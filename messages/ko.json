@@ -1,0 +1,19 @@
+{
+    "home": {
+        "title": "Filo",
+        "description": "Filo는 AI 기반 콘텐츠를 만들고 공유하기 위한 플랫폼입니다.",
+        "slogan": "받은 편지함에서 완료까지",
+        "sloganDescription": "압도적인 이메일을 1초 만에 명확한 요약, 빠른 답장, AI 생성 할 일로 변환하세요.",
+        "inputScrollText1": "더 캐주얼하지만 여전히 존중하는",
+        "inputScrollText2": "3개씩 두 단락으로 나누기",
+        "inputScrollText3": "안부 확인에 대한 빠른 감사 인사 추가",
+        "inputScrollText4": "일요일에 사진을 보낸다고 언급",
+        "appleSilicon": "Apple Silicon",
+        "Intel": "Intel",
+        "understandItAll": "모든 것을 이해",
+        "promoCondensed": "프로모, 압축",
+        "whatDoISay": "뭐라고 말하지?",
+        "bossBombDefused": "보스 폭탄 해제",
+        "goodbyeAutoBill": "자동 청구 안녕"
+    }
+} 

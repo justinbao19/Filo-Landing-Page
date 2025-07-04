@@ -1,0 +1,19 @@
+{
+    "home": {
+        "title": "Filo",
+        "description": "Filo是一个用于创建和分享AI驱动内容的平台。",
+        "slogan": "收件箱到完成",
+        "sloganDescription": "将令人不知所措的邮件转化为清晰的摘要、快速回复和AI生成的待办事项，只需一秒。",
+        "inputScrollText1": "更随意但仍然尊重",
+        "inputScrollText2": "分成两个3段",
+        "inputScrollText3": "添加一个快速的感谢问候",
+        "inputScrollText4": "提到我会在周日发送照片",
+        "appleSilicon": "Apple Silicon",
+        "Intel": "Intel",
+        "understandItAll": "理解一切",
+        "promoCondensed": "促销，浓缩版",
+        "whatDoISay": "我该说什么？",
+        "bossBombDefused": "老板炸弹已拆除",
+        "goodbyeAutoBill": "再见自动账单"
+    }
+} 

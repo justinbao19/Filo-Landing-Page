@@ -1,0 +1,19 @@
+{
+    "home": {
+        "title": "Filo",
+        "description": "Filo è una piattaforma per creare e condividere contenuti alimentati dall'IA.",
+        "slogan": "Dalla casella di posta al completamento",
+        "sloganDescription": "Trasforma email travolgenti in riassunti cristallini, risposte rapide e attività generate dall'IA in un secondo.",
+        "inputScrollText1": "Più casual ma sempre rispettoso",
+        "inputScrollText2": "Dividere in due paragrafi di 3",
+        "inputScrollText3": "Aggiungere un rapido grazie per aver controllato",
+        "inputScrollText4": "Menzionare che invierò le foto domenica",
+        "appleSilicon": "Apple Silicon",
+        "Intel": "Intel",
+        "understandItAll": "Capire tutto",
+        "promoCondensed": "Promo, condensato",
+        "whatDoISay": "Cosa dico?",
+        "bossBombDefused": "Bomba del capo disinnescata",
+        "goodbyeAutoBill": "Addio fatturazione automatica"
+    }
+} 

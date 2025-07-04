@@ -1,0 +1,19 @@
+{
+    "home": {
+        "title": "Filo",
+        "description": "Filo ist eine Plattform zum Erstellen und Teilen von KI-gestützten Inhalten.",
+        "slogan": "Vom Posteingang zur Erledigung",
+        "sloganDescription": "Verwandeln Sie überwältigende E-Mails in kristallklare Zusammenfassungen, schnelle Antworten und KI-generierte Aufgaben in einer Sekunde.",
+        "inputScrollText1": "Lässiger aber immer noch respektvoll",
+        "inputScrollText2": "In zwei 3-Absätze aufteilen",
+        "inputScrollText3": "Schnelles Dankeschön für das Nachfragen hinzufügen",
+        "inputScrollText4": "Erwähnen, dass ich die Fotos am Sonntag sende",
+        "appleSilicon": "Apple Silicon",
+        "Intel": "Intel",
+        "understandItAll": "Alles verstehen",
+        "promoCondensed": "Promo, komprimiert",
+        "whatDoISay": "Was sage ich?",
+        "bossBombDefused": "Chef-Bombe entschärft",
+        "goodbyeAutoBill": "Auf Wiedersehen automatische Abrechnung"
+    }
+} 
