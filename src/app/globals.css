@@ -3,6 +3,13 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Rainbow Button Colors */
+  --color-1: 0 100% 63%;
+  --color-2: 270 100% 63%;
+  --color-3: 210 100% 63%;
+  --color-4: 195 100% 63%;
+  --color-5: 90 100% 63%;
 }
 
 @theme inline {
@@ -10,6 +17,22 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Rainbow Button Theme Colors */
+  --color-color-1: hsl(var(--color-1));
+  --color-color-2: hsl(var(--color-2));
+  --color-color-3: hsl(var(--color-3));
+  --color-color-4: hsl(var(--color-4));
+  --color-color-5: hsl(var(--color-5));
+  
+  /* Primary foreground for button text */
+  --color-primary-foreground: #ffffff;
+  
+  /* Ring color for focus */
+  --color-ring: hsl(var(--color-1));
+  
+  /* Rainbow Animation */
+  --animate-rainbow: rainbow var(--speed, 2s) infinite linear;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -39,4 +62,165 @@ body {
 /* 优化触摸滚动 */
 .scrollbar-hide {
   -webkit-overflow-scrolling: touch;
+}
+
+/* 无限滚动样式 */
+.scroll-container {
+  width: 200%;
+  display: flex;
+  animation: infiniteScroll 60s linear infinite;
+}
+
+.scroll-container:hover {
+  animation-play-state: paused;
+}
+
+.scroll-content {
+  width: 50%;
+  flex-shrink: 0;
+}
+
+@keyframes infiniteScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* 其他样式 */
+
+/* Sample Cards Auto-Scroll Animation */
+.sample-cards-scroll {
+  animation: sampleCardsAutoScroll 60s linear infinite;
+  width: max-content;
+}
+
+.sample-cards-scroll:hover {
+  animation-play-state: paused;
+}
+
+@keyframes sampleCardsAutoScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-3200px); /* 5 cards × 600px + 4 gaps × 40px + extra spacing */
+  }
+  }
+
+/* A Closer Look Mobile section line animations */
+.feature-line {
+  transform: scaleX(0);
+  transition: all 0.8s ease-out;
+}
+
+.feature-line.animate {
+  transform: scaleX(1);
+}
+
+.feature-line-1 {
+  animation-delay: 0.2s;
+  transform-origin: right center; /* Take actions: right to left */
+}
+
+.feature-line-2 {
+  animation-delay: 0.6s;
+  transform-origin: left center; /* Summarize what matters: left to right */
+}
+
+.feature-line-3 {
+  animation-delay: 1.0s;
+  transform-origin: left center; /* Sync to-dos: left to right */
+}
+
+.feature-line-4 {
+  animation-delay: 1.4s;
+  transform-origin: right center; /* Chat with AI: right to left */
+}
+
+.feature-line.animate-sequence {
+  animation: expandLine 0.8s ease-out forwards;
+}
+
+@keyframes expandLine {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+/* Popup scale-in animation */
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.popup-scale-in {
+  animation: scaleIn 0.6s ease-out forwards;
+}
+
+/* Floating animation */
+@keyframes floating {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.floating {
+  animation: floating 3s ease-in-out infinite;
+}
+
+.floating-1 {
+  animation: floating 3s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.floating-2 {
+  animation: floating 3.5s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.floating-3 {
+  animation: floating 4s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.floating-4 {
+  animation: floating 3.2s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+/* Popup interaction states */
+.popup-dimmed {
+  animation-play-state: paused;
+}
+
+.popup-normal {
+  animation-play-state: running;
+}
+
+/* Rainbow Button Animation */
+@keyframes rainbow {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 200%;
+  }
 }

@@ -1,21 +1,24 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 
 export default function Home() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isGetFiloDropdownOpen, setIsGetFiloDropdownOpen] = useState(false);
-  const [isBottomCtaDropdownOpen, setIsBottomCtaDropdownOpen] = useState(false);
-  const [expandedFaqs, setExpandedFaqs] = useState<Set<number>>(new Set());
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('English');
+  const [isGetFiloTodayHovered, setIsGetFiloTodayHovered] = useState(false);
+
+    const [expandedFaqs, setExpandedFaqs] = useState<Set<number>>(new Set());
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const getFiloTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const bottomCtaTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<number | null>(null);
-  const lastInteractionRef = useRef<number>(Date.now());
-  const [isUserInteracting, setIsUserInteracting] = useState(false);
-  const [isAutoScrollEnabled, setIsAutoScrollEnabled] = useState(true);
+  const languageTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+
+
   const [selectedView, setSelectedView] = useState<'mobile' | 'desktop'>('mobile');
   
   // 输入框动态文本状态
@@ -33,6 +36,15 @@ export default function Home() {
 
   // 滚动动画状态
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+  
+  // A Closer Look Mobile 线条动画状态
+  const [mobileLineAnimations, setMobileLineAnimations] = useState<Set<number>>(new Set());
+  const [hasPlayedLineAnimation, setHasPlayedLineAnimation] = useState(false);
+  
+  // Email Task 弹窗悬停状态
+  const [isAnyPopupHovered, setIsAnyPopupHovered] = useState(false);
+  
+
 
   // 滚动动画效果
   useEffect(() => {
@@ -61,93 +73,66 @@ export default function Home() {
     };
   }, []);
 
-  // 处理鼠标进入下拉区域
-  const handleMouseEnter = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
-    setIsDropdownOpen(true);
-  };
-
-  // 处理鼠标离开下拉区域
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setIsDropdownOpen(false);
-    }, 100); // 100ms 延迟，给用户时间移动到下拉菜单
-  };
-
-  // 处理按钮点击
-  const handleButtonClick = () => {
-    // 这里可以添加默认下载逻辑，或者切换下拉菜单状态
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const init = useRef(false)
-
-  // 自动滚动逻辑
+  // A Closer Look Mobile 线条动画触发 - 只在页面加载时触发一次
   useEffect(() => {
-    const scrollSpeed = 5; // 滚动速度：4像素每帧 (约240像素/秒) - 再快2倍
-    const interactionDelay = 2000; // 用户交互后等待2秒
-    let lastTime = 0;
-
-    const autoScroll = (currentTime: number) => {
-      const now = Date.now();
-      const timeSinceLastInteraction = now - lastInteractionRef.current;
-
-      // 页面加载2秒后开始滚动，用户交互后暂停2秒
-      if (scrollContainerRef.current && timeSinceLastInteraction > interactionDelay) {
-        const container = scrollContainerRef.current;
-        const maxScrollLeft = container.scrollWidth - container.clientWidth;
-        console.log('maxScrollLeft', maxScrollLeft, container.scrollLeft)
-        if (maxScrollLeft > 0) {
-          // 计算基于时间的平滑滚动
-          
-          
-          if (container.scrollLeft >= maxScrollLeft - 10) {
-            // 滚动到最右边，重置到开始
-            container.scrollLeft = 0;
-          } else {
-            // 实时连续滚动 - 基于时间差计算移动距离
-            console.log('pixelsToMove', scrollSpeed)
-            container.scrollLeft += scrollSpeed;
-          }
-        }
-      }
+    if (!hasPlayedLineAnimation && selectedView === 'mobile') {
+      // 延迟触发动画，确保页面已加载
+      const initialDelay = setTimeout(() => {
+        // 重置动画状态
+        setMobileLineAnimations(new Set());
+        
+        // 依次触发4条线的动画 - 按指定顺序
+        const animationSequence = [
+          { delay: 200, lineNumber: 2 },   // Summarize what matters
+          { delay: 600, lineNumber: 1 },   // Take actions  
+          { delay: 1000, lineNumber: 3 },  // Sync to-dos
+          { delay: 1400, lineNumber: 4 }   // Chat with AI
+        ];
+        
+        animationSequence.forEach(({ delay, lineNumber }) => {
+          setTimeout(() => {
+            setMobileLineAnimations(prev => new Set([...prev, lineNumber]));
+          }, delay);
+        });
+        
+        // 标记动画已播放
+        setHasPlayedLineAnimation(true);
+      }, 1000); // 1秒延迟确保页面完全加载
       
-      lastTime = currentTime;
-      animationRef.current = requestAnimationFrame(autoScroll);
-    };
-
-    if (!init.current) {
-      autoScroll(Date.now())
-      init.current = true
+      return () => clearTimeout(initialDelay);
     }
+  }, [selectedView, hasPlayedLineAnimation]);
 
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [isUserInteracting, isAutoScrollEnabled]); // 恢复依赖数组以避免 React 警告
+  // 水平循环动画效果
+  // CSS 动画将用于无限水平滚动
 
-  // 处理用户交互
-  const handleUserInteraction = () => {
-    console.log('User interaction detected');
-    lastInteractionRef.current = Date.now();
-    setIsUserInteracting(true);
-    
-    // 200ms后重置交互状态，允许继续检测交互
-    setTimeout(() => {
-      setIsUserInteracting(false);
-      console.log('User interaction state reset');
-    }, 200);
-  };
+
+
+
 
   // 处理视图切换
-  const handleViewToggle = (view: 'mobile' | 'desktop') => {
+  const handleViewToggle = useCallback((view: 'mobile' | 'desktop') => {
     setSelectedView(view);
-  };
+  }, []);
+
+  // 键盘快捷键处理
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft') {
+        handleViewToggle('mobile');
+      } else if (event.key === 'ArrowRight') {
+        handleViewToggle('desktop');
+      }
+    };
+
+    // 添加事件监听器
+    document.addEventListener('keydown', handleKeyPress);
+
+    // 清理函数
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleViewToggle]);
 
   // 打字效果和文本循环
   useEffect(() => {
@@ -162,7 +147,7 @@ export default function Home() {
         // 正在打字
         typingTimeout = setTimeout(() => {
           setDisplayText(currentText.slice(0, currentLength + 1));
-        }, 80); // 80ms 每个字符，稍微慢一点让光标更稳定
+        }, 50); // 50ms 每个字符，更快的打字速度
       } else {
         // 打字完成，等待1秒后切换到下一个文本
         nextTextTimeout = setTimeout(() => {
@@ -179,7 +164,28 @@ export default function Home() {
     };
   }, [displayText, currentTextIndex, isTyping, inputTexts]);
 
-  // 处理Get Filo按钮鼠标进入
+  // 处理macOS下拉菜单鼠标进入
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setIsDropdownOpen(true);
+  };
+
+  // 处理macOS下拉菜单鼠标离开
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsDropdownOpen(false);
+    }, 100); // 100ms 延迟，给用户时间移动到下拉菜单
+  };
+
+  // 处理macOS按钮点击
+  const handleButtonClick = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  // 处理Get Filo Today下拉菜单鼠标进入
   const handleGetFiloMouseEnter = () => {
     if (getFiloTimeoutRef.current) {
       clearTimeout(getFiloTimeoutRef.current);
@@ -188,17 +194,41 @@ export default function Home() {
     setIsGetFiloDropdownOpen(true);
   };
 
-  // 处理Get Filo按钮鼠标离开
+  // 处理Get Filo Today下拉菜单鼠标离开
   const handleGetFiloMouseLeave = () => {
     getFiloTimeoutRef.current = setTimeout(() => {
       setIsGetFiloDropdownOpen(false);
     }, 100); // 100ms 延迟，给用户时间移动到下拉菜单
   };
 
-  // 处理Get Filo按钮点击
+  // 处理Get Filo Today按钮点击
   const handleGetFiloButtonClick = () => {
     setIsGetFiloDropdownOpen(!isGetFiloDropdownOpen);
   };
+
+  // 处理语言下拉菜单鼠标进入
+  const handleLanguageMouseEnter = () => {
+    if (languageTimeoutRef.current) {
+      clearTimeout(languageTimeoutRef.current);
+      languageTimeoutRef.current = null;
+    }
+    setIsLanguageDropdownOpen(true);
+  };
+
+  // 处理语言下拉菜单鼠标离开
+  const handleLanguageMouseLeave = () => {
+    languageTimeoutRef.current = setTimeout(() => {
+      setIsLanguageDropdownOpen(false);
+    }, 100);
+  };
+
+  // 处理语言选择
+  const handleLanguageSelect = (language: string) => {
+    setSelectedLanguage(language);
+    setIsLanguageDropdownOpen(false);
+  };
+
+
 
   // 处理FAQ折叠展开
   const handleFaqToggle = (index: number) => {
@@ -213,45 +243,43 @@ export default function Home() {
     });
   };
 
-  // 处理底部CTA按钮鼠标进入
-  const handleBottomCtaMouseEnter = () => {
-    if (bottomCtaTimeoutRef.current) {
-      clearTimeout(bottomCtaTimeoutRef.current);
-      bottomCtaTimeoutRef.current = null;
-    }
-    setIsBottomCtaDropdownOpen(true);
+
+
+  // 处理弹窗悬停
+  const handlePopupMouseEnter = () => {
+    setIsAnyPopupHovered(true);
   };
 
-  // 处理底部CTA按钮鼠标离开
-  const handleBottomCtaMouseLeave = () => {
-    bottomCtaTimeoutRef.current = setTimeout(() => {
-      setIsBottomCtaDropdownOpen(false);
-    }, 100); // 100ms 延迟，给用户时间移动到下拉菜单
+  const handlePopupMouseLeave = () => {
+    setIsAnyPopupHovered(false);
   };
 
-  // 处理底部CTA按钮点击
-  const handleBottomCtaButtonClick = () => {
-    setIsBottomCtaDropdownOpen(!isBottomCtaDropdownOpen);
-  };
+
 
   return (
     <>
       <style jsx>{`
-        @keyframes gentle-bounce {
-          0%, 20%, 53%, 80%, 100% {
-            transform: translate3d(0, 0, 0);
+        @keyframes float {
+          0% {
+            box-shadow: 0 5px 15px 0px rgba(0,0,0,0.15);
+            transform: translateY(0px);
           }
-          40%, 43% {
-            transform: translate3d(0, -8px, 0);
+          50% {
+            box-shadow: 0 25px 25px 0px rgba(0,0,0,0.08);
+            transform: translateY(-15px);
           }
-          70% {
-            transform: translate3d(0, -4px, 0);
+          100% {
+            box-shadow: 0 5px 15px 0px rgba(0,0,0,0.15);
+            transform: translateY(0px);
           }
         }
-        .gentle-bounce {
-          animation: gentle-bounce 3s ease-in-out infinite;
+        .float-animation {
+          animation: float 4s ease-in-out infinite;
         }
-        .gentle-bounce:hover {
+        .float-animation:hover {
+          animation-play-state: paused;
+        }
+        .float-animation.paused {
           animation-play-state: paused;
         }
         
@@ -401,6 +429,44 @@ export default function Home() {
           transform: translateY(0);
           transition: all 0.8s ease-out;
         }
+
+        /* 无限水平滚动动画 */
+        @keyframes infiniteScroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-100%);
+          }
+        }
+
+        .infinite-scroll {
+          animation: infiniteScroll 60s linear infinite;
+        }
+
+        .infinite-scroll:hover {
+          animation-play-state: paused;
+        }
+
+        .scroll-container {
+          display: flex;
+          width: 200%; /* 双倍宽度以容纳重复内容 */
+        }
+
+        .scroll-content {
+          display: flex;
+          width: 50%; /* 每个内容块占50%宽度 */
+          flex-shrink: 0;
+        }
+
+        /* Tone Card Hover Effects */
+        .tone-card-hover:hover .tone-card-content {
+          transform: translate(-3.5rem, -3.5rem);
+        }
+
+        .tone-card-hover:hover .tone-card-overlay {
+          transform: translate(3.5rem, 3.5rem);
+        }
       `}</style>
       <div className="min-h-screen bg-white">
         {/* 主要背景框体 - 自适应宽度 x 610px with gradient */}
@@ -427,11 +493,200 @@ export default function Home() {
               </div>
               
               {/* 语言选择器 */}
-              <div className="flex items-center gap-2 text-gray-700 cursor-pointer hover:text-gray-900 transition-colors">
-                <span className="text-base">English</span>
-                <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+              <div 
+                className="relative"
+                onMouseEnter={handleLanguageMouseEnter}
+                onMouseLeave={handleLanguageMouseLeave}
+              >
+                <div className="flex items-center gap-2 text-gray-700 cursor-pointer hover:text-gray-900 transition-colors">
+                  <span className="text-base">{selectedLanguage}</span>
+                  <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                
+                {/* 语言下拉菜单 */}
+                {isLanguageDropdownOpen && (
+                  <div 
+                    className="absolute top-full right-0 mt-2 z-30 dropdown-animate"
+                    style={{
+                      display: 'inline-flex',
+                      padding: '12px 20px 12px 12px',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      gap: '16px',
+                      borderRadius: '16px',
+                      background: 'var(--14, rgba(0, 0, 0, 0.04))',
+                      width: '140px',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {/* English */}
+                    <div 
+                      onClick={() => handleLanguageSelect('English')}
+                      className="cursor-pointer flex items-center gap-2"
+                      style={{
+                        color: '#374151',
+                        fontFamily: 'Inter',
+                        fontSize: '16px',
+                        fontStyle: 'normal',
+                        fontWeight: selectedLanguage === 'English' ? 600 : 400,
+                        lineHeight: '130%',
+                        transition: 'opacity 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.opacity = '0.7';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.opacity = '1';
+                      }}
+                    >
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="17.6" 
+                        height="17.6" 
+                        viewBox="0 0 16 16" 
+                        fill="none"
+                        style={{ opacity: selectedLanguage === 'English' ? 1 : 0 }}
+                      >
+                        <path d="M6.75146 13.1716C6.46186 13.1716 6.2145 13.0429 6.00938 12.7854L2.88419 8.87594C2.80777 8.78343 2.75146 8.69293 2.71526 8.60445C2.68308 8.51596 2.66699 8.42546 2.66699 8.33295C2.66699 8.1238 2.73537 7.95085 2.87212 7.8141C3.01289 7.67735 3.18987 7.60897 3.40304 7.60897C3.64839 7.60897 3.85553 7.71958 4.02446 7.9408L6.72732 11.4099L11.9641 3.09012C12.0566 2.94934 12.1512 2.8508 12.2477 2.79449C12.3442 2.73416 12.4689 2.70399 12.6217 2.70399C12.8309 2.70399 13.0018 2.77036 13.1346 2.90309C13.2673 3.0318 13.3337 3.20073 13.3337 3.40988C13.3337 3.49434 13.3196 3.58082 13.2914 3.6693C13.2633 3.75377 13.219 3.84427 13.1587 3.9408L7.48751 12.7794C7.31053 13.0408 7.06518 13.1716 6.75146 13.1716Z" fill="black"/>
+                      </svg>
+                      <span>English</span>
+                    </div>
+
+                    {/* español */}
+                    <div 
+                      onClick={() => handleLanguageSelect('español')}
+                      className="cursor-pointer flex items-center gap-2"
+                      style={{
+                        color: '#374151',
+                        fontFamily: 'Inter',
+                        fontSize: '16px',
+                        fontStyle: 'normal',
+                        fontWeight: selectedLanguage === 'español' ? 600 : 400,
+                        lineHeight: '130%',
+                        transition: 'opacity 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.opacity = '0.7';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.opacity = '1';
+                      }}
+                    >
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="17.6" 
+                        height="17.6" 
+                        viewBox="0 0 16 16" 
+                        fill="none"
+                        style={{ opacity: selectedLanguage === 'español' ? 1 : 0 }}
+                      >
+                        <path d="M6.75146 13.1716C6.46186 13.1716 6.2145 13.0429 6.00938 12.7854L2.88419 8.87594C2.80777 8.78343 2.75146 8.69293 2.71526 8.60445C2.68308 8.51596 2.66699 8.42546 2.66699 8.33295C2.66699 8.1238 2.73537 7.95085 2.87212 7.8141C3.01289 7.67735 3.18987 7.60897 3.40304 7.60897C3.64839 7.60897 3.85553 7.71958 4.02446 7.9408L6.72732 11.4099L11.9641 3.09012C12.0566 2.94934 12.1512 2.8508 12.2477 2.79449C12.3442 2.73416 12.4689 2.70399 12.6217 2.70399C12.8309 2.70399 13.0018 2.77036 13.1346 2.90309C13.2673 3.0318 13.3337 3.20073 13.3337 3.40988C13.3337 3.49434 13.3196 3.58082 13.2914 3.6693C13.2633 3.75377 13.219 3.84427 13.1587 3.9408L7.48751 12.7794C7.31053 13.0408 7.06518 13.1716 6.75146 13.1716Z" fill="black"/>
+                      </svg>
+                      <span>español</span>
+                    </div>
+
+                    {/* 简体中文 */}
+                    <div 
+                      onClick={() => handleLanguageSelect('简体中文')}
+                      className="cursor-pointer flex items-center gap-2"
+                      style={{
+                        color: '#374151',
+                        fontFamily: 'Inter',
+                        fontSize: '16px',
+                        fontStyle: 'normal',
+                        fontWeight: selectedLanguage === '简体中文' ? 600 : 400,
+                        lineHeight: '130%',
+                        transition: 'opacity 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.opacity = '0.7';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.opacity = '1';
+                      }}
+                    >
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="17.6" 
+                        height="17.6" 
+                        viewBox="0 0 16 16" 
+                        fill="none"
+                        style={{ opacity: selectedLanguage === '简体中文' ? 1 : 0 }}
+                      >
+                        <path d="M6.75146 13.1716C6.46186 13.1716 6.2145 13.0429 6.00938 12.7854L2.88419 8.87594C2.80777 8.78343 2.75146 8.69293 2.71526 8.60445C2.68308 8.51596 2.66699 8.42546 2.66699 8.33295C2.66699 8.1238 2.73537 7.95085 2.87212 7.8141C3.01289 7.67735 3.18987 7.60897 3.40304 7.60897C3.64839 7.60897 3.85553 7.71958 4.02446 7.9408L6.72732 11.4099L11.9641 3.09012C12.0566 2.94934 12.1512 2.8508 12.2477 2.79449C12.3442 2.73416 12.4689 2.70399 12.6217 2.70399C12.8309 2.70399 13.0018 2.77036 13.1346 2.90309C13.2673 3.0318 13.3337 3.20073 13.3337 3.40988C13.3337 3.49434 13.3196 3.58082 13.2914 3.6693C13.2633 3.75377 13.219 3.84427 13.1587 3.9408L7.48751 12.7794C7.31053 13.0408 7.06518 13.1716 6.75146 13.1716Z" fill="black"/>
+                      </svg>
+                      <span>简体中文</span>
+                    </div>
+
+                    {/* 繁体中文 */}
+                    <div 
+                      onClick={() => handleLanguageSelect('繁体中文')}
+                      className="cursor-pointer flex items-center gap-2"
+                      style={{
+                        color: '#374151',
+                        fontFamily: 'Inter',
+                        fontSize: '16px',
+                        fontStyle: 'normal',
+                        fontWeight: selectedLanguage === '繁体中文' ? 600 : 400,
+                        lineHeight: '130%',
+                        transition: 'opacity 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.opacity = '0.7';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.opacity = '1';
+                      }}
+                    >
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="17.6" 
+                        height="17.6" 
+                        viewBox="0 0 16 16" 
+                        fill="none"
+                        style={{ opacity: selectedLanguage === '繁体中文' ? 1 : 0 }}
+                      >
+                        <path d="M6.75146 13.1716C6.46186 13.1716 6.2145 13.0429 6.00938 12.7854L2.88419 8.87594C2.80777 8.78343 2.75146 8.69293 2.71526 8.60445C2.68308 8.51596 2.66699 8.42546 2.66699 8.33295C2.66699 8.1238 2.73537 7.95085 2.87212 7.8141C3.01289 7.67735 3.18987 7.60897 3.40304 7.60897C3.64839 7.60897 3.85553 7.71958 4.02446 7.9408L6.72732 11.4099L11.9641 3.09012C12.0566 2.94934 12.1512 2.8508 12.2477 2.79449C12.3442 2.73416 12.4689 2.70399 12.6217 2.70399C12.8309 2.70399 13.0018 2.77036 13.1346 2.90309C13.2673 3.0318 13.3337 3.20073 13.3337 3.40988C13.3337 3.49434 13.3196 3.58082 13.2914 3.6693C13.2633 3.75377 13.219 3.84427 13.1587 3.9408L7.48751 12.7794C7.31053 13.0408 7.06518 13.1716 6.75146 13.1716Z" fill="black"/>
+                      </svg>
+                      <span>繁体中文</span>
+                    </div>
+
+                    {/* 日本語 */}
+                    <div 
+                      onClick={() => handleLanguageSelect('日本語')}
+                      className="cursor-pointer flex items-center gap-2"
+                      style={{
+                        color: '#374151',
+                        fontFamily: 'Inter',
+                        fontSize: '16px',
+                        fontStyle: 'normal',
+                        fontWeight: selectedLanguage === '日本語' ? 600 : 400,
+                        lineHeight: '130%',
+                        transition: 'opacity 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.opacity = '0.7';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.opacity = '1';
+                      }}
+                    >
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="17.6" 
+                        height="17.6" 
+                        viewBox="0 0 16 16" 
+                        fill="none"
+                        style={{ opacity: selectedLanguage === '日本語' ? 1 : 0 }}
+                      >
+                        <path d="M6.75146 13.1716C6.46186 13.1716 6.2145 13.0429 6.00938 12.7854L2.88419 8.87594C2.80777 8.78343 2.75146 8.69293 2.71526 8.60445C2.68308 8.51596 2.66699 8.42546 2.66699 8.33295C2.66699 8.1238 2.73537 7.95085 2.87212 7.8141C3.01289 7.67735 3.18987 7.60897 3.40304 7.60897C3.64839 7.60897 3.85553 7.71958 4.02446 7.9408L6.72732 11.4099L11.9641 3.09012C12.0566 2.94934 12.1512 2.8508 12.2477 2.79449C12.3442 2.73416 12.4689 2.70399 12.6217 2.70399C12.8309 2.70399 13.0018 2.77036 13.1346 2.90309C13.2673 3.0318 13.3337 3.20073 13.3337 3.40988C13.3337 3.49434 13.3196 3.58082 13.2914 3.6693C13.2633 3.75377 13.219 3.84427 13.1587 3.9408L7.48751 12.7794C7.31053 13.0408 7.06518 13.1716 6.75146 13.1716Z" fill="black"/>
+                      </svg>
+                      <span>日本語</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </nav>
 
@@ -505,7 +760,7 @@ export default function Home() {
                 
                 {/* macOS 按钮 - 使用新的SVG with dropdown */}
                 <div 
-                  className="relative"
+                  className="relative mac-dropdown"
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
                 >
@@ -531,44 +786,47 @@ export default function Home() {
                   {/* Dropdown 菜单 */}
                   {isDropdownOpen && (
                     <div 
-                      className="absolute top-full left-0 mt-2 z-30"
+                      className="absolute top-full left-0 mt-2 z-30 dropdown-animate"
                       style={{
                         width: '359px',
                         display: 'flex',
-                        padding: '30px',
+                        padding: '20px',
                         flexDirection: 'column',
                         alignItems: 'flex-start',
-                        gap: '24px',
-                        alignSelf: 'stretch',
-                        borderRadius: '24px',
-                        background: 'rgba(0, 0, 0, 0.04)',
-                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)'
+                        gap: '12px',
+                        borderRadius: '16px',
+                        background: '#FFFFFF',
+                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+                        border: '1px solid rgba(0, 0, 0, 0.08)'
                       }}
                     >
                       {/* Apple Silicon 选项 */}
                       <a 
                         href="https://download.filomail.com/mac_upgrade/versions/latest/prod/arm64/Filo-arm64.dmg" 
-                        className="block w-full transition-all duration-200"
-                        style={{ alignSelf: 'stretch', borderRadius: '12px', padding: '8px 12px' }}
+                        className="block w-full transition-all duration-200 dropdown-item-animate dropdown-item-delay-1"
+                        style={{ 
+                          textDecoration: 'none',
+                          borderRadius: '12px',
+                          padding: '12px 16px',
+                          backgroundColor: 'transparent'
+                        }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.backgroundColor = 'rgba(34, 160, 251, 0.1)';
-                          e.currentTarget.style.transform = 'translateX(4px)';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.backgroundColor = 'transparent';
-                          e.currentTarget.style.transform = 'translateX(0px)';
+                          e.currentTarget.style.transform = 'translateY(0px)';
                         }}
                       >
                         <div 
                           style={{
-                            alignSelf: 'stretch',
-                            textAlign: 'left',
                             color: '#22A0FB',
                             fontFeatureSettings: '"liga" off, "clig" off',
-                            fontFamily: 'var(--font-inter), Inter, sans-serif',
+                            fontFamily: 'Inter',
                             fontSize: '20px',
                             fontStyle: 'normal',
-                            fontWeight: 700,
+                            fontWeight: 600,
                             lineHeight: '130%'
                           }}
                         >
@@ -579,27 +837,30 @@ export default function Home() {
                       {/* Intel 选项 */}
                       <a 
                         href="https://download.filomail.com/mac_upgrade/versions/latest/prod/x64/Filo-x64.dmg" 
-                        className="block w-full transition-all duration-200"
-                        style={{ alignSelf: 'stretch', borderRadius: '12px', padding: '8px 12px' }}
+                        className="block w-full transition-all duration-200 dropdown-item-animate dropdown-item-delay-2"
+                        style={{ 
+                          textDecoration: 'none',
+                          borderRadius: '12px',
+                          padding: '12px 16px',
+                          backgroundColor: 'transparent'
+                        }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.backgroundColor = 'rgba(34, 160, 251, 0.1)';
-                          e.currentTarget.style.transform = 'translateX(4px)';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.backgroundColor = 'transparent';
-                          e.currentTarget.style.transform = 'translateX(0px)';
+                          e.currentTarget.style.transform = 'translateY(0px)';
                         }}
                       >
                         <div 
                           style={{
-                            alignSelf: 'stretch',
-                            textAlign: 'left',
                             color: '#22A0FB',
                             fontFeatureSettings: '"liga" off, "clig" off',
-                            fontFamily: 'var(--font-inter), Inter, sans-serif',
+                            fontFamily: 'Inter',
                             fontSize: '20px',
                             fontStyle: 'normal',
-                            fontWeight: 700,
+                            fontWeight: 600,
                             lineHeight: '130%'
                           }}
                         >
@@ -617,355 +878,617 @@ export default function Home() {
           
         </div>
         
-        {/* 功能卡片区域 */}
+        {/* Sample Emails 区域 */}
         <section 
-          className={`w-full bg-white pt-[220px] pb-32 scroll-animate relative z-10 ${visibleSections.has('cards') ? 'visible' : ''}`}
-          data-section="cards"
+          className={`w-full bg-white pt-[200px] pb-32 scroll-animate relative z-10 ${visibleSections.has('sample-emails') ? 'visible' : ''}`}
+          data-section="sample-emails"
         >
-          <div className="max-w-[1440px] mx-auto px-20">
+          <div className="w-full">
             
-            {/* 卡片水平滚动容器 */}
-            <div className="relative">
-              {/* 左侧渐变遮罩 */}
-              <div className="absolute left-0 top-0 w-8 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-              {/* 右侧渐变遮罩 */}
-              <div className="absolute right-0 top-0 w-8 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
-              
-              <div 
-                ref={scrollContainerRef}
-                className="overflow-x-auto scrollbar-hide"
-                // onScroll={handleUserInteraction}
-                // onMouseDown={handleUserInteraction}
-                // onTouchStart={handleUserInteraction}
-              >
-                <div className="flex gap-[40px] px-4" style={{ width: 'max-content', paddingTop: '20px', paddingBottom: '80px' }}>
-                  
-                  {/* 卡片 1 */}
-                  <div 
-                    className="flex-shrink-0 hover:scale-105 transition-transform duration-200"
-                    style={{
-                      width: '600px',
-                      height: '570px',
-                      borderRadius: '20px',
-                      border: '0.5px solid rgba(0, 0, 0, 0.04)',
-                      background: 'var(--09, #FCFAFA)',
-                      transformOrigin: 'center center',
-                      boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.03), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.04), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.05), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.07)'
-                    }}
-                  >
-                    <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
-                      <h3 
-                        style={{
-                          color: 'var(--06, #000)',
-                          fontFeatureSettings: '"liga" off, "clig" off',
-                          fontFamily: 'Inter',
-                          fontSize: '27px',
-                          fontStyle: 'normal',
-                          fontWeight: 700,
-                          lineHeight: '130%',
-                          marginBottom: '40px'
-                        }}
-                      >
-                        Understand It All
-                      </h3>
-                      
-                      {/* 功能示例图片 */}
-                      <div className="flex-1 relative" style={{ minHeight: '400px' }}>
-                        {/* 底层原始图片 - 左侧显示 */}
-                        <div 
-                          className="absolute"
-                          style={{
-                            left: '0px',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            width: '60%',
-                            zIndex: 1
-                          }}
-                        >
+
+
+            {/* 卡片自动滚动容器 */}
+            <div className="relative overflow-hidden">
+              <div className="sample-cards-scroll flex gap-[40px]" style={{ paddingLeft: '80px', paddingRight: '80px', paddingTop: '30px', paddingBottom: '30px' }}>
+                
+                {/* 卡片 1 - Understand It All */}
+                <div 
+                  className="flex-shrink-0 transition-all duration-200"
+                  style={{
+                    width: '600px',
+                    height: '570px',
+                    borderRadius: '20px',
+                    border: '0.5px solid rgba(0, 0, 0, 0.04)',
+                    background: 'var(--09, #FCFAFA)',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+                    <h3 
+                      style={{
+                        color: 'var(--06, #000)',
+                        fontFeatureSettings: '"liga" off, "clig" off',
+                        fontFamily: 'Inter',
+                        fontSize: '27px',
+                        fontStyle: 'normal',
+                        fontWeight: 700,
+                        lineHeight: '130%',
+                        marginBottom: '40px'
+                      }}
+                    >
+                      Understand It All
+                    </h3>
+                    
+                    {/* 功能示例图片 */}
+                    <div className="flex-1 flex items-end">
+                      <div style={{ display: 'flex', gap: '16px', width: '100%' }}>
+                        {/* Japanese email */}
+                        <div style={{ flex: 1 }}>
                           <Image 
-                            src="/icons/feature/feature-sample1-original.png"
-                            alt="Original email interface"
-                            width={438}
-                            height={308}
-                            className="w-full h-auto"
-                            style={{ 
-                              display: 'block',
-                              borderRadius: '12px',
-                              boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.1)'
-                            }}
-                          />
-                        </div>
-                        
-                        {/* 叠加的翻译图片 - 右侧显示，部分重叠 */}
-                        <div 
-                          className="absolute"
-                          style={{
-                            right: '0px',
-                            bottom: '33px',
-                            width: '55%',
-                            zIndex: 2
-                          }}
-                        >
-                          <Image 
-                            src="/icons/feature/feature-sample1-translated.png"
-                            alt="Translated email summary"
-                            width={404}
-                            height={333}
-                            className="w-full h-auto"
-                            style={{ 
-                              display: 'block',
-                              borderRadius: '12px',
-                              boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.15)'
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 卡片 2 */}
-                  <div 
-                    className="flex-shrink-0 hover:scale-105 transition-transform duration-200"
-                    style={{
-                      width: '600px',
-                      height: '570px',
-                      borderRadius: '20px',
-                      border: '0.5px solid rgba(0, 0, 0, 0.04)',
-                      background: 'var(--09, #FCFAFA)',
-                      transformOrigin: 'center center',
-                      boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.03), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.04), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.05), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.07)'
-                    }}
-                  >
-                    <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
-                      <h3 
-                        style={{
-                          alignSelf: 'stretch',
-                          color: 'var(--06, #000)',
-                          fontFeatureSettings: '"liga" off, "clig" off',
-                          fontFamily: 'Inter',
-                          fontSize: '27px',
-                          fontStyle: 'normal',
-                          fontWeight: 700,
-                          lineHeight: '130%',
-                          marginBottom: '40px'
-                        }}
-                      >
-                        Promo, Condensed
-                      </h3>
-                      
-                      {/* 促销功能示例图片 */}
-                      <div 
-                        style={{
-                          display: 'flex',
-                          padding: '20px',
-                          alignItems: 'flex-start',
-                          gap: '18px',
-                          flex: '1 0 0',
-                          alignSelf: 'stretch'
-                        }}
-                      >
-                        <Image 
-                          src="/icons/feature/feature_sample2_promo.png"
-                          alt="Promo email condensed feature"
-                          width={500}
-                          height={350}
-                          className="w-full h-auto"
-                          style={{ 
-                            display: 'block',
-                            borderRadius: '12px',
-                            boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.03), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.04), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.05), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.07)'
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 卡片 3 */}
-                  <div 
-                    className="flex-shrink-0 hover:scale-105 transition-transform duration-200"
-                    style={{
-                      width: '600px',
-                      height: '570px',
-                      borderRadius: '20px',
-                      border: '0.5px solid rgba(0, 0, 0, 0.04)',
-                      background: 'var(--09, #FCFAFA)',
-                      transformOrigin: 'center center',
-                      boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.03), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.04), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.05), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.07)'
-                    }}
-                  >
-                    <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
-                      <h3 
-                        style={{
-                          alignSelf: 'stretch',
-                          color: 'var(--06, #000)',
-                          fontFeatureSettings: '"liga" off, "clig" off',
-                          fontFamily: 'Inter',
-                          fontSize: '27px',
-                          fontStyle: 'normal',
-                          fontWeight: 700,
-                          lineHeight: '130%',
-                          marginBottom: '40px'
-                        }}
-                      >
-                        What do I say?
-                      </h3>
-                      
-                      {/* 法语功能示例图片 */}
-                      <div className="flex-1 flex items-end">
-                        <Image 
-                          src="/icons/feature/feature_sample3_french.png"
-                          alt="French AI reply feature"
-                          width={540}
-                          height={350}
-                          className="w-full h-auto"
-                          style={{ 
-                            display: 'block',
-                            borderRadius: '12px',
-                            boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.03), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.04), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.05), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.07)'
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 卡片 4 */}
-                  <div 
-                    className="flex-shrink-0 hover:scale-105 transition-transform duration-200"
-                    style={{
-                      width: '600px',
-                      height: '570px',
-                      borderRadius: '20px',
-                      border: '0.5px solid rgba(0, 0, 0, 0.04)',
-                      background: 'var(--09, #FCFAFA)',
-                      transformOrigin: 'center center',
-                      boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.03), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.04), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.05), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.07)'
-                    }}
-                  >
-                    <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
-                      <h3 
-                        style={{
-                          alignSelf: 'stretch',
-                          color: 'var(--06, #000)',
-                          fontFeatureSettings: '"liga" off, "clig" off',
-                          fontFamily: 'Inter',
-                          fontSize: '27px',
-                          fontStyle: 'normal',
-                          fontWeight: 700,
-                          lineHeight: '130%',
-                          marginBottom: '40px'
-                        }}
-                      >
-                        Boss Bomb Defused
-                      </h3>
-                      
-                      {/* Boss功能示例图片 */}
-                      <div className="flex-1 flex items-end">
-                        <Image 
-                          src="/icons/feature/freature_sample4_boss.png"
-                          alt="Boss task management feature"
-                          width={540}
-                          height={350}
-                          className="w-full h-auto"
-                          style={{ 
-                            display: 'block',
-                            borderRadius: '12px',
-                            boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.03), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.04), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.05), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.07)'
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 卡片 5 */}
-                  <div 
-                    className="flex-shrink-0 hover:scale-105 transition-transform duration-200"
-                    style={{
-                      width: '600px',
-                      height: '570px',
-                      borderRadius: '20px',
-                      border: '0.5px solid rgba(0, 0, 0, 0.04)',
-                      background: 'var(--09, #FCFAFA)',
-                      transformOrigin: 'center center',
-                      boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.03), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.04), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.05), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.07)'
-                    }}
-                  >
-                    <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
-                      <h3 
-                        style={{
-                          alignSelf: 'stretch',
-                          color: 'var(--06, #000)',
-                          fontFeatureSettings: '"liga" off, "clig" off',
-                          fontFamily: 'Inter',
-                          fontSize: '27px',
-                          fontStyle: 'normal',
-                          fontWeight: 700,
-                          lineHeight: '130%',
-                          marginBottom: '40px'
-                        }}
-                      >
-                        Goodbye Auto-Bill
-                      </h3>
-                      
-                      {/* 订阅管理功能示例图片 */}
-                      <div className="flex-1 relative">
-                        {/* 底层订阅图片 */}
-                        <div className="flex items-end h-full">
-                          <Image 
-                            src="/icons/feature/feature_sample5_subscription.png"
-                            alt="Subscription management feature"
-                            width={540}
+                            src="/icons/feature/sample1_jp.png"
+                            alt="Japanese email example"
+                            width={258}
                             height={350}
                             className="w-full h-auto"
                             style={{ 
                               display: 'block',
                               borderRadius: '12px',
-                              boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.03), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.04), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.05), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.07)'
+                              boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)'
                             }}
                           />
                         </div>
-                        
-                        {/* 叠加的倾斜通知图片 */}
-                        <Image 
-                          src="/icons/feature/feature_sample5_notification.png"
-                          alt="Cancel subscription notification"
-                          width={320}
-                          height={120}
-                          className="absolute w-auto h-auto"
-                          style={{ 
-                            top: '20px',
-                            right: '40px',
-                            transform: 'rotate(8deg)',
-                            zIndex: 2,
-                            display: 'block',
-                            background: 'transparent',
-                            border: 'none',
-                            boxShadow: '0px 12px 32px rgba(0, 0, 0, 0.15)'
-                          }}
-                        />
+                        {/* English translation */}
+                        <div style={{ flex: 1 }}>
+                          <Image 
+                            src="/icons/feature/sample1_en.png"
+                            alt="English translation example"
+                            width={258}
+                            height={350}
+                            className="w-full h-auto"
+                            style={{ 
+                              display: 'block',
+                              borderRadius: '12px',
+                              boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)'
+                            }}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-                  
                 </div>
+
+                {/* 卡片 2 - Promo, Condensed */}
+                <div 
+                  className="flex-shrink-0 transition-all duration-200"
+                  style={{
+                    width: '600px',
+                    height: '570px',
+                    borderRadius: '20px',
+                    border: '0.5px solid rgba(0, 0, 0, 0.04)',
+                    background: 'var(--09, #FCFAFA)',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+                    <h3 
+                      style={{
+                        alignSelf: 'stretch',
+                        color: 'var(--06, #000)',
+                        fontFeatureSettings: '"liga" off, "clig" off',
+                        fontFamily: 'Inter',
+                        fontSize: '27px',
+                        fontStyle: 'normal',
+                        fontWeight: 700,
+                        lineHeight: '130%',
+                        marginBottom: '40px'
+                      }}
+                    >
+                      Promo, Condensed
+                    </h3>
+                    
+                    {/* 促销功能示例图片 */}
+                    <div className="flex-1 flex items-end">
+                      <Image 
+                        src="/icons/feature/sample2.png"
+                        alt="Promo email condensed feature"
+                        width={540}
+                        height={350}
+                        className="w-full h-auto"
+                        style={{ 
+                          display: 'block',
+                          borderRadius: '12px',
+                          boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)'
+                          }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 卡片 3 - What do I say? */}
+                <div 
+                  className="flex-shrink-0 transition-all duration-200"
+                  style={{
+                    width: '600px',
+                    height: '570px',
+                    borderRadius: '20px',
+                    border: '0.5px solid rgba(0, 0, 0, 0.04)',
+                    background: 'var(--09, #FCFAFA)',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+                    <h3 
+                      style={{
+                        alignSelf: 'stretch',
+                        color: 'var(--06, #000)',
+                        fontFeatureSettings: '"liga" off, "clig" off',
+                        fontFamily: 'Inter',
+                        fontSize: '27px',
+                        fontStyle: 'normal',
+                        fontWeight: 700,
+                        lineHeight: '130%',
+                        marginBottom: '40px'
+                      }}
+                    >
+                      What do I say?
+                    </h3>
+                    
+                    {/* 法语功能示例图片 */}
+                    <div className="flex-1 flex items-end">
+                      <Image 
+                        src="/icons/feature/sample3.png"
+                        alt="French AI reply feature"
+                        width={540}
+                        height={350}
+                        className="w-full h-auto"
+                        style={{ 
+                          display: 'block',
+                          borderRadius: '12px',
+                          boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)'
+                          }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 卡片 4 - Boss Bomb Defused */}
+                <div 
+                  className="flex-shrink-0 transition-all duration-200"
+                  style={{
+                    width: '600px',
+                    height: '570px',
+                    borderRadius: '20px',
+                    border: '0.5px solid rgba(0, 0, 0, 0.04)',
+                    background: 'var(--09, #FCFAFA)',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+                    <h3 
+                      style={{
+                        alignSelf: 'stretch',
+                        color: 'var(--06, #000)',
+                        fontFeatureSettings: '"liga" off, "clig" off',
+                        fontFamily: 'Inter',
+                        fontSize: '27px',
+                        fontStyle: 'normal',
+                        fontWeight: 700,
+                        lineHeight: '130%',
+                        marginBottom: '40px'
+                      }}
+                    >
+                      Boss Bomb Defused
+                    </h3>
+                    
+                    {/* Boss功能示例图片 */}
+                    <div className="flex-1 flex items-end">
+                      <Image 
+                        src="/icons/feature/sample4.png"
+                        alt="Boss task management feature"
+                        width={540}
+                        height={350}
+                        className="w-full h-auto"
+                        style={{ 
+                          display: 'block',
+                          borderRadius: '12px',
+                          boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)'
+                          }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 卡片 5 - Goodbye Auto-Bill */}
+                <div 
+                  className="flex-shrink-0 transition-all duration-200"
+                  style={{
+                    width: '600px',
+                    height: '570px',
+                    borderRadius: '20px',
+                    border: '0.5px solid rgba(0, 0, 0, 0.04)',
+                    background: 'var(--09, #FCFAFA)',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+                    <h3 
+                      style={{
+                        alignSelf: 'stretch',
+                        color: 'var(--06, #000)',
+                        fontFeatureSettings: '"liga" off, "clig" off',
+                        fontFamily: 'Inter',
+                        fontSize: '27px',
+                        fontStyle: 'normal',
+                        fontWeight: 700,
+                        lineHeight: '130%',
+                        marginBottom: '40px'
+                      }}
+                    >
+                      Goodbye Auto-Bill
+                    </h3>
+                    
+                    {/* 订阅管理功能示例图片 */}
+                    <div className="flex-1 flex items-end">
+                      <Image 
+                        src="/icons/feature/sample5.png"
+                        alt="Subscription management feature"
+                        width={540}
+                        height={350}
+                        className="w-full h-auto"
+                        style={{ 
+                          display: 'block',
+                          borderRadius: '12px',
+                          boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)'
+                          }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 重复卡片以实现无缝循环 */}
+                {/* 卡片 1 - Understand It All (重复) */}
+                <div 
+                  className="flex-shrink-0 transition-all duration-200"
+                  style={{
+                    width: '600px',
+                    height: '570px',
+                    borderRadius: '20px',
+                    border: '0.5px solid rgba(0, 0, 0, 0.04)',
+                    background: 'var(--09, #FCFAFA)',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+                    <h3 
+                      style={{
+                        color: 'var(--06, #000)',
+                        fontFeatureSettings: '"liga" off, "clig" off',
+                        fontFamily: 'Inter',
+                        fontSize: '27px',
+                        fontStyle: 'normal',
+                        fontWeight: 700,
+                        lineHeight: '130%',
+                        marginBottom: '40px'
+                      }}
+                    >
+                      Understand It All
+                    </h3>
+                    
+                    {/* 功能示例图片 */}
+                    <div className="flex-1 flex items-end">
+                      <div style={{ display: 'flex', gap: '16px', width: '100%' }}>
+                        {/* Japanese email */}
+                        <div style={{ flex: 1 }}>
+                          <Image 
+                            src="/icons/feature/sample1_jp.png"
+                            alt="Japanese email example"
+                            width={258}
+                            height={350}
+                            className="w-full h-auto"
+                            style={{ 
+                              display: 'block',
+                              borderRadius: '12px',
+                              boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)'
+                            }}
+                          />
+                        </div>
+                        {/* English translation */}
+                        <div style={{ flex: 1 }}>
+                          <Image 
+                            src="/icons/feature/sample1_en.png"
+                            alt="English translation example"
+                            width={258}
+                            height={350}
+                            className="w-full h-auto"
+                            style={{ 
+                              display: 'block',
+                              borderRadius: '12px',
+                              boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)'
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 卡片 2 - Promo, Condensed (重复) */}
+                <div 
+                  className="flex-shrink-0 transition-all duration-200"
+                  style={{
+                    width: '600px',
+                    height: '570px',
+                    borderRadius: '20px',
+                    border: '0.5px solid rgba(0, 0, 0, 0.04)',
+                    background: 'var(--09, #FCFAFA)',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+                    <h3 
+                      style={{
+                        alignSelf: 'stretch',
+                        color: 'var(--06, #000)',
+                        fontFeatureSettings: '"liga" off, "clig" off',
+                        fontFamily: 'Inter',
+                        fontSize: '27px',
+                        fontStyle: 'normal',
+                        fontWeight: 700,
+                        lineHeight: '130%',
+                        marginBottom: '40px'
+                      }}
+                    >
+                      Promo, Condensed
+                    </h3>
+                    
+                    {/* 促销功能示例图片 */}
+                    <div className="flex-1 flex items-end">
+                      <Image 
+                        src="/icons/feature/sample2.png"
+                        alt="Promo email condensed feature"
+                        width={540}
+                        height={350}
+                        className="w-full h-auto"
+                        style={{ 
+                          display: 'block',
+                          borderRadius: '12px',
+                          boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)'
+                          }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 卡片 3 - What do I say? (重复) */}
+                <div 
+                  className="flex-shrink-0 transition-all duration-200"
+                  style={{
+                    width: '600px',
+                    height: '570px',
+                    borderRadius: '20px',
+                    border: '0.5px solid rgba(0, 0, 0, 0.04)',
+                    background: 'var(--09, #FCFAFA)',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+                    <h3 
+                      style={{
+                        alignSelf: 'stretch',
+                        color: 'var(--06, #000)',
+                        fontFeatureSettings: '"liga" off, "clig" off',
+                        fontFamily: 'Inter',
+                        fontSize: '27px',
+                        fontStyle: 'normal',
+                        fontWeight: 700,
+                        lineHeight: '130%',
+                        marginBottom: '40px'
+                      }}
+                    >
+                      What do I say?
+                    </h3>
+                    
+                    {/* 法语功能示例图片 */}
+                    <div className="flex-1 flex items-end">
+                      <Image 
+                        src="/icons/feature/sample3.png"
+                        alt="French AI reply feature"
+                        width={540}
+                        height={350}
+                        className="w-full h-auto"
+                        style={{ 
+                          display: 'block',
+                          borderRadius: '12px',
+                          boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)'
+                          }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 卡片 4 - Boss Bomb Defused (重复) */}
+                <div 
+                  className="flex-shrink-0 transition-all duration-200"
+                  style={{
+                    width: '600px',
+                    height: '570px',
+                    borderRadius: '20px',
+                    border: '0.5px solid rgba(0, 0, 0, 0.04)',
+                    background: 'var(--09, #FCFAFA)',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+                    <h3 
+                      style={{
+                        alignSelf: 'stretch',
+                        color: 'var(--06, #000)',
+                        fontFeatureSettings: '"liga" off, "clig" off',
+                        fontFamily: 'Inter',
+                        fontSize: '27px',
+                        fontStyle: 'normal',
+                        fontWeight: 700,
+                        lineHeight: '130%',
+                        marginBottom: '40px'
+                      }}
+                    >
+                      Boss Bomb Defused
+                    </h3>
+                    
+                    {/* Boss功能示例图片 */}
+                    <div className="flex-1 flex items-end">
+                      <Image 
+                        src="/icons/feature/sample4.png"
+                        alt="Boss task management feature"
+                        width={540}
+                        height={350}
+                        className="w-full h-auto"
+                        style={{ 
+                          display: 'block',
+                          borderRadius: '12px',
+                          boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)'
+                          }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 卡片 5 - Goodbye Auto-Bill (重复) */}
+                <div 
+                  className="flex-shrink-0 transition-all duration-200"
+                  style={{
+                    width: '600px',
+                    height: '570px',
+                    borderRadius: '20px',
+                    border: '0.5px solid rgba(0, 0, 0, 0.04)',
+                    background: 'var(--09, #FCFAFA)',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+                    <h3 
+                      style={{
+                        alignSelf: 'stretch',
+                        color: 'var(--06, #000)',
+                        fontFeatureSettings: '"liga" off, "clig" off',
+                        fontFamily: 'Inter',
+                        fontSize: '27px',
+                        fontStyle: 'normal',
+                        fontWeight: 700,
+                        lineHeight: '130%',
+                        marginBottom: '40px'
+                      }}
+                    >
+                      Goodbye Auto-Bill
+                    </h3>
+                    
+                    {/* 订阅管理功能示例图片 */}
+                    <div className="flex-1 flex items-end">
+                      <Image 
+                        src="/icons/feature/sample5.png"
+                        alt="Subscription management feature"
+                        width={540}
+                        height={350}
+                        className="w-full h-auto"
+                        style={{ 
+                          display: 'block',
+                          borderRadius: '12px',
+                          boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)'
+                          }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
             
           </div>
         </section>
-
+        
         {/* A Closer Look 区域 */}
-        <section className="w-full bg-white py-24">
+        <section className="w-full pt-24 pb-0" data-section="closer-look" style={{ marginBottom: '-104px' }}>
           <div className="max-w-[1440px] mx-auto px-20">
             
             {/* 标题 */}
-            <div className="text-center mb-20">
+            <div 
+              className="text-center mb-20 relative z-20" 
+              style={{ 
+                transform: 'translateY(-50px)',
+                position: 'relative',
+                isolation: 'isolate',
+                willChange: 'transform',
+                backfaceVisibility: 'hidden',
+                transformStyle: 'preserve-3d'
+              }}
+            >
               <h2 
                 style={{
                   color: 'var(--06, #000)',
                   textAlign: 'center',
                   fontFeatureSettings: '"liga" off, "clig" off',
                   fontFamily: 'var(--font-inter), Inter, sans-serif',
-                  fontSize: '64px',
+                  fontSize: '80px',
                   fontStyle: 'normal',
                   fontWeight: 700,
                   lineHeight: '130%',
@@ -977,7 +1500,14 @@ export default function Home() {
             </div>
 
             {/* Mobile/Desktop 切换按钮 */}
-            <div className="flex justify-center mb-16">
+            <div 
+              className="flex justify-center mb-16 relative z-20" 
+              style={{ 
+                transform: 'translateY(-50px)',
+                position: 'relative',
+                isolation: 'isolate'
+              }}
+            >
               <div 
                 className="relative"
                 style={{
@@ -1051,55 +1581,54 @@ export default function Home() {
             </div>
 
             {/* 展示区域容器 */}
-            <div className="relative overflow-hidden" style={{ height: '800px' }}>
+            <div 
+              className="relative z-10" 
+              style={{ 
+                height: '1100px', 
+                transform: 'translateY(-50px)',
+                isolation: 'isolate'
+              }}
+            >
               
               {/* Mobile 视图 */}
               <div 
-                className={`absolute inset-0 transition-transform duration-500 ease-in-out ${
-                  selectedView === 'mobile' ? 'translate-x-0' : '-translate-x-full'
+                className={`absolute inset-0 transition-all duration-700 ${
+                  selectedView === 'mobile' 
+                    ? 'translate-x-0 opacity-100 scale-100' 
+                    : '-translate-x-full opacity-0 scale-95'
                 }`}
+                style={{
+                  transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                  transitionDelay: selectedView === 'mobile' ? '100ms' : '0ms'
+                }}
               >
-                <div className="relative flex justify-center items-center h-full">
-                  
-                  {/* 背景圆形托盘 */}
-                  <div className="absolute inset-0 flex justify-center items-center" style={{ transform: 'translateY(100px)' }}>
-                    <Image 
-                      src="/icons/feature/feature_circle_pad.png"
-                      alt="Circle background"
-                      width={600}
-                      height={600}
-                      className="w-auto h-auto"
-                      style={{ maxHeight: '600px' }}
-                    />
-                  </div>
-
-                  {/* 手机阴影 */}
-                  <div className="absolute" style={{ bottom: '50px' }}>
-                    <Image 
-                      src="/icons/feature/feature_shadow.svg"
-                      alt="Phone shadow"
-                      width={422}
-                      height={615}
-                      className="w-auto h-auto opacity-30"
-                    />
-                  </div>
-
+                                  <div className="relative flex justify-center items-center h-full">
+                    
                   {/* 手机原型 */}
-                  <div className="relative z-10">
+                  <div 
+                    className={`relative z-0 transition-all duration-500 ${
+                      selectedView === 'mobile' ? 'scale-100 opacity-100' : 'scale-110 opacity-90'
+                    }`}
+                    style={{ 
+                      transform: 'translateY(50px)',
+                      transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+                      transitionDelay: selectedView === 'mobile' ? '200ms' : '0ms'
+                    }}
+                  >
                     <Image 
                       src="/icons/feature/feature_iphone_mockup.png"
                       alt="iPhone mockup showing Filo app"
-                      width={400}
-                      height={600}
+                      width={714}
+                      height={1071}
                       className="w-auto h-auto"
-                      style={{ maxHeight: '600px' }}
+                      style={{ maxHeight: '1071px' }}
                     />
                   </div>
 
                   {/* 功能标签 */}
-                  <div className="absolute left-[230px] top-[412px]">
+                  <div className={`absolute left-[195px] top-[390px] feature-line feature-line-1 z-10 ${mobileLineAnimations.has(1) ? 'animate-sequence' : ''}`}>
                     <div className="flex flex-col items-start" style={{gap: '8px'}}>
-                      <Image src="/icons/feature/feature_line2.svg" alt="line" width={300} height={1} />
+                      <Image src="/icons/feature/feature_line2.svg" alt="line" width={320} height={1} />
                       <p 
                         style={{
                           color: 'var(--02, #22A0FB)',
@@ -1116,7 +1645,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="absolute right-[217px] top-[248px]">
+                  <div className={`absolute right-[117px] top-[270px] feature-line feature-line-2 z-10 ${mobileLineAnimations.has(2) ? 'animate-sequence' : ''}`}>
                     <div className="flex flex-col items-end" style={{gap: '8px'}}>
                       <Image src="/icons/feature/feature_line1.svg" alt="line" width={470} height={1} />
                       <p 
@@ -1135,7 +1664,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="absolute right-[230px] top-[548px]">
+                  <div className={`absolute right-[120px] top-[450px] feature-line feature-line-3 z-10 ${mobileLineAnimations.has(3) ? 'animate-sequence' : ''}`}>
                     <div className="flex flex-col items-end" style={{gap: '8px'}}>
                       <Image src="/icons/feature/feature_line3.svg" alt="line" width={420} height={1} />
                       <p 
@@ -1154,9 +1683,9 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="absolute left-[230px] top-[612px]">
+                  <div className={`absolute left-[195px] top-[682px] feature-line feature-line-4 z-10 ${mobileLineAnimations.has(4) ? 'animate-sequence' : ''}`}>
                     <div className="flex flex-col items-start" style={{gap: '8px'}}>
-                      <Image src="/icons/feature/feature_line4.svg" alt="line" width={300} height={1} />
+                      <Image src="/icons/feature/feature_line4.svg" alt="line" width={320} height={1} />
                       <p 
                         style={{
                           color: 'var(--02, #22A0FB)',
@@ -1178,23 +1707,162 @@ export default function Home() {
 
               {/* Desktop 视图 */}
               <div 
-                className={`absolute inset-0 transition-transform duration-500 ease-in-out ${
-                  selectedView === 'desktop' ? 'translate-x-0' : 'translate-x-full'
+                className={`absolute inset-0 transition-all duration-700 ${
+                  selectedView === 'desktop' 
+                    ? 'translate-x-0 opacity-100 scale-100' 
+                    : 'translate-x-full opacity-0 scale-95'
                 }`}
+                style={{
+                  transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                  transitionDelay: selectedView === 'desktop' ? '100ms' : '0ms'
+                }}
               >
                 <div className="relative flex justify-center items-center h-full">
-                  <Image 
-                    src="/icons/feature/feature_macbook_mockup.png"
-                    alt="MacBook mockup showing Filo app"
-                    width={800}
-                    height={600}
-                    className="w-auto h-auto"
-                    style={{ maxHeight: '600px' }}
-                  />
+                  <div 
+                    className={`transition-all duration-500 ${
+                      selectedView === 'desktop' ? 'scale-100 opacity-100' : 'scale-110 opacity-90'
+                    }`}
+                    style={{
+                      transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+                      transitionDelay: selectedView === 'desktop' ? '200ms' : '0ms'
+                    }}
+                  >
+                    <Image 
+                      src="/icons/feature/feature_macbook_mockup.png"
+                      alt="MacBook mockup showing Filo app"
+                      width={1214}
+                      height={911}
+                      className="w-auto h-auto"
+                      style={{ maxHeight: '911px', transform: 'translateY(-30px) scale(1.1)' }}
+                    />
+                  </div>
                 </div>
               </div>
 
             </div>
+
+            {/* CTA Button - Only show when mobile view is selected */}
+            {selectedView === 'mobile' && (
+              <div 
+                className="flex justify-center mt-16"
+                style={{ 
+                  transform: 'translateY(-200px)',
+                  position: 'relative',
+                  zIndex: 20
+                }}
+              >
+                <a 
+                  href="https://apple.co/43FINlq"
+                  style={{
+                    display: 'inline-flex',
+                    padding: '8px 22px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '10px',
+                    borderRadius: '100px',
+                    border: '0.5px solid var(--02, #22A0FB)',
+                    background: 'transparent',
+                    color: 'var(--02, #22A0FB)',
+                    fontFeatureSettings: '"liga" off, "clig" off',
+                    fontFamily: 'Inter',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: '150%',
+                    textDecoration: 'none',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'var(--02, #22A0FB)';
+                    e.currentTarget.style.color = 'white';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = 'var(--02, #22A0FB)';
+                  }}
+                >
+                  Download Mobile
+                </a>
+              </div>
+            )}
+
+            {/* CTA Buttons - Only show when desktop view is selected */}
+            {selectedView === 'desktop' && (
+              <div 
+                className="flex justify-center mt-16"
+                style={{ 
+                  transform: 'translateY(-200px)',
+                  position: 'relative',
+                  zIndex: 20,
+                  gap: '20px'
+                }}
+              >
+                <a 
+                  href="https://download.filomail.com/mac_upgrade/versions/latest/prod/arm64/Filo-arm64.dmg"
+                  style={{
+                    display: 'inline-flex',
+                    padding: '8px 22px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '10px',
+                    borderRadius: '100px',
+                    border: '0.5px solid var(--02, #22A0FB)',
+                    background: 'transparent',
+                    color: 'var(--02, #22A0FB)',
+                    fontFeatureSettings: '"liga" off, "clig" off',
+                    fontFamily: 'Inter',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: '150%',
+                    textDecoration: 'none',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'var(--02, #22A0FB)';
+                    e.currentTarget.style.color = 'white';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = 'var(--02, #22A0FB)';
+                  }}
+                >
+                  Download Mac (M series)
+                </a>
+                <a 
+                  href="https://download.filomail.com/mac_upgrade/versions/latest/prod/x64/Filo-x64.dmg"
+                  style={{
+                    display: 'inline-flex',
+                    padding: '8px 22px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '10px',
+                    borderRadius: '100px',
+                    border: '0.5px solid var(--02, #22A0FB)',
+                    background: 'transparent',
+                    color: 'var(--02, #22A0FB)',
+                    fontFeatureSettings: '"liga" off, "clig" off',
+                    fontFamily: 'Inter',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: '150%',
+                    textDecoration: 'none',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'var(--02, #22A0FB)';
+                    e.currentTarget.style.color = 'white';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = 'var(--02, #22A0FB)';
+                  }}
+                >
+                  Download Mac (Intel)
+                </a>
+              </div>
+            )}
 
           </div>
         </section>
@@ -1309,73 +1977,77 @@ export default function Home() {
                   
                   {/* 弹窗 1 - Review (右上角) */}
                   <div 
-                    className="absolute gentle-bounce transition-all duration-300 hover:scale-110 hover:drop-shadow-2xl hover:brightness-110"
+                    className={`absolute float-animation transition-transform duration-300 hover:scale-110 ${isAnyPopupHovered ? 'paused' : ''}`}
                     style={{ 
                       top: '180px', 
                       right: '-210px',
                       animationDelay: '0.5s'
                     }}
+                    onMouseEnter={handlePopupMouseEnter}
+                    onMouseLeave={handlePopupMouseLeave}
                   >
                     <Image 
                       src="/icons/feature/feature_todo_popup1_review.svg"
                       alt="Review popup"
                       width={297}
                       height={78}
-                      className="drop-shadow-lg"
                     />
                   </div>
 
                   {/* 弹窗 2 - Reservation (左侧中部) */}
                   <div 
-                    className="absolute gentle-bounce transition-all duration-300 hover:scale-110 hover:drop-shadow-2xl hover:brightness-110"
+                    className={`absolute float-animation transition-transform duration-300 hover:scale-110 ${isAnyPopupHovered ? 'paused' : ''}`}
                     style={{ 
                       top: '325px', 
                       left: '-170px',
                       animationDelay: '1s'
                     }}
+                    onMouseEnter={handlePopupMouseEnter}
+                    onMouseLeave={handlePopupMouseLeave}
                   >
                     <Image 
                       src="/icons/feature/feature_todo_popup2_reservation.svg"
                       alt="Reservation popup"
                       width={202}
                       height={78}
-                      className="drop-shadow-lg"
                     />
                   </div>
 
                   {/* 弹窗 3 - Confirm (右侧中下部) */}
                   <div 
-                    className="absolute gentle-bounce transition-all duration-300 hover:scale-110 hover:drop-shadow-2xl hover:brightness-110"
+                    className={`absolute float-animation transition-transform duration-300 hover:scale-110 ${isAnyPopupHovered ? 'paused' : ''}`}
                     style={{ 
                       top: '435px', 
                       right: '-120px',
                       animationDelay: '1.5s'
                     }}
+                    onMouseEnter={handlePopupMouseEnter}
+                    onMouseLeave={handlePopupMouseLeave}
                   >
                     <Image 
                       src="/icons/feature/feature_todo_popup3_confirm.svg"
                       alt="Confirm popup"
                       width={252}
                       height={58}
-                      className="drop-shadow-lg"
                     />
                   </div>
 
                   {/* 弹窗 4 - RSVP Cancel (底部中央) */}
                   <div 
-                    className="absolute gentle-bounce transition-all duration-300 hover:scale-110 hover:drop-shadow-2xl hover:brightness-110"
+                    className={`absolute float-animation transition-transform duration-300 hover:scale-110 ${isAnyPopupHovered ? 'paused' : ''}`}
                     style={{ 
                       top: '610px', 
                       left: '-70px',
                       animationDelay: '2s'
                     }}
+                    onMouseEnter={handlePopupMouseEnter}
+                    onMouseLeave={handlePopupMouseLeave}
                   >
                     <Image 
                       src="/icons/feature/feature_todo_popup4_RSVP_cancel.svg"
                       alt="RSVP Cancel popup"
                       width={236}
                       height={78}
-                      className="drop-shadow-lg"
                     />
                   </div>
                 </div>
@@ -1391,7 +2063,8 @@ export default function Home() {
           style={{
             display: 'flex',
             width: '100%',
-            paddingBottom: '0px',
+            paddingTop: '120px',
+            paddingBottom: '160px',
             flexDirection: 'column',
             alignItems: 'center',
             gap: '120px',
@@ -1420,212 +2093,320 @@ export default function Home() {
           </div>
 
           {/* 三个语调选项区域 */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: '1200px', gap: '60px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: '1200px', gap: '100px' }}>
             
             {/* Positive */}
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-              <h3 
-                style={{
-                  color: 'var(--06, #000)',
-                  textAlign: 'center',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Georgia',
-                  fontSize: '40px',
-                  fontStyle: 'normal',
-                  fontWeight: 400,
-                  lineHeight: '150%',
-                  margin: 0
-                }}
-              >
-                Positive
-              </h3>
-              <p 
-                style={{
-                  alignSelf: 'stretch',
-                  color: 'var(--07, #707070)',
-                  textAlign: 'center',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Inter',
-                  fontSize: '20px',
-                  fontStyle: 'normal',
-                  fontWeight: 500,
-                  lineHeight: '150%',
-                  margin: 0,
-                  marginBottom: '24px'
-                }}
-              >
-                Say yes or show support
-              </p>
               <div 
-                className="transition-all duration-300 hover:scale-105 hover:drop-shadow-2xl"
+                className="tone-card-hover"
                 style={{
-                  display: 'flex',
+                  position: 'relative',
                   width: '350px',
                   height: '470px',
-                  transform: 'rotate(-5deg) translateY(25px)',
-                  padding: '40px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexShrink: 0,
-                  borderRadius: '30px',
-                  background: 'var(--05, #E9F6FF)',
-                  boxShadow: '0px 100px 100px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 41.778px 0px rgba(0, 0, 0, 0.02), 0px 22.336px 22.336px 0px rgba(0, 0, 0, 0.03), 0px 12.522px 12.522px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 6.65px 0px rgba(0, 0, 0, 0.04), 0px 2.767px 2.767px 0px rgba(0, 0, 0, 0.06)',
+                  transform: 'translateY(-15px)',
                   cursor: 'pointer'
                 }}
               >
+                {/* Content Layer - moves up-left on hover */}
                 <div 
+                  className="tone-card-content"
                   style={{
-                    color: '#22A0FB',
-                    fontFamily: 'Inter',
-                    fontSize: '18px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    textAlign: 'left'
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    padding: '40px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexShrink: 0,
+                    borderRadius: '30px',
+                    background: 'var(--05, #E9F6FF)',
+                    boxShadow: '0px 100px 100px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 41.778px 0px rgba(0, 0, 0, 0.02), 0px 22.336px 22.336px 0px rgba(0, 0, 0, 0.03), 0px 12.522px 12.522px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 6.65px 0px rgba(0, 0, 0, 0.04), 0px 2.767px 2.767px 0px rgba(0, 0, 0, 0.06)',
+                    zIndex: 2,
+                    transition: 'all 0.3s ease-in-out'
                   }}
                 >
-                  Hey Emily,<br /><br />
-                  Just rescheduled the dentist for next Thursday and uploaded the missing trip photos. I'm free on the 14th for Aunt Denise's dinner — count me in.<br /><br />
-                  Thanks for the nudge! Hope your weekend's off to a good start.<br />
-                  Jordan
+                  <div 
+                    style={{
+                      color: '#22A0FB',
+                      fontFamily: 'Inter',
+                      fontSize: '18px',
+                      fontWeight: 500,
+                      lineHeight: '150%',
+                      textAlign: 'left'
+                    }}
+                  >
+                    Hey Emily,<br /><br />
+                    Just rescheduled the dentist for next Thursday and uploaded the missing trip photos. I'm free on the 14th for Aunt Denise's dinner — count me in.<br /><br />
+                    Thanks for the nudge! Hope your weekend's off to a good start.<br />
+                    Jordan
+                  </div>
+                </div>
+
+                {/* Overlay Layer - moves down-right on hover */}
+                <div 
+                  className="tone-card-overlay"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    padding: '40px',
+                    paddingBottom: '20px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                    textAlign: 'center',
+                    borderRadius: '30px',
+                    background: '#fff',
+                    zIndex: 1,
+                    transition: 'all 0.3s ease-in-out'
+                  }}
+                >
+                  <div>
+                    <h2 
+                      style={{
+                        fontFamily: 'Georgia',
+                        fontSize: '36px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        color: '#111',
+                        lineHeight: '32px',
+                        letterSpacing: '1px',
+                        margin: 0,
+                        marginBottom: '12px'
+                      }}
+                    >
+                      Positive
+                    </h2>
+                    <span 
+                      style={{
+                        color: 'var(--07, #707070)',
+                        textAlign: 'center',
+                        fontFeatureSettings: '"liga" off, "clig" off',
+                        fontFamily: 'Inter',
+                        fontSize: '20px',
+                        fontStyle: 'normal',
+                        fontWeight: 500
+                      }}
+                    >
+                      Say yes or show support
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Negative */}
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-              <h3 
-                style={{
-                  color: 'var(--06, #000)',
-                  textAlign: 'center',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Georgia',
-                  fontSize: '40px',
-                  fontStyle: 'normal',
-                  fontWeight: 400,
-                  lineHeight: '150%',
-                  margin: 0
-                }}
-              >
-                Negative
-              </h3>
-              <p 
-                style={{
-                  alignSelf: 'stretch',
-                  color: 'var(--07, #707070)',
-                  textAlign: 'center',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Inter',
-                  fontSize: '20px',
-                  fontStyle: 'normal',
-                  fontWeight: 500,
-                  lineHeight: '150%',
-                  margin: 0,
-                  marginBottom: '24px'
-                }}
-              >
-                Politely say no or pass
-              </p>
               <div 
-                className="transition-all duration-300 hover:scale-105 hover:drop-shadow-2xl"
+                className="tone-card-hover"
                 style={{
-                  display: 'flex',
+                  position: 'relative',
                   width: '350px',
                   height: '470px',
-                  transform: 'rotate(5deg) translateY(25px)',
-                  padding: '40px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexShrink: 0,
-                  borderRadius: '30px',
-                  background: '#FFE4E1',
-                  boxShadow: '0px 100px 100px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 41.778px 0px rgba(0, 0, 0, 0.02), 0px 22.336px 22.336px 0px rgba(0, 0, 0, 0.03), 0px 12.522px 12.522px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 6.65px 0px rgba(0, 0, 0, 0.04), 0px 2.767px 2.767px 0px rgba(0, 0, 0, 0.06)',
+                  transform: 'translateY(-15px)',
                   cursor: 'pointer'
                 }}
               >
+                {/* Content Layer - moves up-left on hover */}
                 <div 
+                  className="tone-card-content"
                   style={{
-                    color: '#F78B60',
-                    fontFamily: 'Inter',
-                    fontSize: '18px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    textAlign: 'left'
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    padding: '40px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexShrink: 0,
+                    borderRadius: '30px',
+                    background: '#FFE4E1',
+                    boxShadow: '0px 100px 100px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 41.778px 0px rgba(0, 0, 0, 0.02), 0px 22.336px 22.336px 0px rgba(0, 0, 0, 0.03), 0px 12.522px 12.522px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 6.65px 0px rgba(0, 0, 0, 0.04), 0px 2.767px 2.767px 0px rgba(0, 0, 0, 0.06)',
+                    zIndex: 2,
+                    transition: 'all 0.3s ease-in-out'
                   }}
                 >
-                  Hey Em,<br /><br />
-                  Haven't rebooked the dentist yet — might push it to next month. Still digging up those trip photos. And I won't be able to make it to Aunt Denise's on the 14th. Please send my apologies.<br /><br />
-                  Hope you have a great weekend,<br />
-                  Jordan
+                  <div 
+                    style={{
+                      color: '#F78B60',
+                      fontFamily: 'Inter',
+                      fontSize: '18px',
+                      fontWeight: 500,
+                      lineHeight: '150%',
+                      textAlign: 'left'
+                    }}
+                  >
+                    Hey Em,<br /><br />
+                    Haven't rebooked the dentist yet — might push it to next month. Still digging up those trip photos. And I won't be able to make it to Aunt Denise's on the 14th. Please send my apologies.<br /><br />
+                    Hope you have a great weekend,<br />
+                    Jordan
+                  </div>
+                </div>
+
+                {/* Overlay Layer - moves down-right on hover */}
+                <div 
+                  className="tone-card-overlay"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    padding: '40px',
+                    paddingBottom: '20px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                    textAlign: 'center',
+                    borderRadius: '30px',
+                    background: '#fff',
+                    zIndex: 1,
+                    transition: 'all 0.3s ease-in-out'
+                  }}
+                >
+                  <div>
+                    <h2 
+                      style={{
+                        fontFamily: 'Georgia',
+                        fontSize: '36px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        color: '#111',
+                        lineHeight: '32px',
+                        letterSpacing: '1px',
+                        margin: 0,
+                        marginBottom: '12px'
+                      }}
+                    >
+                      Negative
+                    </h2>
+                    <span 
+                      style={{
+                        color: 'var(--07, #707070)',
+                        textAlign: 'center',
+                        fontFeatureSettings: '"liga" off, "clig" off',
+                        fontFamily: 'Inter',
+                        fontSize: '20px',
+                        fontStyle: 'normal',
+                        fontWeight: 500
+                      }}
+                    >
+                      Politely say no or pass
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Neutral */}
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-              <h3 
-                style={{
-                  color: 'var(--06, #000)',
-                  textAlign: 'center',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Georgia',
-                  fontSize: '40px',
-                  fontStyle: 'normal',
-                  fontWeight: 400,
-                  lineHeight: '150%',
-                  margin: 0
-                }}
-              >
-                Neutral
-              </h3>
-              <p 
-                style={{
-                  alignSelf: 'stretch',
-                  color: 'var(--07, #707070)',
-                  textAlign: 'center',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Inter',
-                  fontSize: '20px',
-                  fontStyle: 'normal',
-                  fontWeight: 500,
-                  lineHeight: '150%',
-                  margin: 0,
-                  marginBottom: '24px'
-                }}
-              >
-                Keep it casual or undecided
-              </p>
               <div 
-                className="transition-all duration-300 hover:scale-105 hover:drop-shadow-2xl"
+                className="tone-card-hover"
                 style={{
-                  display: 'flex',
+                  position: 'relative',
                   width: '350px',
                   height: '470px',
-                  transform: 'rotate(-5deg) translateY(25px)',
-                  padding: '40px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexShrink: 0,
-                  borderRadius: '30px',
-                  background: '#FFF8DC',
-                  boxShadow: '0px 100px 100px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 41.778px 0px rgba(0, 0, 0, 0.02), 0px 22.336px 22.336px 0px rgba(0, 0, 0, 0.03), 0px 12.522px 12.522px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 6.65px 0px rgba(0, 0, 0, 0.04), 0px 2.767px 2.767px 0px rgba(0, 0, 0, 0.06)',
+                  transform: 'translateY(-15px)',
                   cursor: 'pointer'
                 }}
               >
+                {/* Content Layer - moves up-left on hover */}
                 <div 
+                  className="tone-card-content"
                   style={{
-                    color: '#D8AA41',
-                    fontFamily: 'Inter',
-                    fontSize: '18px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    textAlign: 'left'
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    padding: '40px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexShrink: 0,
+                    borderRadius: '30px',
+                    background: '#FFE49F',
+                    boxShadow: '0px 100px 100px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 41.778px 0px rgba(0, 0, 0, 0.02), 0px 22.336px 22.336px 0px rgba(0, 0, 0, 0.03), 0px 12.522px 12.522px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 6.65px 0px rgba(0, 0, 0, 0.04), 0px 2.767px 2.767px 0px rgba(0, 0, 0, 0.06)',
+                    zIndex: 2,
+                    transition: 'all 0.3s ease-in-out'
                   }}
                 >
-                  Hey Emily,<br /><br />
-                  Still sorting out the dentist — haven't picked a new date. I'll look for those trip photos this weekend. As for Aunt Denise's dinner, I'm not sure yet, depends on work.<br /><br />
-                  I'll let you know soon.<br /><br />
-                  Thanks for the check-in,<br />
-                  Jordan
+                  <div 
+                    style={{
+                      color: '#D8AA41',
+                      fontFamily: 'Inter',
+                      fontSize: '18px',
+                      fontWeight: 500,
+                      lineHeight: '150%',
+                      textAlign: 'left'
+                    }}
+                  >
+                    Hey Emily,<br /><br />
+                    Still sorting out the dentist — haven't picked a new date. I'll look for those trip photos this weekend. As for Aunt Denise's dinner, I'm not sure yet, depends on work.<br /><br />
+                    I'll let you know soon.<br /><br />
+                    Thanks for the check-in,<br />
+                    Jordan
+                  </div>
+                </div>
+
+                {/* Overlay Layer - moves down-right on hover */}
+                <div 
+                  className="tone-card-overlay"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    padding: '40px',
+                    paddingBottom: '20px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                    textAlign: 'center',
+                    borderRadius: '30px',
+                    background: '#fff',
+                    zIndex: 1,
+                    transition: 'all 0.3s ease-in-out'
+                  }}
+                >
+                  <div>
+                    <h2 
+                      style={{
+                        fontFamily: 'Georgia',
+                        fontSize: '36px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        color: '#111',
+                        lineHeight: '32px',
+                        letterSpacing: '1px',
+                        margin: 0,
+                        marginBottom: '12px'
+                      }}
+                    >
+                      Neutral
+                    </h2>
+                    <span 
+                      style={{
+                        color: 'var(--07, #707070)',
+                        textAlign: 'center',
+                        fontFeatureSettings: '"liga" off, "clig" off',
+                        fontFamily: 'Inter',
+                        fontSize: '20px',
+                        fontStyle: 'normal',
+                        fontWeight: 500
+                      }}
+                    >
+                      Keep it casual or undecided
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1640,11 +2421,12 @@ export default function Home() {
           style={{
             display: 'flex',
             width: '100%',
-            paddingTop: '120px',
-            paddingBottom: '160px',
+            paddingTop: '0px',
+            paddingBottom: '260px',
+            marginTop: '-10px',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '80px',
+            gap: '50px',
             background: 'var(--09, #FCFAFA)'
           }}
         >
@@ -1666,10 +2448,11 @@ export default function Home() {
                   fontStyle: 'normal',
                   fontWeight: 400,
                   lineHeight: '130%',
-                  letterSpacing: '-1px'
+                  letterSpacing: '-1px',
+                  marginRight: '20px'
                 }}
               >
-                Or{' '}
+                Or
               </span>
               <span
                 style={{
@@ -1700,14 +2483,14 @@ export default function Home() {
                 style={{
                   background: 'transparent',
                   boxShadow: '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.02), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.02), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.03), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.04)',
-                  borderRadius: '30px'
+                  borderRadius: '55px'
                 }}
               >
                 {/* 外框背景 */}
-                <rect width="800" height="110" rx="30" ry="30" fill="#F6F6F6"/>
+                <rect width="800" height="110" rx="55" ry="55" fill="#F6F6F6"/>
                 
                 {/* 内框背景 */}
-                <rect x="20" y="20" width="760" height="70" rx="16" ry="16" fill="rgba(0, 0, 0, 0.04)"/>
+                <rect x="20" y="20" width="760" height="70" rx="35" ry="35" fill="rgba(0, 0, 0, 0.04)"/>
                 
                 {/* 星形图标 1 */}
                 <path d="M40.2479 50.2231C40.63 48.6476 42.8707 48.6476 43.2527 50.2231L44.3039 54.5582C44.4403 55.1207 44.8795 55.5599 45.442 55.6963L49.777 56.7475C51.3525 57.1295 51.3525 59.3702 49.777 59.7522L45.442 60.8034C44.8795 60.9398 44.4403 61.379 44.3039 61.9415L43.2527 66.2766C42.8707 67.852 40.63 67.852 40.2479 66.2766L39.1968 61.9415C39.0604 61.379 38.6212 60.9398 38.0587 60.8034L33.7236 59.7522C32.1481 59.3702 32.1481 57.1295 33.7236 56.7475L38.0587 55.6963C38.6212 55.5599 39.0604 55.1207 39.1968 54.5582L40.2479 50.2231Z" fill="#22A0FB"/>
@@ -1725,9 +2508,6 @@ export default function Home() {
                   fontWeight="400"
                 >
                   {displayText}
-                  {isTyping && (
-                    <tspan className="cursor-blink">|</tspan>
-                  )}
                 </text>
               </svg>
             </div>
@@ -1744,7 +2524,9 @@ export default function Home() {
             height: '700px',
             justifyContent: 'center',
             alignItems: 'center',
-            background: '#FFFFFF'
+            background: '#FFFFFF',
+            paddingTop: '100px',
+            paddingBottom: '100px'
           }}
         >
           <div 
@@ -1821,7 +2603,7 @@ export default function Home() {
                     alignItems: 'center',
                     gap: '10px',
                     borderRadius: '100px',
-                    border: '0.5px solid var(--06, #000)',
+                    border: '1px solid var(--06, #000)',
                     background: 'transparent',
                     color: 'var(--06, #000)',
                     fontFeatureSettings: '"liga" off, "clig" off',
@@ -1844,54 +2626,43 @@ export default function Home() {
                 >
                   Get Filo Today
                 </button>
-
+                
                 {/* Dropdown 菜单 */}
                 {isGetFiloDropdownOpen && (
                   <div 
-                    className="absolute top-full left-0 z-50 dropdown-animate"
+                    className="absolute top-full z-50 dropdown-animate"
                     style={{
-                      marginTop: '12px',
+                      width: '300px',
+                      left: '30px',
+                      marginTop: '20px',
                       display: 'flex',
-                      flexDirection: 'column',
                       alignItems: 'flex-start',
-                      background: 'transparent',
-                      minWidth: '300px',
-                      paddingLeft: '14px' // 向左移动8像素 (22px - 8px = 14px)
+                      gap: '8px'
                     }}
                   >
-                    {/* 左侧引导线 */}
+                    {/* Single line */}
                     <div 
                       style={{
-                        position: 'absolute',
-                        left: '0',
-                        top: '0',
-                        bottom: '0',
-                        width: '0.5px',
-                        background: '#000'
+                        width: '1px',
+                        height: '110px', // Height to cover all 3 options: 24px * 3 + 20px * 2 spacing
+                        background: 'var(--06, #000)',
+                        flexShrink: 0,
+                        marginTop: '0px'
                       }}
                     />
                     
-                    {/* Download for iOS */}
-                    <a 
-                      href="https://apple.co/43FINlq" 
-                      className="block transition-all duration-200 dropdown-item-animate dropdown-item-delay-1"
-                      style={{ 
-                        textDecoration: 'none',
-                        marginBottom: '0px',
-                        whiteSpace: 'nowrap',
-                        borderRadius: '8px',
-                        padding: '11px 10px'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.08)';
-                        e.currentTarget.style.transform = 'translateX(4px)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.transform = 'translateX(0px)';
+                    {/* Options container */}
+                    <div 
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '20px',
+                        width: '100%'
                       }}
                     >
-                      <div 
+                      {/* iOS & iPadOS 选项 */}
+                      <a 
+                        href="https://apple.co/43FINlq" 
                         style={{
                           color: 'var(--06, #000)',
                           fontFeatureSettings: '"liga" off, "clig" off',
@@ -1899,34 +2670,23 @@ export default function Home() {
                           fontSize: '16px',
                           fontStyle: 'normal',
                           fontWeight: 500,
-                          lineHeight: '150%'
+                          lineHeight: '150%',
+                          textDecoration: 'none',
+                          transition: 'opacity 0.3s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.opacity = '0.7';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.opacity = '1';
                         }}
                       >
-                        Download for iOS
-                      </div>
-                    </a>
-                    
-                    {/* Download for macOS (Apple Silicon) */}
-                    <a 
-                      href="https://download.filomail.com/mac_upgrade/versions/latest/prod/arm64/Filo-arm64.dmg" 
-                      className="block transition-all duration-200 dropdown-item-animate dropdown-item-delay-2"
-                      style={{ 
-                        textDecoration: 'none',
-                        marginBottom: '0px',
-                        whiteSpace: 'nowrap',
-                        borderRadius: '8px',
-                        padding: '11px 10px'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.08)';
-                        e.currentTarget.style.transform = 'translateX(4px)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.transform = 'translateX(0px)';
-                      }}
-                    >
-                      <div 
+                        iOS & iPadOS
+                      </a>
+                      
+                      {/* macOS Apple Silicon 选项 */}
+                      <a 
+                        href="https://download.filomail.com/mac_upgrade/versions/latest/prod/arm64/Filo-arm64.dmg" 
                         style={{
                           color: 'var(--06, #000)',
                           fontFeatureSettings: '"liga" off, "clig" off',
@@ -1934,33 +2694,23 @@ export default function Home() {
                           fontSize: '16px',
                           fontStyle: 'normal',
                           fontWeight: 500,
-                          lineHeight: '150%'
+                          lineHeight: '150%',
+                          textDecoration: 'none',
+                          transition: 'opacity 0.3s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.opacity = '0.7';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.opacity = '1';
                         }}
                       >
-                        Download for macOS (Apple Silicon)
-                      </div>
-                    </a>
-                    
-                    {/* Download for macOS (Intel) */}
-                    <a 
-                      href="https://download.filomail.com/mac_upgrade/versions/latest/prod/x64/Filo-x64.dmg" 
-                      className="block transition-all duration-200 dropdown-item-animate dropdown-item-delay-3"
-                      style={{ 
-                        textDecoration: 'none',
-                        whiteSpace: 'nowrap',
-                        borderRadius: '8px',
-                        padding: '11px 10px'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.08)';
-                        e.currentTarget.style.transform = 'translateX(4px)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.transform = 'translateX(0px)';
-                      }}
-                    >
-                      <div 
+                        macOS (Apple Silicon)
+                      </a>
+                      
+                      {/* macOS Intel 选项 */}
+                      <a 
+                        href="https://download.filomail.com/mac_upgrade/versions/latest/prod/x64/Filo-x64.dmg" 
                         style={{
                           color: 'var(--06, #000)',
                           fontFeatureSettings: '"liga" off, "clig" off',
@@ -1968,12 +2718,20 @@ export default function Home() {
                           fontSize: '16px',
                           fontStyle: 'normal',
                           fontWeight: 500,
-                          lineHeight: '150%'
+                          lineHeight: '150%',
+                          textDecoration: 'none',
+                          transition: 'opacity 0.3s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.opacity = '0.7';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.opacity = '1';
                         }}
                       >
-                        Download for macOS (Intel)
-                      </div>
-                    </a>
+                        macOS (Intel)
+                      </a>
+                    </div>
                   </div>
                 )}
               </div>
@@ -2068,9 +2826,10 @@ export default function Home() {
                 style={{ 
                   width: '491px',
                   height: '364px',
-                  objectFit: 'cover',
+                  objectFit: 'contain',
                   borderRadius: '30px',
-                  background: 'url(/icons/ui/ui_locker_image.png) lightgray -61px 0px / 112.424% 101.099% no-repeat, #D9D9D9'
+                  aspectRatio: '491/364',
+                  transform: 'scale(1.1)'
                 }}
               />
             </div>
@@ -2114,7 +2873,7 @@ export default function Home() {
                   fontStyle: 'normal',
                   fontWeight: 400,
                   lineHeight: '150%',
-                  letterSpacing: '1px',
+                  letterSpacing: '0.5px',
                   margin: 0
                 }}
               >
@@ -2125,7 +2884,7 @@ export default function Home() {
               <p 
                 style={{
                   width: '520px',
-                  color: 'var(--07, #707070)',
+                  color: '#000',
                   textAlign: 'center',
                   fontFeatureSettings: '"liga" off, "clig" off',
                   fontFamily: 'Inter',
@@ -2136,18 +2895,18 @@ export default function Home() {
                   margin: 0
                 }}
               >
-                Filo is <a 
+                Filo is                 <a 
                   href="https://appdefensealliance.dev/casa" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   style={{
-                    color: 'var(--07, #707070)',
-                    textDecoration: 'underline',
+                    color: '#000',
+                    textDecoration: 'none',
                     fontFeatureSettings: '"liga" off, "clig" off',
                     fontFamily: 'Inter',
                     fontSize: '18px',
                     fontStyle: 'normal',
-                    fontWeight: 400,
+                    fontWeight: 500,
                     lineHeight: '150%'
                   }}
                   onMouseEnter={(e) => {
@@ -2160,11 +2919,8 @@ export default function Home() {
               </p>
 
               {/* See Our Data Promise 按钮 */}
-              <button 
-                onClick={() => {
-                  // 目前只有点击效果，后续添加页面跳转
-                  console.log('See Our Data Promise clicked');
-                }}
+              <Link 
+                href="/terms-privacy?section=data"
                 style={{
                   display: 'flex',
                   padding: '8px 22px',
@@ -2172,17 +2928,18 @@ export default function Home() {
                   alignItems: 'center',
                   gap: '10px',
                   borderRadius: '100px',
-                  border: '0.5px solid var(--06, #000)',
+                  border: '1px solid var(--06, #000)',
                   background: 'transparent',
                   color: 'var(--06, #000)',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  textDecoration: 'none'
                 }}
-                onMouseEnter={(e) => {
+                onMouseEnter={(e: any) => {
                   e.currentTarget.style.background = 'var(--06, #000)';
                   e.currentTarget.style.color = 'white';
                 }}
-                onMouseLeave={(e) => {
+                onMouseLeave={(e: any) => {
                   e.currentTarget.style.background = 'transparent';
                   e.currentTarget.style.color = 'var(--06, #000)';
                 }}
@@ -2200,7 +2957,7 @@ export default function Home() {
                 >
                   See Our Data Promise
                 </span>
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -2216,7 +2973,7 @@ export default function Home() {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            padding: '80px 60px'
+            padding: '160px 60px'
           }}
         >
           <div 
@@ -2224,7 +2981,7 @@ export default function Home() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '80px',
+              gap: '50px',
               width: '100%',
               maxWidth: '1000px'
             }}
@@ -2251,8 +3008,7 @@ export default function Home() {
               style={{
                 display: 'flex',
                 flexDirection: 'column',
-                width: '100%',
-                gap: '1px'
+                width: '100%'
               }}
             >
               {[
@@ -2272,16 +3028,16 @@ export default function Home() {
                   question: "How can I share feedback?",
                   answer: "We'd love to hear from you! Join our Discord server and drop your suggestions or bug reports in #📩｜feedback. Need help? Head over to #🛠｜support—our team's there for you."
                 }
-              ].map((faq, index) => (
-                <div 
-                  key={index}
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    borderRadius: '12px',
-                    overflow: 'hidden',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
+              ].map((faq, index, array) => (
+                <React.Fragment key={index}>
+                  <div 
+                    style={{
+                      background: 'transparent',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      transition: 'all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                    }}
+                  >
                   {/* 问题按钮 */}
                   <button
                     onClick={() => handleFaqToggle(index)}
@@ -2291,16 +3047,11 @@ export default function Home() {
                       background: 'transparent',
                       border: 'none',
                       display: 'flex',
-                      justifyContent: 'space-between',
+                      justifyContent: 'center',
                       alignItems: 'center',
                       cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'transparent';
+                      transition: 'all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                      position: 'relative'
                     }}
                   >
                     <span
@@ -2312,7 +3063,13 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 600,
                         lineHeight: '130%',
-                        flex: 1
+                        transition: 'opacity 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.opacity = '0.7';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.opacity = '1';
                       }}
                     >
                       {faq.question}
@@ -2326,10 +3083,21 @@ export default function Home() {
                       fill="none" 
                       xmlns="http://www.w3.org/2000/svg"
                       style={{
-                        transform: expandedFaqs.has(index) ? 'rotate(-90deg)' : 'rotate(0deg)',
-                        transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                        flexShrink: 0,
-                        marginLeft: '20px'
+                        transform: expandedFaqs.has(index) ? 'scaleX(-1) rotate(-90deg)' : 'scaleX(-1) rotate(0deg)',
+                        transition: 'all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                        position: 'absolute',
+                        right: '30px',
+                        cursor: 'pointer'
+                      }}
+                      onMouseEnter={(e) => {
+                        const currentTransform = expandedFaqs.has(index) ? 'scaleX(-1) rotate(-90deg)' : 'scaleX(-1) rotate(0deg)';
+                        e.currentTarget.style.transform = `${currentTransform} translateX(3px)`;
+                        e.currentTarget.style.filter = 'brightness(1.2)';
+                      }}
+                      onMouseLeave={(e) => {
+                        const currentTransform = expandedFaqs.has(index) ? 'scaleX(-1) rotate(-90deg)' : 'scaleX(-1) rotate(0deg)';
+                        e.currentTarget.style.transform = currentTransform;
+                        e.currentTarget.style.filter = 'brightness(1)';
                       }}
                     >
                       <path 
@@ -2348,311 +3116,271 @@ export default function Home() {
                       maxHeight: expandedFaqs.has(index) ? '500px' : '0px',
                       opacity: expandedFaqs.has(index) ? 1 : 0,
                       overflow: 'hidden',
-                      transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+                      transform: expandedFaqs.has(index) ? 'translateY(0)' : 'translateY(-10px)',
+                      transition: 'all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                      transitionProperty: 'max-height, opacity, transform'
                     }}
                   >
                     <div 
                       style={{
-                        padding: '0 30px 30px 30px',
+                        padding: expandedFaqs.has(index) ? '0 30px 30px 30px' : '0 30px 0px 30px',
                         color: '#CCC',
                         fontFamily: 'Inter',
                         fontSize: '18px',
                         fontStyle: 'normal',
                         fontWeight: 400,
-                        lineHeight: '150%'
+                        lineHeight: '150%',
+                        transition: 'padding 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
                       }}
                     >
                       {faq.answer}
                     </div>
                   </div>
-                </div>
+                  </div>
+                  
+                  {/* Add divider between questions (except after the last one) */}
+                  {index < array.length - 1 && (
+                    <div 
+                      style={{
+                        width: '100%',
+                        height: '0.5px',
+                        background: '#3B3B3B',
+                        margin: '0'
+                      }}
+                    />
+                  )}
+                </React.Fragment>
               ))}
             </div>
           </div>
         </div>
 
         {/* 底部图像区域 */}
-        <div className="bg-white pt-60" style={{ paddingBottom: '40px' }}>
-          <div className="max-w-[1200px] mx-auto px-8">
-            {/* 标题 */}
-            <h2 
-              className="text-center mb-12"
+        <div style={{ background: '#E9F6FF', paddingTop: '140px', paddingBottom: '40px' }}>
+          <div className="max-w-[1280px] mx-auto">
+            {/* 主容器 - 左右布局 */}
+            <div 
               style={{
-                color: 'var(--06, #000)',
-                textAlign: 'center',
-                fontFeatureSettings: '"liga" off, "clig" off',
-                fontFamily: 'Inter',
-                fontSize: '80px',
-                fontStyle: 'normal',
-                fontWeight: 700,
-                lineHeight: '130%',
-                letterSpacing: '-3px'
+                display: 'flex',
+                width: '100%',
+                alignItems: 'flex-start',
+                gap: '120px'
               }}
             >
-              The Start of Filo
-            </h2>
-            
-            {/* 中间文本 */}
-            <div className="flex justify-center mb-20">
-              <p 
-                className="text-center"
+              {/* 左侧：标题、文本和按钮容器 */}
+              <div 
                 style={{
-                  width: '420px',
+                  display: 'flex',
+                  width: '575px',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  gap: '40px'
+                }}
+              >
+              {/* 标题 */}
+              <h2 
+                style={{
+                  color: 'var(--06, #000)',
+                  textAlign: 'left',
+                  fontFeatureSettings: '"liga" off, "clig" off',
+                  fontFamily: 'Inter',
+                  fontSize: '80px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '130%',
+                  letterSpacing: '-3px',
+                  margin: 0
+                }}
+              >
+                The Start of Filo
+              </h2>
+              
+              {/* 文本 */}
+              <p 
+                style={{
+                  width: '417px',
                   color: 'var(--07, #707070)',
-                  textAlign: 'center',
+                  textAlign: 'left',
                   fontFeatureSettings: '"liga" off, "clig" off',
                   fontFamily: 'Inter',
                   fontSize: '18px',
                   fontStyle: 'normal',
                   fontWeight: 400,
-                  lineHeight: '150%'
+                  lineHeight: '150%',
+                  margin: 0
                 }}
               >
-                We're not backed by Silicon Valley fame, no keynote stages, no hype cycles — just a small team who loves crafting digital tools that make life a bit easier. When AI took off, we saw a chance to build something simpler, smarter, and more human. That's why we made Filo: not to disrupt the world, just to make email suck less.
+                No Silicon Valley buzz, no big stages, just a small team that loves building digital tools to make life a little easier. When AI took off, we saw a chance to make something simpler, smarter, more human. So we built Filo — not to change the world, just to make email suck less.
               </p>
-            </div>
-            
-            {/* 图像区域 */}
-            <div className="relative">
-              <div className="flex justify-between items-start">
-                {/* 左侧植物图 */}
-                <div className="flex-shrink-0 relative z-30" style={{ marginTop: '-65px' }}>
-                  <Image 
-                    src="/icons/ui/ui_illustration_plant.svg" 
-                    alt="Plant illustration" 
-                    width={226}
-                    height={351}
-                    className="w-auto h-auto"
-                  />
+              
+              {/* 按钮区域 */}
+              <div className="flex gap-[30px] items-start">
+                {/* Mobile 按钮 - Rainbow Button */}
+                <div 
+                  className="inline-block"
+                  onMouseEnter={() => setIsGetFiloTodayHovered(true)}
+                  onMouseLeave={() => setIsGetFiloTodayHovered(false)}
+                >
+                  <RainbowButton 
+                    className="text-white font-semibold text-base whitespace-nowrap"
+                    style={{
+                      fontFamily: 'Inter',
+                      transition: 'all 0.3s ease',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      padding: isGetFiloTodayHovered ? '0 20px' : '0',
+                      width: isGetFiloTodayHovered ? 'auto' : '150px',
+                      height: '53px',
+                      minWidth: '150px'
+                    }}
+                  >
+                    {!isGetFiloTodayHovered ? (
+                      'Get Filo Today'
+                    ) : (
+                      <div style={{ 
+                        display: 'flex', 
+                        flexDirection: 'row', 
+                        alignItems: 'center'
+                      }}>
+                        <a 
+                          href="https://apple.co/43FINlq"
+                          style={{
+                            color: 'white',
+                            textDecoration: 'none',
+                            fontSize: '14px',
+                            fontWeight: 600,
+                            transition: 'opacity 0.3s ease',
+                            whiteSpace: 'nowrap',
+                            padding: '0 15px'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.opacity = '0.8';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.opacity = '1';
+                          }}
+                        >
+                          iOS
+                        </a>
+                        <div style={{
+                          width: '1px',
+                          height: '16px',
+                          background: 'rgba(255, 255, 255, 0.3)',
+                          margin: '0'
+                        }}></div>
+                        <a 
+                          href="https://download.filomail.com/mac_upgrade/versions/latest/prod/arm64/Filo-arm64.dmg"
+                          style={{
+                            color: 'white',
+                            textDecoration: 'none',
+                            fontSize: '14px',
+                            fontWeight: 600,
+                            transition: 'opacity 0.3s ease',
+                            whiteSpace: 'nowrap',
+                            padding: '0 15px'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.opacity = '0.8';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.opacity = '1';
+                          }}
+                        >
+                          macOS (Apple Silicon)
+                        </a>
+                        <div style={{
+                          width: '1px',
+                          height: '16px',
+                          background: 'rgba(255, 255, 255, 0.3)',
+                          margin: '0'
+                        }}></div>
+                        <a 
+                          href="https://download.filomail.com/mac_upgrade/versions/latest/prod/x64/Filo-x64.dmg"
+                          style={{
+                            color: 'white',
+                            textDecoration: 'none',
+                            fontSize: '14px',
+                            fontWeight: 600,
+                            transition: 'opacity 0.3s ease',
+                            whiteSpace: 'nowrap',
+                            padding: '0 15px'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.opacity = '0.8';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.opacity = '1';
+                          }}
+                        >
+                          macOS (Intel)
+                        </a>
+                      </div>
+                    )}
+                  </RainbowButton>
                 </div>
                 
-                {/* 右侧办公室图 */}
-                <div className="flex-shrink-0 relative z-30" style={{ marginTop: '99px' }}>
-                  <Image 
-                    src="/icons/ui/ui_illustration_office.svg" 
-                    alt="Office illustration" 
-                    width={688}
-                    height={272}
-                    className="w-auto h-auto"
-                  />
-                </div>
+                {/* Docs 按钮 - Regular Button */}
+                <a 
+                  href="https://filo-mail.gitbook.io/filo-mail-docs/" 
+                  className="inline-block"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <button 
+                    className="w-[161px] h-[53px] text-black font-semibold text-base whitespace-nowrap"
+                    style={{
+                      fontFamily: 'Inter',
+                      background: 'white',
+                      color: 'black',
+                      border: 'none',
+                      borderRadius: '12px',
+                      boxShadow: '0px 2px 20px 0px rgba(0, 0, 0, 0.04)',
+                      transition: 'all 0.3s ease',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(0, 0, 0, 0.05)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'white';
+                    }}
+                  >
+                    Learn How
+                  </button>
+                </a>
               </div>
-              
-              {/* 第一个蓝色矩形 - 在图片下方 */}
-              <div 
+            </div>
+            
+            {/* 右侧：团队插图 */}
+            <div 
+              style={{
+                flex: '1',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Image 
+                src="/icons/feature/team.svg" 
+                alt="Team working in office" 
+                width={500}
+                height={300}
                 style={{
-                  position: 'absolute',
-                  bottom: '-40px',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: '100vw',
-                  height: '182px',
-                  background: '#E9F6FF',
-                  zIndex: 1
+                  width: 'auto',
+                  height: 'auto',
+                  maxWidth: '100%',
+                  transform: 'scale(0.9) translateY(200px) translateX(50px)'
                 }}
               />
             </div>
-          </div>
-        </div>
-
-        {/* 最底部蓝色区域 */}
-        <div 
-          style={{
-            width: '100%',
-            height: 'auto',
-            minHeight: '300px',
-            background: '#E9F6FF',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            padding: '80px 20px 20px 20px',
-            position: 'relative',
-            zIndex: 1,
-            marginTop: '-80px'
-          }}
-        >
-                    <div className="max-w-[1280px] mx-auto w-full">
-            <h2 
-              style={{
-                alignSelf: 'stretch',
-                color: 'var(--06, #000)',
-                fontFamily: 'Inter',
-                fontSize: '50px',
-                fontStyle: 'normal',
-                fontWeight: 600,
-                lineHeight: '130%',
-                letterSpacing: '-2px',
-                margin: '0 0 30px 0',
-                textAlign: 'left'
-              }}
-            >
-              Inbox to Done
-            </h2>
             
-            <div className="flex gap-[30px] items-start">
-              {/* App Store 按钮 */}
-              <a 
-                href="https://apple.co/43FINlq" 
-                className="inline-block transition-all duration-300 hover:brightness-110"
-                style={{
-                  width: '133px',
-                  height: '53px',
-                  borderRadius: '16px',
-                  border: '1.5px solid var(--14, rgba(0, 0, 0, 0.04))',
-                  background: 'var(--02, #22A0FB)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '0 24px'
-                }}
-              >
-                <div style={{ 
-                  width: '105px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <span style={{ 
-                    color: 'var(--10, #FFF)',
-                    fontFamily: 'Inter',
-                    fontSize: '16px',
-                    fontStyle: 'normal',
-                    fontWeight: 600,
-                    lineHeight: '130%',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    Filo for iOS
-                  </span>
-                </div>
-              </a>
-              
-              {/* macOS 按钮带下拉菜单 */}
-              <div 
-                className="relative"
-                onMouseEnter={handleBottomCtaMouseEnter}
-                onMouseLeave={handleBottomCtaMouseLeave}
-              >
-                <button 
-                  onClick={handleBottomCtaButtonClick}
-                  className="transition-all duration-300 hover:brightness-110"
-                  style={{
-                    width: '161px',
-                    height: '53px',
-                    borderRadius: '16px',
-                    border: '1.5px solid var(--14, rgba(0, 0, 0, 0.04))',
-                    background: 'var(--02, #22A0FB)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '0 24px'
-                  }}
-                >
-                  <div style={{ 
-                    width: '133px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <span style={{
-                      color: 'var(--10, #FFF)',
-                      fontFamily: 'Inter',
-                      fontSize: '16px',
-                      fontStyle: 'normal',
-                      fontWeight: 600,
-                      lineHeight: '130%',
-                      whiteSpace: 'nowrap'
-                    }}>
-                      Filo for macOS
-                    </span>
-                  </div>
-                </button>
-                
-                {/* Dropdown 菜单 */}
-                {isBottomCtaDropdownOpen && (
-                  <div 
-                    className="absolute top-full left-0 mt-2 z-30 dropdown-animate"
-                    style={{
-                      width: '161px',
-                      display: 'flex',
-                      padding: '16px',
-                      flexDirection: 'column',
-                      alignItems: 'flex-start',
-                      gap: '12px',
-                      alignSelf: 'stretch',
-                      borderRadius: '12px',
-                      background: '#FFFFFF',
-                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)'
-                    }}
-                  >
-                    {/* Apple Silicon 选项 */}
-                    <a 
-                      href="https://download.filomail.com/mac_upgrade/versions/latest/prod/arm64/Filo-arm64.dmg" 
-                      className="block w-full transition-all duration-200 dropdown-item-animate dropdown-item-delay-1"
-                      style={{ alignSelf: 'stretch', borderRadius: '6px', padding: '6px 8px' }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(34, 160, 251, 0.1)';
-                        e.currentTarget.style.transform = 'translateX(2px)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.transform = 'translateX(0px)';
-                      }}
-                    >
-                      <div 
-                        style={{
-                          alignSelf: 'stretch',
-                          textAlign: 'left',
-                          color: '#22A0FB',
-                          fontFeatureSettings: '"liga" off, "clig" off',
-                          fontFamily: 'var(--font-inter), Inter, sans-serif',
-                          fontSize: '14px',
-                          fontStyle: 'normal',
-                          fontWeight: 600,
-                          lineHeight: '130%'
-                        }}
-                      >
-                        Apple Silicon
-                      </div>
-                    </a>
-                    
-                    {/* Intel 选项 */}
-                    <a 
-                      href="https://download.filomail.com/mac_upgrade/versions/latest/prod/x64/Filo-x64.dmg" 
-                      className="block w-full transition-all duration-200 dropdown-item-animate dropdown-item-delay-2"
-                      style={{ alignSelf: 'stretch', borderRadius: '6px', padding: '6px 8px' }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(34, 160, 251, 0.1)';
-                        e.currentTarget.style.transform = 'translateX(2px)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.transform = 'translateX(0px)';
-                      }}
-                    >
-                      <div 
-                        style={{
-                          alignSelf: 'stretch',
-                          textAlign: 'left',
-                          color: '#22A0FB',
-                          fontFeatureSettings: '"liga" off, "clig" off',
-                          fontFamily: 'var(--font-inter), Inter, sans-serif',
-                          fontSize: '14px',
-                          fontStyle: 'normal',
-                          fontWeight: 600,
-                          lineHeight: '130%'
-                        }}
-                      >
-                        Intel
-                      </div>
-                    </a>
-                  </div>
-                )}
-              </div>
-            </div>
-
-
+          </div>
           </div>
         </div>
+
+
 
         {/* 分割线 */}
         <div 
@@ -2679,14 +3407,14 @@ export default function Home() {
           style={{
             width: '100%',
             background: '#E9F6FF',
-            padding: '20px 20px 40px 20px'
+            padding: '10px 20px 110px 20px'
           }}
         >
           <div className="max-w-[1280px] mx-auto w-full flex justify-between items-center">
             {/* 左侧链接 */}
             <div className="flex items-center" style={{ gap: '24px' }}>
-              <a 
-                href="#" 
+              <Link 
+                href="http://localhost:3000/terms-privacy?section=terms" 
                 style={{
                   color: 'var(--06, #000)',
                   fontFamily: 'Inter',
@@ -2698,17 +3426,17 @@ export default function Home() {
                   textDecoration: 'none',
                   transition: 'opacity 0.3s ease'
                 }}
-                onMouseEnter={(e) => {
+                onMouseEnter={(e: any) => {
                   e.currentTarget.style.opacity = '0.7';
                 }}
-                onMouseLeave={(e) => {
+                onMouseLeave={(e: any) => {
                   e.currentTarget.style.opacity = '1';
                 }}
               >
                 Terms of Service
-              </a>
-              <a 
-                href="#" 
+              </Link>
+              <Link 
+                href="http://localhost:3000/terms-privacy?section=privacy" 
                 style={{
                   color: 'var(--06, #000)',
                   fontFamily: 'Inter',
@@ -2720,17 +3448,17 @@ export default function Home() {
                   textDecoration: 'none',
                   transition: 'opacity 0.3s ease'
                 }}
-                onMouseEnter={(e) => {
+                onMouseEnter={(e: any) => {
                   e.currentTarget.style.opacity = '0.7';
                 }}
-                onMouseLeave={(e) => {
+                onMouseLeave={(e: any) => {
                   e.currentTarget.style.opacity = '1';
                 }}
               >
                 Privacy Policy
-              </a>
-              <a 
-                href="#" 
+              </Link>
+              <Link 
+                href="/terms-privacy?section=data" 
                 style={{
                   color: 'var(--06, #000)',
                   fontFamily: 'Inter',
@@ -2742,15 +3470,15 @@ export default function Home() {
                   textDecoration: 'none',
                   transition: 'opacity 0.3s ease'
                 }}
-                onMouseEnter={(e) => {
+                onMouseEnter={(e: any) => {
                   e.currentTarget.style.opacity = '0.7';
                 }}
-                onMouseLeave={(e) => {
+                onMouseLeave={(e: any) => {
                   e.currentTarget.style.opacity = '1';
                 }}
               >
-                User Data
-              </a>
+                Data Protection
+              </Link>
               <span style={{
                 color: 'var(--07, #707070)',
                 fontFamily: 'Inter',
@@ -2771,7 +3499,7 @@ export default function Home() {
                 className="transition-all duration-300 hover:scale-110"
                 style={{
                   width: '32px',
-                  height: '33px',
+                  height: '32px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
@@ -2781,8 +3509,12 @@ export default function Home() {
                   src="/icons/brand/brand_discord_icon.svg"
                   alt="Discord"
                   width={32}
-                  height={33}
-                  className="w-auto h-auto"
+                  height={32}
+                  className="w-[32px] h-[32px]"
+                  style={{
+                    width: '32px',
+                    height: '32px'
+                  }}
                 />
               </a>
               <a 
@@ -2790,7 +3522,7 @@ export default function Home() {
                 className="transition-all duration-300 hover:scale-110"
                 style={{
                   width: '32px',
-                  height: '33px',
+                  height: '32px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
@@ -2800,8 +3532,12 @@ export default function Home() {
                   src="/icons/brand/brand_x_icon.svg"
                   alt="X (Twitter)"
                   width={32}
-                  height={33}
-                  className="w-auto h-auto"
+                  height={32}
+                  className="w-[32px] h-[32px]"
+                  style={{
+                    width: '32px',
+                    height: '32px'
+                  }}
                 />
               </a>
               <a 
@@ -2809,18 +3545,24 @@ export default function Home() {
                 className="transition-all duration-300 hover:scale-110"
                 style={{
                   width: '32px',
-                  height: '33px',
+                  height: '32px',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  transform: 'translateY(-3px) scale(0.95)'
                 }}
               >
-                <svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M28 9.5C28 5.91015 25.0899 3 21.5 3H10.5C6.91015 3 4 5.91015 4 9.5V17.5C4 21.0899 6.91015 24 10.5 24H12V28.5C12 28.8978 12.158 29.2794 12.4393 29.5607C12.7206 29.842 13.1022 30 13.5 30C13.7652 30 14.0196 29.8946 14.2071 29.7071L19.7071 24.2071C19.8946 24.0196 20 23.7652 20 23.5C20 23.2348 19.8946 22.9804 19.7071 22.7929C19.5196 22.6054 19.2652 22.5 19 22.5H10.5C7.73858 22.5 5.5 20.2614 5.5 17.5V9.5C5.5 6.73858 7.73858 4.5 10.5 4.5H21.5C24.2614 4.5 26.5 6.73858 26.5 9.5V17.5C26.5 20.2614 24.2614 22.5 21.5 22.5H19C18.5858 22.5 18.25 22.8358 18.25 23.25C18.25 23.6642 18.5858 24 19 24H21.5C25.0899 24 28 21.0899 28 17.5V9.5Z" fill="black"/>
-                  <circle cx="11" cy="13.5" r="1.5" fill="black"/>
-                  <circle cx="16" cy="13.5" r="1.5" fill="black"/>
-                  <circle cx="21" cy="13.5" r="1.5" fill="black"/>
-                </svg>
+                <Image 
+                  src="/icons/brand/brand_feedback_icon.svg"
+                  alt="Feedback"
+                  width={32}
+                  height={32}
+                  className="w-[32px] h-[32px]"
+                  style={{
+                    width: '32px',
+                    height: '32px'
+                  }}
+                />
               </a>
             </div>
           </div>
@@ -2830,4 +3572,5 @@ export default function Home() {
     </>
   );
 }
+
 

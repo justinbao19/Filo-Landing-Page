@@ -20,8 +20,17 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Filo",
-  description: "Filo is a platform for creating and sharing AI-powered content.",
+  title: "Filo - Inbox to Done",
+  description: "Turn overwhelming emails into crystal-clear summaries, quick replies and AI-generated to-dos in one sec.",
+  icons: {
+    icon: [
+      { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-48.png', sizes: '48x48', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/favicon-48.png',
+  },
 };
 
 export default async function RootLayout({
