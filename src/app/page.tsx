@@ -6,7 +6,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { RainbowButton } from '@/components/ui/rainbow-button'
 import { useTranslations } from 'next-intl'
 import { Language, LANGUAGE_OPTIONS } from '@/lib/locale'
-import Cookies from 'universal-cookie';
+import Cookies from 'universal-cookie'
 
 const cookies = new Cookies()
 
@@ -25,7 +25,7 @@ export default function Home() {
   const t = useTranslations('home')
 
   useEffect(() => {
-    setSelectedLanguage(cookies.get('user-locale') as Language || Language.EN)
+    setSelectedLanguage((cookies.get('user-locale') as Language) || Language.EN)
   }, [])
 
   const [selectedView, setSelectedView] = useState<'mobile' | 'desktop'>('mobile')
