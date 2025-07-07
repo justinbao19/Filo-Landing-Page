@@ -43,7 +43,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased w-svw h-svh`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} overflow-y-auto overflow-x-hidden antialiased w-svw h-svh`}
       >
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
