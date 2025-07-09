@@ -968,10 +968,18 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '40px',
+                        marginBottom: '28px',
                       }}
                     >
-                      {t('understandItAll')}
+                      {t('understandItAll').split('\n').map((line, index) => (
+                        <div key={index}>
+                          {index === 0 ? (
+                            <span style={{ fontSize: '18.225px' }}>{line}</span>
+                          ) : (
+                            <div>{line}</div>
+                          )}
+                        </div>
+                      ))}
                     </h3>
 
                     {/* 功能示例图片 */}
@@ -1043,10 +1051,18 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '40px',
+                        marginBottom: '28px',
                       }}
                     >
-                      {t('promoCondensed')}
+                      {t('promoCondensed').split('\n').map((line, index) => (
+                        <div key={index}>
+                          {index === 0 ? (
+                            <span style={{ fontSize: '18.225px' }}>{line}</span>
+                          ) : (
+                            <div>{line}</div>
+                          )}
+                        </div>
+                      ))}
                     </h3>
 
                     {/* 促销功能示例图片 */}
@@ -1097,10 +1113,18 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '40px',
+                        marginBottom: '28px',
                       }}
                     >
-                      {t('whatDoISay')}
+                      {t('whatDoISay').split('\n').map((line, index) => (
+                        <div key={index}>
+                          {index === 0 ? (
+                            <span style={{ fontSize: '18.225px' }}>{line}</span>
+                          ) : (
+                            <div>{line}</div>
+                          )}
+                        </div>
+                      ))}
                     </h3>
 
                     {/* 法语功能示例图片 */}
@@ -1151,10 +1175,18 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '40px',
+                        marginBottom: '28px',
                       }}
                     >
-                      {t('bossBombDefused')}
+                      {t('bossBombDefused').split('\n').map((line, index) => (
+                        <div key={index}>
+                          {index === 0 ? (
+                            <span style={{ fontSize: '18.225px' }}>{line}</span>
+                          ) : (
+                            <div>{line}</div>
+                          )}
+                        </div>
+                      ))}
                     </h3>
 
                     {/* Boss功能示例图片 */}
@@ -1205,10 +1237,18 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '40px',
+                        marginBottom: '28px',
                       }}
                     >
-                      {t('goodbyeAutoBill')}
+                      {t('goodbyeAutoBill').split('\n').map((line, index) => (
+                        <div key={index}>
+                          {index === 0 ? (
+                            <span style={{ fontSize: '18.225px' }}>{line}</span>
+                          ) : (
+                            <div>{line}</div>
+                          )}
+                        </div>
+                      ))}
                     </h3>
 
                     {/* 订阅管理功能示例图片 */}
@@ -1259,10 +1299,18 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '40px',
+                        marginBottom: '28px',
                       }}
                     >
-                      {t('understandItAll')}
+                      {t('understandItAll').split('\n').map((line, index) => (
+                        <div key={index}>
+                          {index === 0 ? (
+                            <span style={{ fontSize: '18.225px' }}>{line}</span>
+                          ) : (
+                            <div>{line}</div>
+                          )}
+                        </div>
+                      ))}
                     </h3>
 
                     {/* 功能示例图片 */}
@@ -1334,10 +1382,18 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '40px',
+                        marginBottom: '28px',
                       }}
                     >
-                      {t('promoCondensed')}
+                      {t('promoCondensed').split('\n').map((line, index) => (
+                        <div key={index}>
+                          {index === 0 ? (
+                            <span style={{ fontSize: '18.225px' }}>{line}</span>
+                          ) : (
+                            <div>{line}</div>
+                          )}
+                        </div>
+                      ))}
                     </h3>
 
                     {/* 促销功能示例图片 */}
@@ -1388,10 +1444,18 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '40px',
+                        marginBottom: '28px',
                       }}
                     >
-                      {t('whatDoISay')}
+                      {t('whatDoISay').split('\n').map((line, index) => (
+                        <div key={index}>
+                          {index === 0 ? (
+                            <span style={{ fontSize: '18.225px' }}>{line}</span>
+                          ) : (
+                            <div>{line}</div>
+                          )}
+                        </div>
+                      ))}
                     </h3>
 
                     {/* 法语功能示例图片 */}
@@ -1445,7 +1509,15 @@ export default function Home() {
                         marginBottom: '40px',
                       }}
                     >
-                      {t('bossBombDefused')}
+                      {t('bossBombDefused').split('\n').map((line, index) => (
+                        <div key={index}>
+                          {index === 0 ? (
+                            <span style={{ fontSize: '18.225px' }}>{line}</span>
+                          ) : (
+                            <div>{line}</div>
+                          )}
+                        </div>
+                      ))}
                     </h3>
 
                     {/* Boss功能示例图片 */}
@@ -1496,10 +1568,18 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '40px',
+                        marginBottom: '28px',
                       }}
                     >
-                      {t('goodbyeAutoBill')}
+                      {t('goodbyeAutoBill').split('\n').map((line, index) => (
+                        <div key={index}>
+                          {index === 0 ? (
+                            <span style={{ fontSize: '18.225px' }}>{line}</span>
+                          ) : (
+                            <div>{line}</div>
+                          )}
+                        </div>
+                      ))}
                     </h3>
 
                     {/* 订阅管理功能示例图片 */}
@@ -2047,9 +2127,6 @@ export default function Home() {
                   }}
                 >
                   {t('neverMissATaskDescription')}
-                  <br />
-                  <br />
-                  {t('noSetupNoStress')}
                 </p>
               </div>
 
@@ -2727,7 +2804,9 @@ export default function Home() {
                   margin: 0,
                 }}
               >
-                {t('poweredByTopTierAI')}
+                {t('poweredByTopTierAILine1')}
+                <br />
+                {t('poweredByTopTierAILine2')}
               </h2>
 
               {/* Tagline */}
@@ -3375,7 +3454,7 @@ export default function Home() {
                 </h2>
 
                 {/* 文本 */}
-                <p
+                <div
                   style={{
                     width: '417px',
                     color: 'var(--07, #707070)',
@@ -3389,8 +3468,17 @@ export default function Home() {
                     margin: 0,
                   }}
                 >
-                  {t('theStartOfFiloDescription')}
-                </p>
+                  {t('theStartOfFiloDescription').split('\n\n').map((paragraph, index) => (
+                    <p
+                      key={index}
+                      style={{
+                        margin: index === 0 ? '0 0 16px 0' : '16px 0',
+                      }}
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
 
                 {/* 按钮区域 */}
                 <div className="flex gap-[30px] items-start">

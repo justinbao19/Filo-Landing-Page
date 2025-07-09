@@ -78,10 +78,18 @@ const HomeCarousel = () => {
                   fontStyle: 'normal',
                   fontWeight: 700,
                   lineHeight: '130%',
-                  marginBottom: '40px',
+                  marginBottom: '28px',
                 }}
               >
-                {t('understandItAll')}
+                {t('understandItAll').split('\n').map((line, index) => (
+                  <div key={index}>
+                    {index === 0 ? (
+                      <span style={{ fontSize: '18.225px' }}>{line}</span>
+                    ) : (
+                      <div>{line}</div>
+                    )}
+                  </div>
+                ))}
               </h3>
 
               <div className="relative">
@@ -130,10 +138,18 @@ const HomeCarousel = () => {
                   fontStyle: 'normal',
                   fontWeight: 700,
                   lineHeight: '130%',
-                  marginBottom: '40px',
+                  marginBottom: '28px',
                 }}
               >
-                {t('promoCondensed')}
+                {t('promoCondensed').split('\n').map((line, index) => (
+                  <div key={index}>
+                    {index === 0 ? (
+                      <span style={{ fontSize: '18.225px' }}>{line}</span>
+                    ) : (
+                      <div>{line}</div>
+                    )}
+                  </div>
+                ))}
               </h3>
 
               <div className="flex-1 flex items-end">
@@ -176,10 +192,18 @@ const HomeCarousel = () => {
                   fontStyle: 'normal',
                   fontWeight: 700,
                   lineHeight: '130%',
-                  marginBottom: '40px',
+                  marginBottom: '28px',
                 }}
               >
-                {t('whatDoISay')}
+                {t('whatDoISay').split('\n').map((line, index) => (
+                  <div key={index}>
+                    {index === 0 ? (
+                      <span style={{ fontSize: '18.225px' }}>{line}</span>
+                    ) : (
+                      <div>{line}</div>
+                    )}
+                  </div>
+                ))}
               </h3>
 
               <div className="flex-1 flex items-end">
@@ -222,10 +246,18 @@ const HomeCarousel = () => {
                   fontStyle: 'normal',
                   fontWeight: 700,
                   lineHeight: '130%',
-                  marginBottom: '40px',
+                  marginBottom: '28px',
                 }}
               >
-                {t('bossBombDefused')}
+                {t('bossBombDefused').split('\n').map((line, index) => (
+                  <div key={index}>
+                    {index === 0 ? (
+                      <span style={{ fontSize: '18.225px' }}>{line}</span>
+                    ) : (
+                      <div>{line}</div>
+                    )}
+                  </div>
+                ))}
               </h3>
 
               <div className="flex-1 flex items-end">
@@ -268,10 +300,18 @@ const HomeCarousel = () => {
                   fontStyle: 'normal',
                   fontWeight: 700,
                   lineHeight: '130%',
-                  marginBottom: '40px',
+                  marginBottom: '28px',
                 }}
               >
-                {t('goodbyeAutoBill')}
+                {t('goodbyeAutoBill').split('\n').map((line, index) => (
+                  <div key={index}>
+                    {index === 0 ? (
+                      <span style={{ fontSize: '18.225px' }}>{line}</span>
+                    ) : (
+                      <div>{line}</div>
+                    )}
+                  </div>
+                ))}
               </h3>
 
               <div className="flex-1 flex items-end">
