@@ -968,18 +968,22 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '28px',
+                        marginBottom: t('understandItAll').includes('\n') ? '28px' : '40px',
                       }}
                     >
-                      {t('understandItAll').split('\n').map((line, index) => (
-                        <div key={index}>
-                          {index === 0 ? (
-                            <span style={{ fontSize: '18.225px' }}>{line}</span>
-                          ) : (
-                            <div>{line}</div>
-                          )}
-                        </div>
-                      ))}
+                      {t('understandItAll').includes('\n') ? (
+                        t('understandItAll').split('\n').map((line, index) => (
+                          <div key={index}>
+                            {index === 0 ? (
+                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                            ) : (
+                              <div>{line}</div>
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        t('understandItAll')
+                      )}
                     </h3>
 
                     {/* 功能示例图片 */}
@@ -1051,18 +1055,22 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '28px',
+                        marginBottom: t('promoCondensed').includes('\n') ? '28px' : '40px',
                       }}
                     >
-                      {t('promoCondensed').split('\n').map((line, index) => (
-                        <div key={index}>
-                          {index === 0 ? (
-                            <span style={{ fontSize: '18.225px' }}>{line}</span>
-                          ) : (
-                            <div>{line}</div>
-                          )}
-                        </div>
-                      ))}
+                      {t('promoCondensed').includes('\n') ? (
+                        t('promoCondensed').split('\n').map((line, index) => (
+                          <div key={index}>
+                            {index === 0 ? (
+                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                            ) : (
+                              <div>{line}</div>
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        t('promoCondensed')
+                      )}
                     </h3>
 
                     {/* 促销功能示例图片 */}
@@ -1113,18 +1121,22 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '28px',
+                        marginBottom: t('whatDoISay').includes('\n') ? '28px' : '40px',
                       }}
                     >
-                      {t('whatDoISay').split('\n').map((line, index) => (
-                        <div key={index}>
-                          {index === 0 ? (
-                            <span style={{ fontSize: '18.225px' }}>{line}</span>
-                          ) : (
-                            <div>{line}</div>
-                          )}
-                        </div>
-                      ))}
+                      {t('whatDoISay').includes('\n') ? (
+                        t('whatDoISay').split('\n').map((line, index) => (
+                          <div key={index}>
+                            {index === 0 ? (
+                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                            ) : (
+                              <div>{line}</div>
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        t('whatDoISay')
+                      )}
                     </h3>
 
                     {/* 法语功能示例图片 */}
@@ -1175,18 +1187,22 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '28px',
+                        marginBottom: t('bossBombDefused').includes('\n') ? '28px' : '40px',
                       }}
                     >
-                      {t('bossBombDefused').split('\n').map((line, index) => (
-                        <div key={index}>
-                          {index === 0 ? (
-                            <span style={{ fontSize: '18.225px' }}>{line}</span>
-                          ) : (
-                            <div>{line}</div>
-                          )}
-                        </div>
-                      ))}
+                      {t('bossBombDefused').includes('\n') ? (
+                        t('bossBombDefused').split('\n').map((line, index) => (
+                          <div key={index}>
+                            {index === 0 ? (
+                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                            ) : (
+                              <div>{line}</div>
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        t('bossBombDefused')
+                      )}
                     </h3>
 
                     {/* Boss功能示例图片 */}
@@ -1237,18 +1253,22 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '28px',
+                        marginBottom: t('goodbyeAutoBill').includes('\n') ? '28px' : '40px',
                       }}
                     >
-                      {t('goodbyeAutoBill').split('\n').map((line, index) => (
-                        <div key={index}>
-                          {index === 0 ? (
-                            <span style={{ fontSize: '18.225px' }}>{line}</span>
-                          ) : (
-                            <div>{line}</div>
-                          )}
-                        </div>
-                      ))}
+                      {t('goodbyeAutoBill').includes('\n') ? (
+                        t('goodbyeAutoBill').split('\n').map((line, index) => (
+                          <div key={index}>
+                            {index === 0 ? (
+                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                            ) : (
+                              <div>{line}</div>
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        t('goodbyeAutoBill')
+                      )}
                     </h3>
 
                     {/* 订阅管理功能示例图片 */}
@@ -1299,18 +1319,22 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '28px',
+                        marginBottom: t('understandItAll').includes('\n') ? '28px' : '40px',
                       }}
                     >
-                      {t('understandItAll').split('\n').map((line, index) => (
-                        <div key={index}>
-                          {index === 0 ? (
-                            <span style={{ fontSize: '18.225px' }}>{line}</span>
-                          ) : (
-                            <div>{line}</div>
-                          )}
-                        </div>
-                      ))}
+                      {t('understandItAll').includes('\n') ? (
+                        t('understandItAll').split('\n').map((line, index) => (
+                          <div key={index}>
+                            {index === 0 ? (
+                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                            ) : (
+                              <div>{line}</div>
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        t('understandItAll')
+                      )}
                     </h3>
 
                     {/* 功能示例图片 */}
@@ -1382,18 +1406,22 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '28px',
+                        marginBottom: t('promoCondensed').includes('\n') ? '28px' : '40px',
                       }}
                     >
-                      {t('promoCondensed').split('\n').map((line, index) => (
-                        <div key={index}>
-                          {index === 0 ? (
-                            <span style={{ fontSize: '18.225px' }}>{line}</span>
-                          ) : (
-                            <div>{line}</div>
-                          )}
-                        </div>
-                      ))}
+                      {t('promoCondensed').includes('\n') ? (
+                        t('promoCondensed').split('\n').map((line, index) => (
+                          <div key={index}>
+                            {index === 0 ? (
+                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                            ) : (
+                              <div>{line}</div>
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        t('promoCondensed')
+                      )}
                     </h3>
 
                     {/* 促销功能示例图片 */}
@@ -1444,18 +1472,22 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '28px',
+                        marginBottom: t('whatDoISay').includes('\n') ? '28px' : '40px',
                       }}
                     >
-                      {t('whatDoISay').split('\n').map((line, index) => (
-                        <div key={index}>
-                          {index === 0 ? (
-                            <span style={{ fontSize: '18.225px' }}>{line}</span>
-                          ) : (
-                            <div>{line}</div>
-                          )}
-                        </div>
-                      ))}
+                      {t('whatDoISay').includes('\n') ? (
+                        t('whatDoISay').split('\n').map((line, index) => (
+                          <div key={index}>
+                            {index === 0 ? (
+                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                            ) : (
+                              <div>{line}</div>
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        t('whatDoISay')
+                      )}
                     </h3>
 
                     {/* 法语功能示例图片 */}
@@ -1568,18 +1600,22 @@ export default function Home() {
                         fontStyle: 'normal',
                         fontWeight: 700,
                         lineHeight: '130%',
-                        marginBottom: '28px',
+                        marginBottom: t('goodbyeAutoBill').includes('\n') ? '28px' : '40px',
                       }}
                     >
-                      {t('goodbyeAutoBill').split('\n').map((line, index) => (
-                        <div key={index}>
-                          {index === 0 ? (
-                            <span style={{ fontSize: '18.225px' }}>{line}</span>
-                          ) : (
-                            <div>{line}</div>
-                          )}
-                        </div>
-                      ))}
+                      {t('goodbyeAutoBill').includes('\n') ? (
+                        t('goodbyeAutoBill').split('\n').map((line, index) => (
+                          <div key={index}>
+                            {index === 0 ? (
+                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                            ) : (
+                              <div>{line}</div>
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        t('goodbyeAutoBill')
+                      )}
                     </h3>
 
                     {/* 订阅管理功能示例图片 */}
