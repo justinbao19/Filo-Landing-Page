@@ -3,10 +3,19 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import AutoScroll from 'embla-carousel-auto-scroll'
 import { useTranslations } from 'next-intl'
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from './ui/carousel'
+import { Language } from '@/lib/locale'
+import Cookies from 'universal-cookie'
+
+const cookies = new Cookies()
 
 const HomeCarousel = () => {
   const t = useTranslations('home')
   const [api, setApi] = useState<CarouselApi | null>(null)
+  const [selectedLanguage, setSelectedLanguage] = useState(Language.EN)
+
+  useEffect(() => {
+    setSelectedLanguage(cookies.get('user-locale') as Language || Language.EN)
+  }, [])
 
   const toggleAutoplay = useCallback(() => {
     const autoScroll = api?.plugins()?.autoScroll
@@ -85,7 +94,7 @@ const HomeCarousel = () => {
                   t('understandItAll').split('\n').map((line, index) => (
                     <div key={index}>
                       {index === 0 ? (
-                        <span style={{ fontSize: '18.225px' }}>{line}</span>
+                        <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                       ) : (
                         <div>{line}</div>
                       )}
@@ -149,7 +158,7 @@ const HomeCarousel = () => {
                   t('promoCondensed').split('\n').map((line, index) => (
                     <div key={index}>
                       {index === 0 ? (
-                        <span style={{ fontSize: '18.225px' }}>{line}</span>
+                        <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                       ) : (
                         <div>{line}</div>
                       )}
@@ -207,7 +216,7 @@ const HomeCarousel = () => {
                   t('whatDoISay').split('\n').map((line, index) => (
                     <div key={index}>
                       {index === 0 ? (
-                        <span style={{ fontSize: '18.225px' }}>{line}</span>
+                        <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                       ) : (
                         <div>{line}</div>
                       )}
@@ -265,7 +274,7 @@ const HomeCarousel = () => {
                   t('bossBombDefused').split('\n').map((line, index) => (
                     <div key={index}>
                       {index === 0 ? (
-                        <span style={{ fontSize: '18.225px' }}>{line}</span>
+                        <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                       ) : (
                         <div>{line}</div>
                       )}
@@ -323,7 +332,7 @@ const HomeCarousel = () => {
                   t('goodbyeAutoBill').split('\n').map((line, index) => (
                     <div key={index}>
                       {index === 0 ? (
-                        <span style={{ fontSize: '18.225px' }}>{line}</span>
+                        <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                       ) : (
                         <div>{line}</div>
                       )}

@@ -976,7 +976,7 @@ export default function Home() {
                         t('understandItAll').split('\n').map((line, index) => (
                           <div key={index}>
                             {index === 0 ? (
-                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                              <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                             ) : (
                               <div>{line}</div>
                             )}
@@ -1063,7 +1063,7 @@ export default function Home() {
                         t('promoCondensed').split('\n').map((line, index) => (
                           <div key={index}>
                             {index === 0 ? (
-                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                              <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                             ) : (
                               <div>{line}</div>
                             )}
@@ -1129,7 +1129,7 @@ export default function Home() {
                         t('whatDoISay').split('\n').map((line, index) => (
                           <div key={index}>
                             {index === 0 ? (
-                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                              <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                             ) : (
                               <div>{line}</div>
                             )}
@@ -1195,7 +1195,7 @@ export default function Home() {
                         t('bossBombDefused').split('\n').map((line, index) => (
                           <div key={index}>
                             {index === 0 ? (
-                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                              <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                             ) : (
                               <div>{line}</div>
                             )}
@@ -1261,7 +1261,7 @@ export default function Home() {
                         t('goodbyeAutoBill').split('\n').map((line, index) => (
                           <div key={index}>
                             {index === 0 ? (
-                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                              <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                             ) : (
                               <div>{line}</div>
                             )}
@@ -1327,7 +1327,7 @@ export default function Home() {
                         t('understandItAll').split('\n').map((line, index) => (
                           <div key={index}>
                             {index === 0 ? (
-                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                              <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                             ) : (
                               <div>{line}</div>
                             )}
@@ -1414,7 +1414,7 @@ export default function Home() {
                         t('promoCondensed').split('\n').map((line, index) => (
                           <div key={index}>
                             {index === 0 ? (
-                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                              <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                             ) : (
                               <div>{line}</div>
                             )}
@@ -1480,7 +1480,7 @@ export default function Home() {
                         t('whatDoISay').split('\n').map((line, index) => (
                           <div key={index}>
                             {index === 0 ? (
-                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                              <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                             ) : (
                               <div>{line}</div>
                             )}
@@ -1545,7 +1545,7 @@ export default function Home() {
                       {t('bossBombDefused').split('\n').map((line, index) => (
                         <div key={index}>
                           {index === 0 ? (
-                            <span style={{ fontSize: '18.225px' }}>{line}</span>
+                            <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                           ) : (
                             <div>{line}</div>
                           )}
@@ -1608,7 +1608,7 @@ export default function Home() {
                         t('goodbyeAutoBill').split('\n').map((line, index) => (
                           <div key={index}>
                             {index === 0 ? (
-                              <span style={{ fontSize: '18.225px' }}>{line}</span>
+                              <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
                             ) : (
                               <div>{line}</div>
                             )}
