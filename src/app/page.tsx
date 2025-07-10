@@ -2712,21 +2712,37 @@ export default function Home() {
                 margin: 0,
               }}
             >
-              <span
-                style={{
-                  color: 'var(--06, #000)',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Georgia',
-                  fontSize: '40px',
-                  fontStyle: 'normal',
-                  fontWeight: 400,
-                  lineHeight: '130%',
-                  letterSpacing: '-1px',
-                  marginRight: '20px',
-                }}
-              >
-                {t('orWriteWithAI')}
-              </span>
+              <>
+                <span
+                  style={{
+                    color: 'var(--06, #000)',
+                    fontFeatureSettings: '"liga" off, "clig" off',
+                    fontFamily: 'Georgia',
+                    fontSize: '40px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '130%',
+                    letterSpacing: '-1px',
+                    marginRight: '20px',
+                  }}
+                >
+                  Or
+                </span>
+                <span
+                  style={{
+                    color: 'var(--06, #000)',
+                    fontFeatureSettings: '"liga" off, "clig" off',
+                    fontFamily: 'Inter',
+                    fontSize: '50px',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    lineHeight: '130%',
+                    letterSpacing: '-1px',
+                  }}
+                >
+                  Write with AI
+                </span>
+              </>
             </h2>
           </div>
 
@@ -3170,7 +3186,7 @@ export default function Home() {
               <p
                 style={{
                   width: '520px',
-                  color: '#000',
+                  color: 'var(--07, #707070)',
                   textAlign: 'center',
                   fontFeatureSettings: '"liga" off, "clig" off',
                   fontFamily: 'Inter',
@@ -3181,19 +3197,19 @@ export default function Home() {
                   margin: 0,
                 }}
               >
-                {t('privacyDescription')}
+                {t('privacyDescriptionStart')}
                 <a
                   href="https://appdefensealliance.dev/casa"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
-                    color: '#000',
+                    color: 'var(--07, #707070)',
                     textDecoration: 'none',
                     fontFeatureSettings: '"liga" off, "clig" off',
                     fontFamily: 'Inter',
                     fontSize: '18px',
                     fontStyle: 'normal',
-                    fontWeight: 500,
+                    fontWeight: 700,
                     lineHeight: '150%',
                   }}
                   onMouseEnter={(e) => {
@@ -3205,6 +3221,7 @@ export default function Home() {
                 >
                   {t('casaTier3Verified')}
                 </a>
+                {t('privacyDescriptionEnd')}
               </p>
 
               {/* See Our Data Promise 按钮 */}
@@ -3738,7 +3755,7 @@ export default function Home() {
           style={{
             width: '100%',
             background: '#E9F6FF',
-            padding: '10px 20px 110px 20px',
+            padding: '30px 20px 110px 20px',
           }}
         >
           <div className="max-w-[1280px] mx-auto w-full flex justify-between items-center">
