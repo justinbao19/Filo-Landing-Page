@@ -52,6 +52,28 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* 强制所有按钮保持浅色模式样式 */
+button {
+  color-scheme: light !important;
+  -webkit-color-scheme: light !important;
+}
+
+/* 特别针对RainbowButton强制保护 */
+.group.relative.inline-flex.animate-rainbow {
+  color-scheme: light !important;
+  -webkit-color-scheme: light !important;
+  filter: none !important;
+}
+
+/* 通用按钮保护 */
+[role="button"], 
+button, 
+.rainbow-button,
+*[class*="button"] {
+  color-scheme: light !important;
+  -webkit-color-scheme: light !important;
+}
+
 /* 水平滚动容器样式 */
 .scrollbar-hide {
   -ms-overflow-style: none;  /* IE and Edge */
@@ -228,4 +250,6 @@ body {
     background-position: 200%;
   }
 }
+
+
 
