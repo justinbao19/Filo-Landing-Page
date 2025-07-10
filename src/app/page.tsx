@@ -790,6 +790,7 @@ export default function Home() {
                     background: 'var(--06, #000)',
                     boxShadow:
                       '0px 100px 80px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.03), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.04), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.05), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.07)',
+                    colorScheme: 'light',
                   }}
                   target="_blank"
                 >
@@ -2889,6 +2890,7 @@ export default function Home() {
                     lineHeight: '150%',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
+                    colorScheme: 'light',
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = 'var(--06, #000)'
@@ -3528,25 +3530,38 @@ export default function Home() {
                       className="text-white font-semibold text-base whitespace-nowrap"
                       style={{
                         fontFamily: 'Inter',
-                        transition: 'all 0.3s ease',
+                        transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                         display: 'flex',
                         flexDirection: 'row',
                         justifyContent: 'center',
                         alignItems: 'center',
                         padding: isGetFiloTodayHovered ? '0 20px' : '0',
-                        width: isGetFiloTodayHovered ? 'auto' : '150px',
+                        width: isGetFiloTodayHovered ? '380px' : '150px',
                         height: '53px',
                         minWidth: '150px',
+                        overflow: 'hidden',
                       }}
                     >
-                      {!isGetFiloTodayHovered ? (
-                        t('getFiloToday')
-                      ) : (
+                      <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <div
                           style={{
+                            position: 'absolute',
+                            opacity: isGetFiloTodayHovered ? 0 : 1,
+                            transition: 'opacity 0.3s ease-in-out',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {t('getFiloToday')}
+                        </div>
+                        <div
+                          style={{
+                            position: 'absolute',
+                            opacity: isGetFiloTodayHovered ? 1 : 0,
                             display: 'flex',
                             flexDirection: 'row',
                             alignItems: 'center',
+                            transform: isGetFiloTodayHovered ? 'translateX(0)' : 'translateX(20px)',
+                            transition: 'all 0.3s ease-in-out 0.2s',
                           }}
                         >
                           <a
@@ -3633,7 +3648,7 @@ export default function Home() {
                             {t('macOSIntel')}
                           </a>
                         </div>
-                      )}
+                      </div>
                     </RainbowButton>
                   </div>
 
@@ -3655,12 +3670,15 @@ export default function Home() {
                         boxShadow: '0px 2px 20px 0px rgba(0, 0, 0, 0.04)',
                         transition: 'all 0.3s ease',
                         cursor: 'pointer',
+                        colorScheme: 'light',
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.background = 'rgba(0, 0, 0, 0.05)'
+                        e.currentTarget.style.color = 'black'
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.background = 'white'
+                        e.currentTarget.style.color = 'black'
                       }}
                     >
                       {t('learnHow')}

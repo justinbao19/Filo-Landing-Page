@@ -21,6 +21,11 @@ export function RainbowButton({ children, className, ...props }: RainbowButtonPr
 
         className,
       )}
+      style={{
+        colorScheme: 'light',
+        color: '#ffffff !important',
+        ...props.style,
+      }}
       {...props}
     >
       {children}
