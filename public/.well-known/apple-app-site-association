@@ -1,0 +1,17 @@
+{
+    "applinks": {
+      "apps": [],
+      "details": [
+        {
+          "appID": "X99J66Y5YN.com.filo.client",
+          "paths": ["/*"]
+        }
+      ]
+    },
+    "activitycontinuation": {
+      "apps": ["X99J66Y5YN.com.filo.client"]
+    },
+    "webcredentials": {
+      "apps": ["X99J66Y5YN.com.filo.client"]
+    }
+  }
