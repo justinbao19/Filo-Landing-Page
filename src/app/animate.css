@@ -203,12 +203,3 @@
   width: 50%; /* 每个内容块占50%宽度 */
   flex-shrink: 0;
 }
-
-/* Tone Card Hover Effects */
-.tone-card-hover:hover .tone-card-content {
-  transform: translate(-3.5rem, -3.5rem);
-}
-
-.tone-card-hover:hover .tone-card-overlay {
-  transform: translate(3.5rem, 3.5rem);
-}

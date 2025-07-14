@@ -422,7 +422,7 @@ function Home() {
             }}
           >
             <div
-              className="tone-card-hover"
+              className="group"
               style={{
                 position: 'relative',
                 width: '350px',
@@ -433,7 +433,7 @@ function Home() {
             >
               {/* Content Layer - moves up-left on hover */}
               <div
-                className="tone-card-content"
+                className="md:group-hover:-translate-x-[3.5rem] md:group-hover:-translate-y-[3.5rem]"
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -478,7 +478,7 @@ function Home() {
 
               {/* Overlay Layer - moves down-right on hover */}
               <div
-                className="tone-card-overlay"
+                className="md:group-hover:translate-x-[3.5rem] md:group-hover:translate-y-[3.5rem]"
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -542,7 +542,7 @@ function Home() {
             }}
           >
             <div
-              className="tone-card-hover"
+              className="group"
               style={{
                 position: 'relative',
                 width: '350px',
@@ -553,7 +553,7 @@ function Home() {
             >
               {/* Content Layer - moves up-left on hover */}
               <div
-                className="tone-card-content"
+                className="md:group-hover:-translate-x-[3.5rem] md:group-hover:-translate-y-[3.5rem]"
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -599,7 +599,7 @@ function Home() {
 
               {/* Overlay Layer - moves down-right on hover */}
               <div
-                className="tone-card-overlay"
+                className="md:group-hover:translate-x-[3.5rem] md:group-hover:translate-y-[3.5rem]"
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -663,7 +663,7 @@ function Home() {
             }}
           >
             <div
-              className="tone-card-hover"
+              className="group"
               style={{
                 position: 'relative',
                 width: '350px',
@@ -674,7 +674,7 @@ function Home() {
             >
               {/* Content Layer - moves up-left on hover */}
               <div
-                className="tone-card-content"
+                className="md:group-hover:-translate-x-[3.5rem] md:group-hover:-translate-y-[3.5rem]"
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -723,7 +723,7 @@ function Home() {
 
               {/* Overlay Layer - moves down-right on hover */}
               <div
-                className="tone-card-overlay"
+                className="md:group-hover:translate-x-[3.5rem] md:group-hover:translate-y-[3.5rem]"
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -1447,6 +1447,7 @@ function Home() {
                   fontWeight: 500,
                   lineHeight: '150%',
                 }}
+                className="text-nowrap"
               >
                 {t('seeOurDataPromise')}
               </span>
@@ -1578,6 +1579,7 @@ function Home() {
                         right: '30px',
                         cursor: 'pointer',
                       }}
+                      className="hidden md:inline"
                       onMouseEnter={(e) => {
                         const currentTransform = expandedFaqs.has(index)
                           ? 'scaleX(-1) rotate(-90deg)'
