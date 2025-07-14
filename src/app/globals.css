@@ -127,6 +127,10 @@ button,
   animation-play-state: paused;
 }
 
+.stop {
+  animation-play-state: paused;
+}
+
 @keyframes sampleCardsAutoScroll {
   0% {
     transform: translateX(0);
@@ -134,7 +138,7 @@ button,
   100% {
     transform: translateX(-3200px); /* 5 cards × 600px + 4 gaps × 40px + extra spacing */
   }
-  }
+}
 
 /* A Closer Look Mobile section line animations */
 .feature-line {

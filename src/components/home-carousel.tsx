@@ -1,180 +1,133 @@
 'use client'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import AutoScroll from 'embla-carousel-auto-scroll'
+import React, { memo, useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Carousel, CarouselApi, CarouselContent, CarouselItem } from './ui/carousel'
 import { Language } from '@/lib/locale'
 import Cookies from 'universal-cookie'
+import Image from 'next/image'
 
 const cookies = new Cookies()
 
 const HomeCarousel = () => {
   const t = useTranslations('home')
-  const [api, setApi] = useState<CarouselApi | null>(null)
+
+  const [isSampleCardsVisible, setIsSampleCardsVisible] = useState(false)
   const [selectedLanguage, setSelectedLanguage] = useState(Language.EN)
 
   useEffect(() => {
-    setSelectedLanguage(cookies.get('user-locale') as Language || Language.EN)
+    setSelectedLanguage((cookies.get('user-locale') as Language) || Language.EN)
   }, [])
-
-  const toggleAutoplay = useCallback(() => {
-    const autoScroll = api?.plugins()?.autoScroll
-    if (!autoScroll) return
-
-    const playOrStop = autoScroll.isPlaying() ? autoScroll.stop : autoScroll.play
-    playOrStop()
-  }, [api])
-
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        setIsVisible(entry.isIntersecting)
+        if (entry.isIntersecting) {
+          setIsSampleCardsVisible(true)
+        } else {
+          setIsSampleCardsVisible(false)
+        }
       })
     })
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current)
+    const sampleCards = document.querySelector('.sample-cards-scroll')
+    if (sampleCards) {
+      observer.observe(sampleCards)
     }
 
     return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current)
+      if (sampleCards) {
+        observer.unobserve(sampleCards)
       }
     }
   }, [])
 
-  useEffect(() => {
-    if (!api?.plugins()?.autoScroll) return
-    if (isVisible) {
-      api.plugins()?.autoScroll.play()
-    } else {
-      api.plugins()?.autoScroll.stop()
-    }
-  }, [isVisible, api])
-
   return (
-    <section ref={containerRef} className={`w-full bg-white pt-[200px] pb-32 relative z-10 overflow-hidden`}>
-      <Carousel
-        className="items-center flex"
-        setApi={setApi}
-        opts={{ loop: true }}
-        plugins={[AutoScroll({ playOnInit: false, speed: 1 })]}
+    <div
+      className={`sample-cards-scroll flex gap-[40px] ${!isSampleCardsVisible ? 'stop' : ''}`}
+      style={{
+        paddingLeft: '80px',
+        paddingRight: '80px',
+        paddingTop: '30px',
+        paddingBottom: '30px',
+      }}
+    >
+      {/* 卡片 1 - Understand It All */}
+      <div
+        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        style={{
+          width: '600px',
+          height: '570px',
+          borderRadius: '20px',
+          border: '0.5px solid rgba(0, 0, 0, 0.04)',
+          background: 'var(--09, #FCFAFA)',
+          position: 'relative',
+        }}
       >
-        <CarouselContent className="-ml-10 snap-center">
-          <CarouselItem className="pl-10 w-[640px] group h-[600px] flex items-center justify-center relative">
-            <div
-              style={{
-                background: 'var(--09, #FCFAFA)',
-              }}
-              className="w-[600px] h-[570px] will-change-transform group-hover:scale-105 transition-transform duration-200 flex flex-col p-[30px] rounded-[20px] border-0.5 border-black/5"
-              onMouseEnter={() => {
-                toggleAutoplay()
-              }}
-              onMouseLeave={() => {
-                toggleAutoplay()
-              }}
-            >
-              <h3
-                style={{
-                  color: 'var(--06, #000)',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Inter',
-                  fontSize: '27px',
-                  fontStyle: 'normal',
-                  fontWeight: 700,
-                  lineHeight: '130%',
-                  marginBottom: t('understandItAll').includes('\n') ? '28px' : '40px',
-                }}
-              >
-                {t('understandItAll').includes('\n') ? (
-                  t('understandItAll').split('\n').map((line, index) => (
+        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+          <h3
+            style={{
+              color: 'var(--06, #000)',
+              fontFeatureSettings: '"liga" off, "clig" off',
+              fontFamily: 'Inter',
+              fontSize: '27px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '130%',
+              marginBottom: t('understandItAll').includes('\n') ? '28px' : '40px',
+            }}
+          >
+            {t('understandItAll').includes('\n')
+              ? t('understandItAll')
+                  .split('\n')
+                  .map((line, index) => (
                     <div key={index}>
                       {index === 0 ? (
-                        <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
+                        <span
+                          style={{
+                            fontSize:
+                              selectedLanguage === Language.ZH_CN ||
+                              selectedLanguage === Language.ZH_TW ||
+                              selectedLanguage === Language.JA
+                                ? '16px'
+                                : '18.225px',
+                          }}
+                        >
+                          {line}
+                        </span>
                       ) : (
                         <div>{line}</div>
                       )}
                     </div>
                   ))
-                ) : (
-                  t('understandItAll')
-                )}
-              </h3>
+              : t('understandItAll')}
+          </h3>
 
-              <div className="relative">
-                <img
+          {/* 功能示例图片 */}
+          <div className="flex-1 flex items-end">
+            <div style={{ display: 'flex', gap: '16px', width: '100%' }}>
+              {/* Japanese email */}
+              <div style={{ flex: 1 }}>
+                <Image
                   src="/icons/feature/sample1_jp.png"
                   alt="Japanese email example"
-                  className="absolute top-0 left-0 w-[80%] h-auto"
+                  width={258}
+                  height={350}
+                  className="w-full h-auto"
                   style={{
                     display: 'block',
                     borderRadius: '12px',
+                    boxShadow:
+                      '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
                   }}
                 />
-                <img
+              </div>
+              {/* English translation */}
+              <div style={{ flex: 1 }}>
+                <Image
                   src="/icons/feature/sample1_en.png"
                   alt="English translation example"
-                  className="absolute top-[100px] left-[100px] w-[80%] h-auto"
-                  style={{
-                    display: 'block',
-                    borderRadius: '12px',
-                  }}
-                />
-              </div>
-            </div>
-          </CarouselItem>
-
-          <CarouselItem className="pl-10 w-[640px] group h-[600px] flex items-center justify-center relative">
-            <div
-              style={{
-                background: 'var(--09, #FCFAFA)',
-              }}
-              className="w-[600px] h-[570px] will-change-transform group-hover:scale-105 transition-transform duration-200 flex flex-col p-[30px] rounded-[20px] border-0.5 border-black/5"
-              onMouseEnter={() => {
-                toggleAutoplay()
-              }}
-              onMouseLeave={() => {
-                toggleAutoplay()
-              }}
-            >
-              <h3
-                style={{
-                  alignSelf: 'stretch',
-                  color: 'var(--06, #000)',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Inter',
-                  fontSize: '27px',
-                  fontStyle: 'normal',
-                  fontWeight: 700,
-                  lineHeight: '130%',
-                  marginBottom: t('promoCondensed').includes('\n') ? '28px' : '40px',
-                }}
-              >
-                {t('promoCondensed').includes('\n') ? (
-                  t('promoCondensed').split('\n').map((line, index) => (
-                    <div key={index}>
-                      {index === 0 ? (
-                        <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
-                      ) : (
-                        <div>{line}</div>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  t('promoCondensed')
-                )}
-              </h3>
-
-              <div className="flex-1 flex items-end">
-                <img
-                  src="/icons/feature/sample2.png"
-                  alt="Promo email condensed feature"
-                  width={540}
+                  width={258}
                   height={350}
+                  className="w-full h-auto"
                   style={{
                     display: 'block',
                     borderRadius: '12px',
@@ -184,55 +137,373 @@ const HomeCarousel = () => {
                 />
               </div>
             </div>
-          </CarouselItem>
+          </div>
+        </div>
+      </div>
 
-          <CarouselItem className="pl-10 w-[640px] group h-[600px] flex items-center justify-center relative">
-            <div
-              style={{
-                background: 'var(--09, #FCFAFA)',
-              }}
-              className="w-[600px] h-[570px] will-change-transform group-hover:scale-105 transition-transform duration-200 flex flex-col p-[30px] rounded-[20px] border-0.5 border-black/5"
-              onMouseEnter={() => {
-                toggleAutoplay()
-              }}
-              onMouseLeave={() => {
-                toggleAutoplay()
-              }}
-            >
-              <h3
-                style={{
-                  alignSelf: 'stretch',
-                  color: 'var(--06, #000)',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Inter',
-                  fontSize: '27px',
-                  fontStyle: 'normal',
-                  fontWeight: 700,
-                  lineHeight: '130%',
-                  marginBottom: t('whatDoISay').includes('\n') ? '28px' : '40px',
-                }}
-              >
-                {t('whatDoISay').includes('\n') ? (
-                  t('whatDoISay').split('\n').map((line, index) => (
+      {/* 卡片 2 - Promo, Condensed */}
+      <div
+        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        style={{
+          width: '600px',
+          height: '570px',
+          borderRadius: '20px',
+          border: '0.5px solid rgba(0, 0, 0, 0.04)',
+          background: 'var(--09, #FCFAFA)',
+          position: 'relative',
+        }}
+      >
+        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+          <h3
+            style={{
+              alignSelf: 'stretch',
+              color: 'var(--06, #000)',
+              fontFeatureSettings: '"liga" off, "clig" off',
+              fontFamily: 'Inter',
+              fontSize: '27px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '130%',
+              marginBottom: t('promoCondensed').includes('\n') ? '28px' : '40px',
+            }}
+          >
+            {t('promoCondensed').includes('\n')
+              ? t('promoCondensed')
+                  .split('\n')
+                  .map((line, index) => (
                     <div key={index}>
                       {index === 0 ? (
-                        <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
+                        <span
+                          style={{
+                            fontSize:
+                              selectedLanguage === Language.ZH_CN ||
+                              selectedLanguage === Language.ZH_TW ||
+                              selectedLanguage === Language.JA
+                                ? '16px'
+                                : '18.225px',
+                          }}
+                        >
+                          {line}
+                        </span>
                       ) : (
                         <div>{line}</div>
                       )}
                     </div>
                   ))
-                ) : (
-                  t('whatDoISay')
-                )}
-              </h3>
+              : t('promoCondensed')}
+          </h3>
 
-              <div className="flex-1 flex items-end">
-                <img
-                  src="/icons/feature/sample3.png"
-                  alt="French AI reply feature"
-                  width={540}
+          {/* 促销功能示例图片 */}
+          <div className="flex-1 flex items-end">
+            <Image
+              src="/icons/feature/sample2.png"
+              alt="Promo email condensed feature"
+              width={540}
+              height={350}
+              className="w-full h-auto"
+              style={{
+                display: 'block',
+                borderRadius: '12px',
+                boxShadow:
+                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 卡片 3 - What do I say? */}
+      <div
+        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        style={{
+          width: '600px',
+          height: '570px',
+          borderRadius: '20px',
+          border: '0.5px solid rgba(0, 0, 0, 0.04)',
+          background: 'var(--09, #FCFAFA)',
+          position: 'relative',
+        }}
+      >
+        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+          <h3
+            style={{
+              alignSelf: 'stretch',
+              color: 'var(--06, #000)',
+              fontFeatureSettings: '"liga" off, "clig" off',
+              fontFamily: 'Inter',
+              fontSize: '27px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '130%',
+              marginBottom: t('whatDoISay').includes('\n') ? '28px' : '40px',
+            }}
+          >
+            {t('whatDoISay').includes('\n')
+              ? t('whatDoISay')
+                  .split('\n')
+                  .map((line, index) => (
+                    <div key={index}>
+                      {index === 0 ? (
+                        <span
+                          style={{
+                            fontSize:
+                              selectedLanguage === Language.ZH_CN ||
+                              selectedLanguage === Language.ZH_TW ||
+                              selectedLanguage === Language.JA
+                                ? '16px'
+                                : '18.225px',
+                          }}
+                        >
+                          {line}
+                        </span>
+                      ) : (
+                        <div>{line}</div>
+                      )}
+                    </div>
+                  ))
+              : t('whatDoISay')}
+          </h3>
+
+          {/* 法语功能示例图片 */}
+          <div className="flex-1 flex items-end">
+            <Image
+              src="/icons/feature/sample3.png"
+              alt="French AI reply feature"
+              width={540}
+              height={350}
+              className="w-full h-auto"
+              style={{
+                display: 'block',
+                borderRadius: '12px',
+                boxShadow:
+                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 卡片 4 - Boss Bomb Defused */}
+      <div
+        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        style={{
+          width: '600px',
+          height: '570px',
+          borderRadius: '20px',
+          border: '0.5px solid rgba(0, 0, 0, 0.04)',
+          background: 'var(--09, #FCFAFA)',
+          position: 'relative',
+        }}
+      >
+        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+          <h3
+            style={{
+              alignSelf: 'stretch',
+              color: 'var(--06, #000)',
+              fontFeatureSettings: '"liga" off, "clig" off',
+              fontFamily: 'Inter',
+              fontSize: '27px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '130%',
+              marginBottom: t('bossBombDefused').includes('\n') ? '28px' : '40px',
+            }}
+          >
+            {t('bossBombDefused').includes('\n')
+              ? t('bossBombDefused')
+                  .split('\n')
+                  .map((line, index) => (
+                    <div key={index}>
+                      {index === 0 ? (
+                        <span
+                          style={{
+                            fontSize:
+                              selectedLanguage === Language.ZH_CN ||
+                              selectedLanguage === Language.ZH_TW ||
+                              selectedLanguage === Language.JA
+                                ? '16px'
+                                : '18.225px',
+                          }}
+                        >
+                          {line}
+                        </span>
+                      ) : (
+                        <div>{line}</div>
+                      )}
+                    </div>
+                  ))
+              : t('bossBombDefused')}
+          </h3>
+
+          {/* Boss功能示例图片 */}
+          <div className="flex-1 flex items-end">
+            <Image
+              src="/icons/feature/sample4.png"
+              alt="Boss task management feature"
+              width={540}
+              height={350}
+              className="w-full h-auto"
+              style={{
+                display: 'block',
+                borderRadius: '12px',
+                boxShadow:
+                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 卡片 5 - Goodbye Auto-Bill */}
+      <div
+        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        style={{
+          width: '600px',
+          height: '570px',
+          borderRadius: '20px',
+          border: '0.5px solid rgba(0, 0, 0, 0.04)',
+          background: 'var(--09, #FCFAFA)',
+          position: 'relative',
+        }}
+      >
+        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+          <h3
+            style={{
+              alignSelf: 'stretch',
+              color: 'var(--06, #000)',
+              fontFeatureSettings: '"liga" off, "clig" off',
+              fontFamily: 'Inter',
+              fontSize: '27px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '130%',
+              marginBottom: t('goodbyeAutoBill').includes('\n') ? '28px' : '40px',
+            }}
+          >
+            {t('goodbyeAutoBill').includes('\n')
+              ? t('goodbyeAutoBill')
+                  .split('\n')
+                  .map((line, index) => (
+                    <div key={index}>
+                      {index === 0 ? (
+                        <span
+                          style={{
+                            fontSize:
+                              selectedLanguage === Language.ZH_CN ||
+                              selectedLanguage === Language.ZH_TW ||
+                              selectedLanguage === Language.JA
+                                ? '16px'
+                                : '18.225px',
+                          }}
+                        >
+                          {line}
+                        </span>
+                      ) : (
+                        <div>{line}</div>
+                      )}
+                    </div>
+                  ))
+              : t('goodbyeAutoBill')}
+          </h3>
+
+          {/* 订阅管理功能示例图片 */}
+          <div className="flex-1 flex items-end">
+            <Image
+              src="/icons/feature/sample5.png"
+              alt="Subscription management feature"
+              width={540}
+              height={350}
+              className="w-full h-auto"
+              style={{
+                display: 'block',
+                borderRadius: '12px',
+                boxShadow:
+                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 重复卡片以实现无缝循环 */}
+      {/* 卡片 1 - Understand It All (重复) */}
+      <div
+        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        style={{
+          width: '600px',
+          height: '570px',
+          borderRadius: '20px',
+          border: '0.5px solid rgba(0, 0, 0, 0.04)',
+          background: 'var(--09, #FCFAFA)',
+          position: 'relative',
+        }}
+      >
+        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+          <h3
+            style={{
+              color: 'var(--06, #000)',
+              fontFeatureSettings: '"liga" off, "clig" off',
+              fontFamily: 'Inter',
+              fontSize: '27px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '130%',
+              marginBottom: t('understandItAll').includes('\n') ? '28px' : '40px',
+            }}
+          >
+            {t('understandItAll').includes('\n')
+              ? t('understandItAll')
+                  .split('\n')
+                  .map((line, index) => (
+                    <div key={index}>
+                      {index === 0 ? (
+                        <span
+                          style={{
+                            fontSize:
+                              selectedLanguage === Language.ZH_CN ||
+                              selectedLanguage === Language.ZH_TW ||
+                              selectedLanguage === Language.JA
+                                ? '16px'
+                                : '18.225px',
+                          }}
+                        >
+                          {line}
+                        </span>
+                      ) : (
+                        <div>{line}</div>
+                      )}
+                    </div>
+                  ))
+              : t('understandItAll')}
+          </h3>
+
+          {/* 功能示例图片 */}
+          <div className="flex-1 flex items-end">
+            <div style={{ display: 'flex', gap: '16px', width: '100%' }}>
+              {/* Japanese email */}
+              <div style={{ flex: 1 }}>
+                <Image
+                  src="/icons/feature/sample1_jp.png"
+                  alt="Japanese email example"
+                  width={258}
                   height={350}
+                  className="w-full h-auto"
+                  style={{
+                    display: 'block',
+                    borderRadius: '12px',
+                    boxShadow:
+                      '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
+                  }}
+                />
+              </div>
+              {/* English translation */}
+              <div style={{ flex: 1 }}>
+                <Image
+                  src="/icons/feature/sample1_en.png"
+                  alt="English translation example"
+                  width={258}
+                  height={350}
+                  className="w-full h-auto"
                   style={{
                     display: 'block',
                     borderRadius: '12px',
@@ -242,127 +513,293 @@ const HomeCarousel = () => {
                 />
               </div>
             </div>
-          </CarouselItem>
+          </div>
+        </div>
+      </div>
 
-          <CarouselItem className="pl-10 w-[640px] group h-[600px] flex items-center justify-center relative">
-            <div
-              style={{
-                background: 'var(--09, #FCFAFA)',
-              }}
-              className="w-[600px] h-[570px] will-change-transform group-hover:scale-105 transition-transform duration-200 flex flex-col p-[30px] rounded-[20px] border-0.5 border-black/5"
-              onMouseEnter={() => {
-                toggleAutoplay()
-              }}
-              onMouseLeave={() => {
-                toggleAutoplay()
-              }}
-            >
-              <h3
-                style={{
-                  alignSelf: 'stretch',
-                  color: 'var(--06, #000)',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Inter',
-                  fontSize: '27px',
-                  fontStyle: 'normal',
-                  fontWeight: 700,
-                  lineHeight: '130%',
-                  marginBottom: t('bossBombDefused').includes('\n') ? '28px' : '40px',
-                }}
-              >
-                {t('bossBombDefused').includes('\n') ? (
-                  t('bossBombDefused').split('\n').map((line, index) => (
+      {/* 卡片 2 - Promo, Condensed (重复) */}
+      <div
+        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        style={{
+          width: '600px',
+          height: '570px',
+          borderRadius: '20px',
+          border: '0.5px solid rgba(0, 0, 0, 0.04)',
+          background: 'var(--09, #FCFAFA)',
+          position: 'relative',
+        }}
+      >
+        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+          <h3
+            style={{
+              alignSelf: 'stretch',
+              color: 'var(--06, #000)',
+              fontFeatureSettings: '"liga" off, "clig" off',
+              fontFamily: 'Inter',
+              fontSize: '27px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '130%',
+              marginBottom: t('promoCondensed').includes('\n') ? '28px' : '40px',
+            }}
+          >
+            {t('promoCondensed').includes('\n')
+              ? t('promoCondensed')
+                  .split('\n')
+                  .map((line, index) => (
                     <div key={index}>
                       {index === 0 ? (
-                        <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
+                        <span
+                          style={{
+                            fontSize:
+                              selectedLanguage === Language.ZH_CN ||
+                              selectedLanguage === Language.ZH_TW ||
+                              selectedLanguage === Language.JA
+                                ? '16px'
+                                : '18.225px',
+                          }}
+                        >
+                          {line}
+                        </span>
                       ) : (
                         <div>{line}</div>
                       )}
                     </div>
                   ))
-                ) : (
-                  t('bossBombDefused')
-                )}
-              </h3>
+              : t('promoCondensed')}
+          </h3>
 
-              <div className="flex-1 flex items-end">
-                <img
-                  src="/icons/feature/sample4.png"
-                  alt="Boss task management feature"
-                  width={540}
-                  height={350}
-                  style={{
-                    display: 'block',
-                    borderRadius: '12px',
-                    boxShadow:
-                      '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
-                  }}
-                />
-              </div>
-            </div>
-          </CarouselItem>
-
-          <CarouselItem className="pl-10 w-[640px] group h-[600px] flex items-center justify-center relative">
-            <div
+          {/* 促销功能示例图片 */}
+          <div className="flex-1 flex items-end">
+            <Image
+              src="/icons/feature/sample2.png"
+              alt="Promo email condensed feature"
+              width={540}
+              height={350}
+              className="w-full h-auto"
               style={{
-                background: 'var(--09, #FCFAFA)',
+                display: 'block',
+                borderRadius: '12px',
+                boxShadow:
+                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
               }}
-              className="w-[600px] h-[570px] will-change-transform group-hover:scale-105 transition-transform duration-200 flex flex-col p-[30px] rounded-[20px] border-0.5 border-black/5"
-              onMouseEnter={() => {
-                toggleAutoplay()
-              }}
-              onMouseLeave={() => {
-                toggleAutoplay()
-              }}
-            >
-              <h3
-                style={{
-                  alignSelf: 'stretch',
-                  color: 'var(--06, #000)',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Inter',
-                  fontSize: '27px',
-                  fontStyle: 'normal',
-                  fontWeight: 700,
-                  lineHeight: '130%',
-                  marginBottom: t('goodbyeAutoBill').includes('\n') ? '28px' : '40px',
-                }}
-              >
-                {t('goodbyeAutoBill').includes('\n') ? (
-                  t('goodbyeAutoBill').split('\n').map((line, index) => (
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 卡片 3 - What do I say? (重复) */}
+      <div
+        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        style={{
+          width: '600px',
+          height: '570px',
+          borderRadius: '20px',
+          border: '0.5px solid rgba(0, 0, 0, 0.04)',
+          background: 'var(--09, #FCFAFA)',
+          position: 'relative',
+        }}
+      >
+        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+          <h3
+            style={{
+              alignSelf: 'stretch',
+              color: 'var(--06, #000)',
+              fontFeatureSettings: '"liga" off, "clig" off',
+              fontFamily: 'Inter',
+              fontSize: '27px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '130%',
+              marginBottom: t('whatDoISay').includes('\n') ? '28px' : '40px',
+            }}
+          >
+            {t('whatDoISay').includes('\n')
+              ? t('whatDoISay')
+                  .split('\n')
+                  .map((line, index) => (
                     <div key={index}>
                       {index === 0 ? (
-                        <span style={{ fontSize: (selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA) ? '16px' : '18.225px' }}>{line}</span>
+                        <span
+                          style={{
+                            fontSize:
+                              selectedLanguage === Language.ZH_CN ||
+                              selectedLanguage === Language.ZH_TW ||
+                              selectedLanguage === Language.JA
+                                ? '16px'
+                                : '18.225px',
+                          }}
+                        >
+                          {line}
+                        </span>
                       ) : (
                         <div>{line}</div>
                       )}
                     </div>
                   ))
-                ) : (
-                  t('goodbyeAutoBill')
-                )}
-              </h3>
+              : t('whatDoISay')}
+          </h3>
 
-              <div className="flex-1 flex items-end">
-                <img
-                  src="/icons/feature/sample5.png"
-                  alt="Subscription management feature"
-                  width={540}
-                  height={350}
-                  style={{
-                    display: 'block',
-                    borderRadius: '12px',
-                    boxShadow:
-                      '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
-                  }}
-                />
-              </div>
-            </div>
-          </CarouselItem>
-        </CarouselContent>
-      </Carousel>
-    </section>
+          {/* 法语功能示例图片 */}
+          <div className="flex-1 flex items-end">
+            <Image
+              src="/icons/feature/sample3.png"
+              alt="French AI reply feature"
+              width={540}
+              height={350}
+              className="w-full h-auto"
+              style={{
+                display: 'block',
+                borderRadius: '12px',
+                boxShadow:
+                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 卡片 4 - Boss Bomb Defused (重复) */}
+      <div
+        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        style={{
+          width: '600px',
+          height: '570px',
+          borderRadius: '20px',
+          border: '0.5px solid rgba(0, 0, 0, 0.04)',
+          background: 'var(--09, #FCFAFA)',
+          position: 'relative',
+        }}
+      >
+        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+          <h3
+            style={{
+              alignSelf: 'stretch',
+              color: 'var(--06, #000)',
+              fontFeatureSettings: '"liga" off, "clig" off',
+              fontFamily: 'Inter',
+              fontSize: '27px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '130%',
+              marginBottom: '40px',
+            }}
+          >
+            {t('bossBombDefused')
+              .split('\n')
+              .map((line, index) => (
+                <div key={index}>
+                  {index === 0 ? (
+                    <span
+                      style={{
+                        fontSize:
+                          selectedLanguage === Language.ZH_CN ||
+                          selectedLanguage === Language.ZH_TW ||
+                          selectedLanguage === Language.JA
+                            ? '16px'
+                            : '18.225px',
+                      }}
+                    >
+                      {line}
+                    </span>
+                  ) : (
+                    <div>{line}</div>
+                  )}
+                </div>
+              ))}
+          </h3>
+
+          {/* Boss功能示例图片 */}
+          <div className="flex-1 flex items-end">
+            <Image
+              src="/icons/feature/sample4.png"
+              alt="Boss task management feature"
+              width={540}
+              height={350}
+              className="w-full h-auto"
+              style={{
+                display: 'block',
+                borderRadius: '12px',
+                boxShadow:
+                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 卡片 5 - Goodbye Auto-Bill (重复) */}
+      <div
+        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        style={{
+          width: '600px',
+          height: '570px',
+          borderRadius: '20px',
+          border: '0.5px solid rgba(0, 0, 0, 0.04)',
+          background: 'var(--09, #FCFAFA)',
+          position: 'relative',
+        }}
+      >
+        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+          <h3
+            style={{
+              alignSelf: 'stretch',
+              color: 'var(--06, #000)',
+              fontFeatureSettings: '"liga" off, "clig" off',
+              fontFamily: 'Inter',
+              fontSize: '27px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '130%',
+              marginBottom: t('goodbyeAutoBill').includes('\n') ? '28px' : '40px',
+            }}
+          >
+            {t('goodbyeAutoBill').includes('\n')
+              ? t('goodbyeAutoBill')
+                  .split('\n')
+                  .map((line, index) => (
+                    <div key={index}>
+                      {index === 0 ? (
+                        <span
+                          style={{
+                            fontSize:
+                              selectedLanguage === Language.ZH_CN ||
+                              selectedLanguage === Language.ZH_TW ||
+                              selectedLanguage === Language.JA
+                                ? '16px'
+                                : '18.225px',
+                          }}
+                        >
+                          {line}
+                        </span>
+                      ) : (
+                        <div>{line}</div>
+                      )}
+                    </div>
+                  ))
+              : t('goodbyeAutoBill')}
+          </h3>
+
+          {/* 订阅管理功能示例图片 */}
+          <div className="flex-1 flex items-end">
+            <Image
+              src="/icons/feature/sample5.png"
+              alt="Subscription management feature"
+              width={540}
+              height={350}
+              className="w-full h-auto"
+              style={{
+                display: 'block',
+                borderRadius: '12px',
+                boxShadow:
+                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
-export default HomeCarousel
+export default memo(HomeCarousel)

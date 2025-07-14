@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale } from 'next-intl/server'
 import './globals.css'
+import { NextDevtoolsProvider } from '@next-devtools/core'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -45,7 +46,9 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} overflow-y-auto overflow-x-hidden antialiased w-svw h-svh`}
       >
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextDevtoolsProvider>
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        </NextDevtoolsProvider>
       </body>
     </html>
   )
