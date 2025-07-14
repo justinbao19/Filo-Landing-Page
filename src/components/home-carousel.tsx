@@ -77,7 +77,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className={`md:text-[27px] text-[16px]`}
+                        className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -152,7 +152,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className="md:text-[27px] text-[16px]"
+                        className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -208,7 +208,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className="md:text-[27px] text-[16px]"
+                        className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -264,7 +264,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className="md:text-[27px] text-[16px]"
+                        className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -320,7 +320,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className="md:text-[27px] text-[16px]"
+                        className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -377,7 +377,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className={`md:text-[27px] text-[16px]`}
+                        className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -452,7 +452,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className="md:text-[27px] text-[16px]"
+                        className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -508,7 +508,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className="md:text-[27px] text-[16px]"
+                        className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -563,7 +563,7 @@ const HomeCarousel = () => {
                 <div key={index}>
                   {index === 0 ? (
                     <span
-                      className="md:text-[27px] text-[16px]"
+                    className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                     >
                       {line}
                     </span>
@@ -618,7 +618,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className="md:text-[27px] text-[16px]"
+                        className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>

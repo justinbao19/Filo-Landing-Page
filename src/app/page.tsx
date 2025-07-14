@@ -841,7 +841,7 @@ function Home() {
 
       {/* Powered by top-tier AI 区域 */}
       <div
-        className={`scroll-animate md:py-25 py-20 ${visibleSections.has('ai-powered') ? 'visible' : ''}`}
+        className={`scroll-animate z-50 md:pb-32 md:pt-25 py-20 ${visibleSections.has('ai-powered') ? 'visible' : ''}`}
         data-section="ai-powered"
         style={{
           display: 'flex',
