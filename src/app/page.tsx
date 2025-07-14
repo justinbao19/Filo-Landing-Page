@@ -816,7 +816,7 @@ function Home() {
                 marginRight: '20px',
               }}
             >
-              Or
+              {t('or')}
             </span>
             <span
               style={{
@@ -830,7 +830,7 @@ function Home() {
                 letterSpacing: '-1px',
               }}
             >
-              Write with AI
+              {t('orWriteWithAI')}
             </span>
           </h2>
         </div>
