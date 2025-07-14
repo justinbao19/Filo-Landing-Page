@@ -77,7 +77,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
+                          className={`md:text-[27px] text-[16px]`}
                         >
                           {line}
                         </span>
@@ -152,7 +152,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
+                          className="md:text-[27px] text-[16px]"
                         >
                           {line}
                         </span>
@@ -208,7 +208,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
+                          className="md:text-[27px] text-[16px]"
                         >
                           {line}
                         </span>
@@ -264,7 +264,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
+                          className="md:text-[27px] text-[16px]"
                         >
                           {line}
                         </span>
@@ -320,7 +320,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
+                          className="md:text-[27px] text-[16px]"
                         >
                           {line}
                         </span>
@@ -377,7 +377,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
+                          className={`md:text-[27px] text-[16px]`}
                         >
                           {line}
                         </span>
@@ -391,9 +391,9 @@ const HomeCarousel = () => {
 
           {/* 功能示例图片 */}
           <div className="flex-1 flex items-end">
-            <div style={{ display: 'flex', gap: '16px', width: '100%' }}>
+            <div className="relative w-full h-full">
               {/* Japanese email */}
-              <div style={{ flex: 1 }}>
+              <div className="w-[90%] h-[90%] absolute top-0 left-0">
                 <Image
                   src="/icons/feature/sample1_jp.png"
                   alt="Japanese email example"
@@ -407,7 +407,7 @@ const HomeCarousel = () => {
                 />
               </div>
               {/* English translation */}
-              <div style={{ flex: 1 }}>
+              <div className="w-[80%] h-[80%] absolute top-[15%] left-[20%]">
                 <Image
                   src="/icons/feature/sample1_en.png"
                   alt="English translation example"
@@ -452,7 +452,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
+                          className="md:text-[27px] text-[16px]"
                         >
                           {line}
                         </span>
@@ -508,7 +508,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
+                          className="md:text-[27px] text-[16px]"
                         >
                           {line}
                         </span>
@@ -563,7 +563,7 @@ const HomeCarousel = () => {
                 <div key={index}>
                   {index === 0 ? (
                     <span
-                      className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
+                      className="md:text-[27px] text-[16px]"
                     >
                       {line}
                     </span>
@@ -618,7 +618,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
+                          className="md:text-[27px] text-[16px]"
                         >
                           {line}
                         </span>

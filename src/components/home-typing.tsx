@@ -158,7 +158,7 @@ const HomeTyping = () => {
               height="35"
               rx="17.5"
               fill="black"
-              fill-opacity="0.04"
+              fillOpacity="0.04"
             />
             <path
               d="M42.6235 25.4028C42.8145 24.6151 43.9349 24.6151 44.1259 25.4028L44.6515 27.5704C44.7197 27.8516 44.9393 28.0712 45.2205 28.1394L47.388 28.665C48.1758 28.856 48.1758 29.9764 47.388 30.1674L45.2205 30.693C44.9393 30.7612 44.7197 30.9808 44.6515 31.262L44.1259 33.4295C43.9349 34.2173 42.8145 34.2173 42.6235 33.4295L42.0979 31.262C42.0297 30.9808 41.8101 30.7612 41.5288 30.693L39.3613 30.1674C38.5736 29.9764 38.5736 28.856 39.3613 28.665L41.5288 28.1394C41.8101 28.0712 42.0297 27.8516 42.0979 27.5704L42.6235 25.4028Z"
@@ -187,9 +187,9 @@ const HomeTyping = () => {
               width="410"
               height="145"
               filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
+              colorInterpolationFilters="sRGB"
             >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
               <feColorMatrix
                 in="SourceAlpha"
                 type="matrix"
