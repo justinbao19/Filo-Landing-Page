@@ -1730,7 +1730,7 @@ function Home() {
                 {/* Mobile 按钮 - Rainbow Button */}
                 <div className="inline-block group">
                   <RainbowButton
-                    className="text-white h-[53px] font-semibold text-base whitespace-nowrap md:group-hover:px-5 md:px-0 md:group-hover:w-[380px] md:w-[150px]"
+                    className="text-white h-[53px] font-semibold overflow-hidden text-base whitespace-nowrap md:group-hover:px-5 md:px-0 md:group-hover:w-[380px] md:w-[150px]"
                     style={{
                       fontFamily: 'Inter',
                       transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -1754,7 +1754,6 @@ function Home() {
                       <div
                         style={{
                           position: 'absolute',
-                          transition: 'opacity 0.3s ease-in-out',
                           whiteSpace: 'nowrap',
                         }}
                         className={`md:group-hover:opacity-0 md:opacity-100 md:pointer-events-none`}
@@ -1766,7 +1765,7 @@ function Home() {
                         style={{
                           position: 'absolute',
                           alignItems: 'center',
-                          transition: 'all 0.3s ease-in-out 0.2s',
+                          transition: 'all 0.3s ease-in-out',
                         }}
                         className={`bg-black h-[150px] md:h-[53px] justify-between md:justify-start py-4 md:py-0 rounded-xl md:bg-transparent md:group-hover:flex md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 top-full left-1/2 -translate-x-1/2 md:hidden md:flex-row flex-col md:opacity-0 md:group-hover:opacity-100 md:pointer-events-auto ${isGetFiloTodayHovered ? 'opacity-100 flex pointer-events-auto' : 'opacity-0 hidden pointer-events-none'}`}
                       >
