@@ -2,14 +2,10 @@ import { Language } from '@/lib/locale'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { memo, useCallback, useEffect, useState } from 'react'
-import Cookies from 'universal-cookie'
-
-const cookies = new Cookies()
 
 const HomeCloser = () => {
   const t = useTranslations('home')
 
-  const [selectedLanguage, setSelectedLanguage] = useState(Language.EN)
   const [selectedView, setSelectedView] = useState<'mobile' | 'desktop'>('mobile')
   const [hasPlayedLineAnimation, setHasPlayedLineAnimation] = useState(false)
 
@@ -42,9 +38,6 @@ const HomeCloser = () => {
     }
   }, [handleViewToggle])
 
-  useEffect(() => {
-    setSelectedLanguage((cookies.get('user-locale') as Language) || Language.EN)
-  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -102,12 +95,11 @@ const HomeCloser = () => {
   }, [selectedView, hasPlayedLineAnimation, isVisible])
 
   return (
-    <div className="max-w-[1440px] mx-auto px-20 closer-look-container">
+    <div className="max-w-[1440px] mx-auto md:px-20 closer-look-container md:pb-20 pb-10 bg-white">
       {/* 标题 */}
       <div
         className="text-center mb-20 relative z-20"
         style={{
-          transform: 'translateY(-50px)',
           position: 'relative',
           willChange: 'transform',
           backfaceVisibility: 'hidden',
@@ -120,19 +112,12 @@ const HomeCloser = () => {
             textAlign: 'center',
             fontFeatureSettings: '"liga" off, "clig" off',
             fontFamily: 'var(--font-inter), Inter, sans-serif',
-            fontSize:
-              selectedLanguage === Language.ZH_CN ||
-              selectedLanguage === Language.ZH_TW ||
-              selectedLanguage === Language.JA
-                ? '60px'
-                : selectedLanguage === Language.ES
-                  ? '70px'
-                  : '80px',
             fontStyle: 'normal',
             fontWeight: 700,
             lineHeight: '130%',
             letterSpacing: '-2px',
           }}
+          className={`md:text-[70px] text-[56px]`}
         >
           {t('aCloserLook')}
         </h2>
@@ -140,56 +125,40 @@ const HomeCloser = () => {
 
       {/* Mobile/Desktop 切换按钮 */}
       <div
-        className="flex justify-center mb-16 relative z-20 will-change-transform"
-        style={{
-          transform: 'translateY(-50px)',
-          position: 'relative',
-        }}
+        className="flex justify-center mb-15 relative z-20 will-change-transform md:mb-20"
       >
         <div
-          className="relative"
+          className="relative grid grid-cols-2 items-center justify-center md:shadow-2xl shadow-xl md:w-[368px] w-[276px] md:h-[58px] h-[46px] py-1 px-1"
           style={{
             display: 'flex',
-            padding: '4px',
             alignItems: 'center',
             borderRadius: '62px',
             background: 'var(--05, #E9F6FF)',
-            boxShadow:
-              '0px 100px 80px 0px rgba(0, 0, 0, 0.05), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.04), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.03), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.03), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.01)',
-            width: '368px',
-            height: '60px',
           }}
         >
           {/* 滑动的蓝色背景 */}
           <div
-            className="absolute transition-transform duration-300 ease-in-out will-change-transform"
+            className="md:w-[181px] w-[135px] absolute md:h-[52px] h-[40px] md:top-1 md:left-1 top-[3px] left-[3px] transition-all duration-300 ease-in-out will-change-transform"
             style={{
               backgroundColor: '#22A0FB',
-              width: '180px',
-              height: '52px',
               borderRadius: '26px',
-              top: '4px',
-              left: '4px',
-              transform: selectedView === 'desktop' ? 'translateX(184px)' : 'translateX(0px)',
+              left: selectedView === 'desktop' ? 'calc(50% - 3px)' : '3px',
               zIndex: 1,
             }}
           />
 
           <button
             onClick={() => handleViewToggle('mobile')}
-            className="relative z-10 rounded-full transition-colors duration-300 will-change-transform"
+            className="relative w-full md:text-[20px] text-[15px] flex items-center justify-center h-full z-10 rounded-full transition-colors duration-300 will-change-transform"
             style={{
               backgroundColor: 'transparent',
               color: selectedView === 'mobile' ? 'white' : 'var(--02, #22A0FB)',
               textAlign: 'center',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Inter',
-              fontSize: '20px',
               fontStyle: 'normal',
               fontWeight: 500,
               lineHeight: '150%',
-              width: '180px',
-              height: '52px',
               border: 'none',
               cursor: 'pointer',
             }}
@@ -198,18 +167,16 @@ const HomeCloser = () => {
           </button>
           <button
             onClick={() => handleViewToggle('desktop')}
-            className="relative z-10 rounded-full transition-colors duration-300 flex-1 will-change-[transform,color]"
+            className="relative md:text-[20px] text-[15px] w-full h-full flex items-center justify-center z-10 rounded-full transition-colors duration-300 will-change-[transform,color]"
             style={{
               backgroundColor: 'transparent',
               color: selectedView === 'desktop' ? 'white' : 'var(--02, #22A0FB)',
               textAlign: 'center',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Inter',
-              fontSize: '20px',
               fontStyle: 'normal',
               fontWeight: 500,
               lineHeight: '150%',
-              height: '52px',
               border: 'none',
               cursor: 'pointer',
             }}
@@ -221,15 +188,12 @@ const HomeCloser = () => {
 
       {/* 展示区域容器 */}
       <div
-        className="relative z-10 will-change-transform"
-        style={{
-          height: '1100px',
-          transform: 'translateY(-50px)',
-        }}
+        className="relative flex flex-nowrap z-10 md:mb-30 overflow-hidden w-full"
       >
+       
         {/* Mobile 视图 */}
         <div
-          className={`absolute inset-0 transition-all duration-700 will-change-[transform,opacity] ${
+          className={`w-full shrink-0 inline-block h-fit transition-all duration-700 translate-y-0 will-change-[transform,opacity] ${
             selectedView === 'mobile'
               ? 'translate-x-0 opacity-100 scale-100'
               : '-translate-x-full opacity-0 scale-95'
@@ -242,28 +206,28 @@ const HomeCloser = () => {
           <div className="relative flex justify-center items-center h-full">
             {/* 手机原型 */}
             <div
-              className={`relative z-0 transition-all duration-500 will-change-[transform,opacity] ${
+              className={`relative md:bg-[url(/icons/feature/feature_iphone_circle.png)] bg-contain bg-no-repeat z-0 md:w-[800px] flex justify-center transition-all duration-500 will-change-[transform,opacity] ${
                 selectedView === 'mobile' ? 'scale-100 opacity-100' : 'scale-110 opacity-90'
               }`}
               style={{
                 transform: 'translateY(50px)',
                 transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
                 transitionDelay: selectedView === 'mobile' ? '200ms' : '0ms',
+                backgroundPosition: 'center 150px',
               }}
             >
               <Image
                 src="/icons/feature/feature_iphone_mockup.png"
                 alt="iPhone mockup showing Filo app"
-                width={714}
-                height={1071}
-                className="w-auto h-auto"
-                style={{ maxHeight: '1071px' }}
+                width={1278}
+                height={2172}
+                className="w-[540px] h-auto z-50"
               />
             </div>
 
             {/* 功能标签 */}
             <div
-              className={`absolute left-[195px] top-[390px] feature-line feature-line-1 z-10 ${mobileLineAnimations.has(1) ? 'animate-sequence' : ''}`}
+              className={`absolute lg:block hidden left-[195px] top-[390px] feature-line feature-line-1 z-10 ${mobileLineAnimations.has(1) ? 'animate-sequence' : ''}`}
             >
               <div className="flex flex-col items-start" style={{ gap: '8px' }}>
                 <Image src="/icons/feature/feature_line2.svg" alt="line" width={320} height={1} />
@@ -284,7 +248,7 @@ const HomeCloser = () => {
             </div>
 
             <div
-              className={`absolute right-[117px] top-[270px] feature-line feature-line-2 z-10 ${mobileLineAnimations.has(2) ? 'animate-sequence' : ''}`}
+              className={`absolute lg:block hidden right-[117px] top-[270px] feature-line feature-line-2 z-10 ${mobileLineAnimations.has(2) ? 'animate-sequence' : ''}`}
             >
               <div className="flex flex-col items-end" style={{ gap: '8px' }}>
                 <Image src="/icons/feature/feature_line1.svg" alt="line" width={470} height={1} />
@@ -305,7 +269,7 @@ const HomeCloser = () => {
             </div>
 
             <div
-              className={`absolute right-[120px] top-[450px] feature-line feature-line-3 z-10 ${mobileLineAnimations.has(3) ? 'animate-sequence' : ''}`}
+              className={`absolute lg:block hidden right-[120px] top-[450px] feature-line feature-line-3 z-10 ${mobileLineAnimations.has(3) ? 'animate-sequence' : ''}`}
             >
               <div className="flex flex-col items-end" style={{ gap: '8px' }}>
                 <Image src="/icons/feature/feature_line3.svg" alt="line" width={420} height={1} />
@@ -326,7 +290,7 @@ const HomeCloser = () => {
             </div>
 
             <div
-              className={`absolute left-[195px] top-[682px] feature-line feature-line-4 z-10 ${mobileLineAnimations.has(4) ? 'animate-sequence' : ''}`}
+              className={`absolute lg:block hidden left-[195px] top-[682px] feature-line feature-line-4 z-10 ${mobileLineAnimations.has(4) ? 'animate-sequence' : ''}`}
             >
               <div className="flex flex-col items-start" style={{ gap: '8px' }}>
                 <Image src="/icons/feature/feature_line4.svg" alt="line" width={320} height={1} />
@@ -350,10 +314,10 @@ const HomeCloser = () => {
 
         {/* Desktop 视图 */}
         <div
-          className={`absolute inset-0 transition-all duration-700 will-change-[transform,opacity] ${
+          className={`w-full shrink-0 inline-block h-fit translate-y-40 md:translate-y-0 transition-all duration-700 will-change-[transform,opacity] ${
             selectedView === 'desktop'
-              ? 'translate-x-0 opacity-100 scale-100'
-              : 'translate-x-full opacity-0 scale-95'
+              ? '-translate-x-full opacity-100 scale-100'
+              : 'translate-x-0 opacity-0 scale-95'
           }`}
           style={{
             transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
@@ -376,7 +340,7 @@ const HomeCloser = () => {
                 width={1214}
                 height={911}
                 className="w-auto h-auto"
-                style={{ maxHeight: '911px', transform: 'translateY(-30px) scale(1.1)' }}
+                style={{ maxHeight: '911px' }}
               />
             </div>
           </div>
@@ -386,9 +350,8 @@ const HomeCloser = () => {
       {/* CTA Button - Only show when mobile view is selected */}
       {selectedView === 'mobile' && (
         <div
-          className="flex justify-center mt-16"
+          className="md:flex hidden justify-center -mt-16"
           style={{
-            transform: 'translateY(-200px)',
             position: 'relative',
             zIndex: 20,
           }}
@@ -434,9 +397,8 @@ const HomeCloser = () => {
       {/* CTA Buttons - Only show when desktop view is selected */}
       {selectedView === 'desktop' && (
         <div
-          className="flex justify-center mt-16"
+          className="hidden justify-center -mt-40 md:flex"
           style={{
-            transform: 'translateY(-200px)',
             position: 'relative',
             zIndex: 20,
             gap: '20px',

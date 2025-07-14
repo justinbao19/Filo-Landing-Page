@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { memo, useCallback, useState } from 'react'
 
-const HomeFloat = ({ selectedLanguage }: { selectedLanguage: Language }) => {
+const HomeFloat = () => {
   const t = useTranslations('home')
 
   // Email Task 弹窗悬停状态
@@ -18,29 +18,16 @@ const HomeFloat = ({ selectedLanguage }: { selectedLanguage: Language }) => {
   }, [])
   return (
     <div
-      style={{
-        display: 'flex',
-        width: '1440px',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '120px',
-      }}
+      className="md:w-[1440px] w-full mx-auto flex flex-col items-center md:gap-30 gap-10"
     >
       {/* 主标题 */}
       <h1
+        className="md:text-[70px] text-[54px] font-bold w-full md:flex-row flex-col flex items-center justify-center"
         style={{
           color: 'var(--06, #000)',
           textAlign: 'center',
           fontFeatureSettings: '"liga" off, "clig" off',
           fontFamily: 'Inter',
-          fontSize:
-            selectedLanguage === Language.ZH_CN ||
-            selectedLanguage === Language.ZH_TW ||
-            selectedLanguage === Language.JA
-              ? '60px'
-              : selectedLanguage === Language.ES
-                ? '70px'
-                : '80px',
           fontStyle: 'normal',
           fontWeight: 700,
           lineHeight: '120%',
@@ -49,47 +36,37 @@ const HomeFloat = ({ selectedLanguage }: { selectedLanguage: Language }) => {
           margin: 0,
         }}
       >
-        {t('emailInTaskOut')}
+        <p>{t('emailInTaskOut1')}</p>
+        <p>{t('emailInTaskOut2')}</p>
       </h1>
 
       {/* 内容区域 */}
       <div
-        style={{
-          display: 'flex',
-          width: '100%',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          maxWidth: '1200px',
-        }}
+      className="w-full flex items-center md:justify-between md:max-w-[1200px] mx-auto flex-col md:flex-row gap-10"
+        
       >
         {/* 左侧文字 */}
-        <div style={{ flex: '0 0 auto', width: '224px' }}>
+        <div className="w-[224px] space-y-10">
           <h2
+            className="md:text-[40px] text-[36px] font-normal text-center"
             style={{
               color: 'var(--06, #000)',
-              textAlign: 'center',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Georgia',
-              fontSize: '40px',
-              fontStyle: 'normal',
-              fontWeight: 400,
               lineHeight: '120%',
               margin: 0,
-              marginBottom: '32px',
             }}
           >
             {t('neverMissATask')}
           </h2>
 
           <p
+            className="md:text-[20px] text-[16px] font-normal text-center"
             style={{
               color: 'var(--07, #707070)',
-              textAlign: 'center',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Inter',
-              fontSize: '20px',
               fontStyle: 'normal',
-              fontWeight: 500,
               lineHeight: '150%',
               alignSelf: 'stretch',
               margin: 0,
@@ -116,22 +93,17 @@ const HomeFloat = ({ selectedLanguage }: { selectedLanguage: Language }) => {
               alt="Email interface"
               width={343}
               height={692}
-              className="w-auto h-auto"
+              className="h-auto md:shadow-2xl shadow md:w-auto w-[180px] px-3"
               style={{
                 borderRadius: '20.27px',
-                borderLeft: '0.338px solid var(--14, rgba(0, 0, 0, 0.04))',
                 background: 'var(--10, #FFF)',
-                boxShadow:
-                  '0px 67.568px 54.054px 0px rgba(0, 0, 0, 0.07), 0px 28.228px 22.582px 0px rgba(0, 0, 0, 0.05), 0px 15.092px 12.074px 0px rgba(0, 0, 0, 0.04), 0px 8.461px 6.768px 0px rgba(0, 0, 0, 0.04), 0px 4.493px 3.595px 0px rgba(0, 0, 0, 0.03), 0px 1.87px 1.496px 0px rgba(0, 0, 0, 0.02)',
               }}
             />
 
             {/* 弹窗 1 - Review (右上角) */}
             <div
-              className={`absolute float-animation transition-transform duration-300 hover:scale-110 ${isAnyPopupHovered ? 'paused' : ''}`}
+              className={`absolute md:top-[180px] top-[50px] md:-right-[210px] -right-[100px] float-animation transition-transform duration-300 hover:scale-110 ${isAnyPopupHovered ? 'paused' : ''}`}
               style={{
-                top: '180px',
-                right: '-210px',
                 animationDelay: '0.5s',
               }}
               onMouseEnter={handlePopupMouseEnter}
@@ -142,15 +114,14 @@ const HomeFloat = ({ selectedLanguage }: { selectedLanguage: Language }) => {
                 alt="Review popup"
                 width={297}
                 height={78}
+                className="md:w-[297px] w-[150px]"
               />
             </div>
 
             {/* 弹窗 2 - Reservation (左侧中部) */}
             <div
-              className={`absolute float-animation transition-transform duration-300 hover:scale-110 ${isAnyPopupHovered ? 'paused' : ''}`}
+              className={`absolute float-animation md:top-[325px] top-[100px] md:-left-[170px] -left-[100px] transition-transform duration-300 hover:scale-110 ${isAnyPopupHovered ? 'paused' : ''}`}
               style={{
-                top: '325px',
-                left: '-170px',
                 animationDelay: '1s',
               }}
               onMouseEnter={handlePopupMouseEnter}
@@ -161,15 +132,14 @@ const HomeFloat = ({ selectedLanguage }: { selectedLanguage: Language }) => {
                 alt="Reservation popup"
                 width={202}
                 height={78}
+                className="md:w-[202px] w-[140px]"
               />
             </div>
 
             {/* 弹窗 3 - Confirm (右侧中下部) */}
             <div
-              className={`absolute float-animation transition-transform duration-300 hover:scale-110 ${isAnyPopupHovered ? 'paused' : ''}`}
+              className={`absolute float-animation md:top-[435px] top-[150px] md:-right-[120px] -right-[100px] transition-transform duration-300 hover:scale-110 ${isAnyPopupHovered ? 'paused' : ''}`}
               style={{
-                top: '435px',
-                right: '-120px',
                 animationDelay: '1.5s',
               }}
               onMouseEnter={handlePopupMouseEnter}
@@ -180,15 +150,14 @@ const HomeFloat = ({ selectedLanguage }: { selectedLanguage: Language }) => {
                 alt="Confirm popup"
                 width={252}
                 height={58}
+                className="md:w-[252px] w-[150px]"
               />
             </div>
 
             {/* 弹窗 4 - RSVP Cancel (底部中央) */}
             <div
-              className={`absolute float-animation transition-transform duration-300 hover:scale-110 ${isAnyPopupHovered ? 'paused' : ''}`}
+              className={`absolute float-animation md:top-[610px] top-[250px] md:-left-[70px] -left-[100px] transition-transform duration-300 hover:scale-110 ${isAnyPopupHovered ? 'paused' : ''}`}
               style={{
-                top: '610px',
-                left: '-70px',
                 animationDelay: '2s',
               }}
               onMouseEnter={handlePopupMouseEnter}
@@ -199,6 +168,7 @@ const HomeFloat = ({ selectedLanguage }: { selectedLanguage: Language }) => {
                 alt="RSVP Cancel popup"
                 width={236}
                 height={78}
+                className="md:w-[236px] w-[150px]"
               />
             </div>
           </div>

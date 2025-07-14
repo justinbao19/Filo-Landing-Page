@@ -93,7 +93,10 @@ const HomeTyping = () => {
       className="typing-container"
       style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
     >
-      <div style={{ position: 'relative', width: '800px', height: '110px' }}>
+      <div
+        className="hidden md:block"
+        style={{ position: 'relative', width: '800px', height: '110px' }}
+      >
         <svg
           width="800"
           height="110"
@@ -136,6 +139,161 @@ const HomeTyping = () => {
           >
             {displayText}
           </text>
+        </svg>
+      </div>
+      <div className="block md:hidden">
+        <svg
+          width="375"
+          height="146"
+          viewBox="0 0 375 146"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g filter="url(#filter0_dddddd_13007_121801)">
+            <rect x="22.5" y="0.291016" width="330" height="55" rx="27.5" fill="#F6F6F6" />
+            <rect
+              x="32.5"
+              y="10.291"
+              width="310"
+              height="35"
+              rx="17.5"
+              fill="black"
+              fill-opacity="0.04"
+            />
+            <path
+              d="M42.6235 25.4028C42.8145 24.6151 43.9349 24.6151 44.1259 25.4028L44.6515 27.5704C44.7197 27.8516 44.9393 28.0712 45.2205 28.1394L47.388 28.665C48.1758 28.856 48.1758 29.9764 47.388 30.1674L45.2205 30.693C44.9393 30.7612 44.7197 30.9808 44.6515 31.262L44.1259 33.4295C43.9349 34.2173 42.8145 34.2173 42.6235 33.4295L42.0979 31.262C42.0297 30.9808 41.8101 30.7612 41.5288 30.693L39.3613 30.1674C38.5736 29.9764 38.5736 28.856 39.3613 28.665L41.5288 28.1394C41.8101 28.0712 42.0297 27.8516 42.0979 27.5704L42.6235 25.4028Z"
+              fill="#22A0FB"
+            />
+            <path
+              d="M48.3943 21.8748C48.4954 21.4578 49.0886 21.4578 49.1897 21.8748L49.4679 23.0223C49.504 23.1712 49.6203 23.2875 49.7692 23.3236L50.9167 23.6018C51.3338 23.7029 51.3338 24.2961 50.9167 24.3972L49.7692 24.6755C49.6203 24.7116 49.504 24.8278 49.4679 24.9767L49.1897 26.1242C49.0886 26.5413 48.4954 26.5413 48.3943 26.1242L48.116 24.9767C48.0799 24.8278 47.9637 24.7116 47.8148 24.6755L46.6673 24.3972C46.2502 24.2961 46.2502 23.7029 46.6673 23.6018L47.8148 23.3236C47.9637 23.2875 48.0799 23.1712 48.116 23.0223L48.3943 21.8748Z"
+              fill="#22A0FB"
+            />
+            <text
+            x="55"
+            y="33"
+            fill="#707070"
+            fontSize="12"
+            fontFamily="Inter, sans-serif"
+            fontWeight="400"
+          >
+            {displayText}
+          </text>
+          </g>
+          <defs>
+            <filter
+              id="filter0_dddddd_13007_121801"
+              x="-17.5"
+              y="0.291016"
+              width="410"
+              height="145"
+              filterUnits="userSpaceOnUse"
+              color-interpolation-filters="sRGB"
+            >
+              <feFlood flood-opacity="0" result="BackgroundImageFix" />
+              <feColorMatrix
+                in="SourceAlpha"
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                result="hardAlpha"
+              />
+              <feOffset dy="1.38363" />
+              <feGaussianBlur stdDeviation="0.553451" />
+              <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0" />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_13007_121801"
+              />
+              <feColorMatrix
+                in="SourceAlpha"
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                result="hardAlpha"
+              />
+              <feOffset dy="3.32505" />
+              <feGaussianBlur stdDeviation="1.33002" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0287542 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="effect1_dropShadow_13007_121801"
+                result="effect2_dropShadow_13007_121801"
+              />
+              <feColorMatrix
+                in="SourceAlpha"
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                result="hardAlpha"
+              />
+              <feOffset dy="6.26078" />
+              <feGaussianBlur stdDeviation="2.50431" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0238443 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="effect2_dropShadow_13007_121801"
+                result="effect3_dropShadow_13007_121801"
+              />
+              <feColorMatrix
+                in="SourceAlpha"
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                result="hardAlpha"
+              />
+              <feOffset dy="11.1682" />
+              <feGaussianBlur stdDeviation="4.46726" />
+              <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.02 0" />
+              <feBlend
+                mode="normal"
+                in2="effect3_dropShadow_13007_121801"
+                result="effect4_dropShadow_13007_121801"
+              />
+              <feColorMatrix
+                in="SourceAlpha"
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                result="hardAlpha"
+              />
+              <feOffset dy="20.8888" />
+              <feGaussianBlur stdDeviation="8.35552" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0161557 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="effect4_dropShadow_13007_121801"
+                result="effect5_dropShadow_13007_121801"
+              />
+              <feColorMatrix
+                in="SourceAlpha"
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                result="hardAlpha"
+              />
+              <feOffset dy="50" />
+              <feGaussianBlur stdDeviation="20" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0112458 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="effect5_dropShadow_13007_121801"
+                result="effect6_dropShadow_13007_121801"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect6_dropShadow_13007_121801"
+                result="shape"
+              />
+            </filter>
+          </defs>
         </svg>
       </div>
     </div>

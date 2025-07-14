@@ -40,7 +40,7 @@ const HomeLanguage = () => {
   }, [])
 
   return (
-    <nav className="flex justify-between items-center px-20 h-20">
+    <nav className="flex justify-between items-center md:px-20 px-7.5 h-20">
       {/* Logo - 使用提供的SVG */}
       <div className="flex items-center flex-shrink-0">
         <Image
@@ -57,6 +57,7 @@ const HomeLanguage = () => {
         className="relative"
         onMouseEnter={handleLanguageMouseEnter}
         onMouseLeave={handleLanguageMouseLeave}
+        onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
       >
         <div className="flex items-center gap-2 text-gray-700 cursor-pointer hover:text-gray-900 transition-colors">
           <span className="text-base">
@@ -82,15 +83,8 @@ const HomeLanguage = () => {
         {/* 语言下拉菜单 */}
         {isLanguageDropdownOpen && (
           <div
-            className="absolute top-full right-0 mt-2 z-30 dropdown-animate"
+            className="absolute md:bg-[rgba(0,0,0,0.04)] bg-[rgba(255,255,255,0.8)] top-full right-0 mt-2 z-40 dropdown-animate pl-3 py-3 pr-5 inline-flex gap-4 rounded-2xl flex-col items-start"
             style={{
-              display: 'inline-flex',
-              padding: '12px 20px 12px 12px',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              gap: '16px',
-              borderRadius: '16px',
-              background: 'var(--14, rgba(0, 0, 0, 0.04))',
               width: '140px',
               whiteSpace: 'nowrap',
             }}

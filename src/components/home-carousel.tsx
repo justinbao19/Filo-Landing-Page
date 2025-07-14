@@ -42,7 +42,7 @@ const HomeCarousel = () => {
 
   return (
     <div
-      className={`sample-cards-scroll flex gap-[40px] ${!isSampleCardsVisible ? 'stop' : ''}`}
+      className={`sample-cards-scroll flex gap-5 md:gap-10 ${!isSampleCardsVisible ? 'stop' : ''}`}
       style={{
         paddingLeft: '80px',
         paddingRight: '80px',
@@ -52,27 +52,22 @@ const HomeCarousel = () => {
     >
       {/* 卡片 1 - Understand It All */}
       <div
-        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
         style={{
-          width: '600px',
-          height: '570px',
-          borderRadius: '20px',
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
       >
-        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+        <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
+            className={`md:text-[27px] text-[16px] font-bold ${t('understandItAll').includes('\n') ? 'md:mb-7.5 mb-5' : 'md:mb-10 mb-7.5'}`}
             style={{
               color: 'var(--06, #000)',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Inter',
-              fontSize: '27px',
               fontStyle: 'normal',
-              fontWeight: 700,
               lineHeight: '130%',
-              marginBottom: t('understandItAll').includes('\n') ? '28px' : '40px',
             }}
           >
             {t('understandItAll').includes('\n')
@@ -82,14 +77,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          style={{
-                            fontSize:
-                              selectedLanguage === Language.ZH_CN ||
-                              selectedLanguage === Language.ZH_TW ||
-                              selectedLanguage === Language.JA
-                                ? '16px'
-                                : '18.225px',
-                          }}
+                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -103,36 +91,32 @@ const HomeCarousel = () => {
 
           {/* 功能示例图片 */}
           <div className="flex-1 flex items-end">
-            <div style={{ display: 'flex', gap: '16px', width: '100%' }}>
+            <div className="relative w-full h-full">
               {/* Japanese email */}
-              <div style={{ flex: 1 }}>
+              <div className="w-[90%] h-[90%] absolute top-0 left-0">
                 <Image
                   src="/icons/feature/sample1_jp.png"
                   alt="Japanese email example"
                   width={258}
                   height={350}
-                  className="w-full h-auto"
+                  className="w-full h-auto md:shadow-xl shadow"
                   style={{
                     display: 'block',
                     borderRadius: '12px',
-                    boxShadow:
-                      '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
                   }}
                 />
               </div>
               {/* English translation */}
-              <div style={{ flex: 1 }}>
+              <div className="w-[80%] h-[80%] absolute top-[15%] left-[20%]">
                 <Image
                   src="/icons/feature/sample1_en.png"
                   alt="English translation example"
                   width={258}
                   height={350}
-                  className="w-full h-auto"
+                  className="w-full h-auto md:shadow-xl shadow"
                   style={{
                     display: 'block',
                     borderRadius: '12px',
-                    boxShadow:
-                      '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
                   }}
                 />
               </div>
@@ -143,28 +127,22 @@ const HomeCarousel = () => {
 
       {/* 卡片 2 - Promo, Condensed */}
       <div
-        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
         style={{
-          width: '600px',
-          height: '570px',
-          borderRadius: '20px',
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
       >
-        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+        <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
+            className={`md:text-[27px] text-[16px] font-bold ${t('promoCondensed').includes('\n') ? 'md:mb-7.5 mb-5' : 'md:mb-10 mb-7.5'}`}
             style={{
-              alignSelf: 'stretch',
               color: 'var(--06, #000)',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Inter',
-              fontSize: '27px',
               fontStyle: 'normal',
-              fontWeight: 700,
               lineHeight: '130%',
-              marginBottom: t('promoCondensed').includes('\n') ? '28px' : '40px',
             }}
           >
             {t('promoCondensed').includes('\n')
@@ -174,14 +152,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          style={{
-                            fontSize:
-                              selectedLanguage === Language.ZH_CN ||
-                              selectedLanguage === Language.ZH_TW ||
-                              selectedLanguage === Language.JA
-                                ? '16px'
-                                : '18.225px',
-                          }}
+                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -200,12 +171,10 @@ const HomeCarousel = () => {
               alt="Promo email condensed feature"
               width={540}
               height={350}
-              className="w-full h-auto"
+              className="w-full h-auto md:shadow-xl shadow"
               style={{
                 display: 'block',
                 borderRadius: '12px',
-                boxShadow:
-                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
               }}
             />
           </div>
@@ -214,28 +183,22 @@ const HomeCarousel = () => {
 
       {/* 卡片 3 - What do I say? */}
       <div
-        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
         style={{
-          width: '600px',
-          height: '570px',
-          borderRadius: '20px',
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
       >
-        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+        <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
+            className={`md:text-[27px] text-[16px] font-bold ${t('whatDoISay').includes('\n') ? 'md:mb-7.5 mb-5' : 'md:mb-10 mb-7.5'}`}
             style={{
-              alignSelf: 'stretch',
               color: 'var(--06, #000)',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Inter',
-              fontSize: '27px',
               fontStyle: 'normal',
-              fontWeight: 700,
               lineHeight: '130%',
-              marginBottom: t('whatDoISay').includes('\n') ? '28px' : '40px',
             }}
           >
             {t('whatDoISay').includes('\n')
@@ -245,14 +208,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          style={{
-                            fontSize:
-                              selectedLanguage === Language.ZH_CN ||
-                              selectedLanguage === Language.ZH_TW ||
-                              selectedLanguage === Language.JA
-                                ? '16px'
-                                : '18.225px',
-                          }}
+                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -271,12 +227,10 @@ const HomeCarousel = () => {
               alt="French AI reply feature"
               width={540}
               height={350}
-              className="w-full h-auto"
+              className="w-full h-auto md:shadow-xl shadow"
               style={{
                 display: 'block',
                 borderRadius: '12px',
-                boxShadow:
-                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
               }}
             />
           </div>
@@ -285,28 +239,22 @@ const HomeCarousel = () => {
 
       {/* 卡片 4 - Boss Bomb Defused */}
       <div
-        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
         style={{
-          width: '600px',
-          height: '570px',
-          borderRadius: '20px',
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
       >
-        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+        <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
+            className={`md:text-[27px] text-[16px] font-bold ${t('bossBombDefused').includes('\n') ? 'md:mb-7.5 mb-5' : 'md:mb-10 mb-7.5'}`}
             style={{
-              alignSelf: 'stretch',
               color: 'var(--06, #000)',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Inter',
-              fontSize: '27px',
               fontStyle: 'normal',
-              fontWeight: 700,
               lineHeight: '130%',
-              marginBottom: t('bossBombDefused').includes('\n') ? '28px' : '40px',
             }}
           >
             {t('bossBombDefused').includes('\n')
@@ -316,14 +264,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          style={{
-                            fontSize:
-                              selectedLanguage === Language.ZH_CN ||
-                              selectedLanguage === Language.ZH_TW ||
-                              selectedLanguage === Language.JA
-                                ? '16px'
-                                : '18.225px',
-                          }}
+                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -342,12 +283,10 @@ const HomeCarousel = () => {
               alt="Boss task management feature"
               width={540}
               height={350}
-              className="w-full h-auto"
+              className="w-full h-auto md:shadow-xl shadow"
               style={{
                 display: 'block',
                 borderRadius: '12px',
-                boxShadow:
-                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
               }}
             />
           </div>
@@ -356,28 +295,22 @@ const HomeCarousel = () => {
 
       {/* 卡片 5 - Goodbye Auto-Bill */}
       <div
-        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
         style={{
-          width: '600px',
-          height: '570px',
-          borderRadius: '20px',
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
       >
-        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+        <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
+            className={`md:text-[27px] text-[16px] font-bold ${t('goodbyeAutoBill').includes('\n') ? 'md:mb-7.5 mb-5' : 'md:mb-10 mb-7.5'}`}
             style={{
-              alignSelf: 'stretch',
               color: 'var(--06, #000)',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Inter',
-              fontSize: '27px',
               fontStyle: 'normal',
-              fontWeight: 700,
               lineHeight: '130%',
-              marginBottom: t('goodbyeAutoBill').includes('\n') ? '28px' : '40px',
             }}
           >
             {t('goodbyeAutoBill').includes('\n')
@@ -387,14 +320,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          style={{
-                            fontSize:
-                              selectedLanguage === Language.ZH_CN ||
-                              selectedLanguage === Language.ZH_TW ||
-                              selectedLanguage === Language.JA
-                                ? '16px'
-                                : '18.225px',
-                          }}
+                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -413,12 +339,10 @@ const HomeCarousel = () => {
               alt="Subscription management feature"
               width={540}
               height={350}
-              className="w-full h-auto"
+              className="w-full h-auto md:shadow-xl shadow"
               style={{
                 display: 'block',
                 borderRadius: '12px',
-                boxShadow:
-                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
               }}
             />
           </div>
@@ -428,27 +352,22 @@ const HomeCarousel = () => {
       {/* 重复卡片以实现无缝循环 */}
       {/* 卡片 1 - Understand It All (重复) */}
       <div
-        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
         style={{
-          width: '600px',
-          height: '570px',
-          borderRadius: '20px',
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
       >
-        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+        <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
+            className={`md:text-[27px] text-[16px] font-bold ${t('understandItAll').includes('\n') ? 'md:mb-7.5 mb-5' : 'md:mb-10 mb-7.5'}`}
             style={{
               color: 'var(--06, #000)',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Inter',
-              fontSize: '27px',
               fontStyle: 'normal',
-              fontWeight: 700,
               lineHeight: '130%',
-              marginBottom: t('understandItAll').includes('\n') ? '28px' : '40px',
             }}
           >
             {t('understandItAll').includes('\n')
@@ -458,14 +377,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          style={{
-                            fontSize:
-                              selectedLanguage === Language.ZH_CN ||
-                              selectedLanguage === Language.ZH_TW ||
-                              selectedLanguage === Language.JA
-                                ? '16px'
-                                : '18.225px',
-                          }}
+                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -487,12 +399,10 @@ const HomeCarousel = () => {
                   alt="Japanese email example"
                   width={258}
                   height={350}
-                  className="w-full h-auto"
+                  className="w-full h-auto md:shadow-xl shadow"
                   style={{
                     display: 'block',
                     borderRadius: '12px',
-                    boxShadow:
-                      '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
                   }}
                 />
               </div>
@@ -503,12 +413,10 @@ const HomeCarousel = () => {
                   alt="English translation example"
                   width={258}
                   height={350}
-                  className="w-full h-auto"
+                  className="w-full h-auto md:shadow-xl shadow"
                   style={{
                     display: 'block',
                     borderRadius: '12px',
-                    boxShadow:
-                      '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
                   }}
                 />
               </div>
@@ -519,28 +427,22 @@ const HomeCarousel = () => {
 
       {/* 卡片 2 - Promo, Condensed (重复) */}
       <div
-        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
         style={{
-          width: '600px',
-          height: '570px',
-          borderRadius: '20px',
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
       >
-        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+        <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
+            className={`md:text-[27px] text-[16px] font-bold ${t('promoCondensed').includes('\n') ? 'md:mb-7.5 mb-5' : 'md:mb-10 mb-7.5'}`}
             style={{
-              alignSelf: 'stretch',
               color: 'var(--06, #000)',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Inter',
-              fontSize: '27px',
               fontStyle: 'normal',
-              fontWeight: 700,
               lineHeight: '130%',
-              marginBottom: t('promoCondensed').includes('\n') ? '28px' : '40px',
             }}
           >
             {t('promoCondensed').includes('\n')
@@ -550,14 +452,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          style={{
-                            fontSize:
-                              selectedLanguage === Language.ZH_CN ||
-                              selectedLanguage === Language.ZH_TW ||
-                              selectedLanguage === Language.JA
-                                ? '16px'
-                                : '18.225px',
-                          }}
+                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -576,12 +471,10 @@ const HomeCarousel = () => {
               alt="Promo email condensed feature"
               width={540}
               height={350}
-              className="w-full h-auto"
+              className="w-full h-auto md:shadow-xl shadow"
               style={{
                 display: 'block',
                 borderRadius: '12px',
-                boxShadow:
-                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
               }}
             />
           </div>
@@ -590,28 +483,22 @@ const HomeCarousel = () => {
 
       {/* 卡片 3 - What do I say? (重复) */}
       <div
-        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
         style={{
-          width: '600px',
-          height: '570px',
-          borderRadius: '20px',
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
       >
-        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+        <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
+            className={`md:text-[27px] text-[16px] font-bold ${t('whatDoISay').includes('\n') ? 'md:mb-7.5 mb-5' : 'md:mb-10 mb-7.5'}`}
             style={{
-              alignSelf: 'stretch',
               color: 'var(--06, #000)',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Inter',
-              fontSize: '27px',
               fontStyle: 'normal',
-              fontWeight: 700,
               lineHeight: '130%',
-              marginBottom: t('whatDoISay').includes('\n') ? '28px' : '40px',
             }}
           >
             {t('whatDoISay').includes('\n')
@@ -621,14 +508,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          style={{
-                            fontSize:
-                              selectedLanguage === Language.ZH_CN ||
-                              selectedLanguage === Language.ZH_TW ||
-                              selectedLanguage === Language.JA
-                                ? '16px'
-                                : '18.225px',
-                          }}
+                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -647,12 +527,10 @@ const HomeCarousel = () => {
               alt="French AI reply feature"
               width={540}
               height={350}
-              className="w-full h-auto"
+              className="w-full h-auto md:shadow-2xl shadow"
               style={{
                 display: 'block',
                 borderRadius: '12px',
-                boxShadow:
-                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
               }}
             />
           </div>
@@ -661,28 +539,22 @@ const HomeCarousel = () => {
 
       {/* 卡片 4 - Boss Bomb Defused (重复) */}
       <div
-        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
         style={{
-          width: '600px',
-          height: '570px',
-          borderRadius: '20px',
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
       >
-        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+        <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
+            className={`md:text-[27px] text-[16px] font-bold ${t('bossBombDefused').includes('\n') ? 'md:mb-7.5 mb-5' : 'md:mb-10 mb-7.5'}`}
             style={{
-              alignSelf: 'stretch',
               color: 'var(--06, #000)',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Inter',
-              fontSize: '27px',
               fontStyle: 'normal',
-              fontWeight: 700,
               lineHeight: '130%',
-              marginBottom: '40px',
             }}
           >
             {t('bossBombDefused')
@@ -691,14 +563,7 @@ const HomeCarousel = () => {
                 <div key={index}>
                   {index === 0 ? (
                     <span
-                      style={{
-                        fontSize:
-                          selectedLanguage === Language.ZH_CN ||
-                          selectedLanguage === Language.ZH_TW ||
-                          selectedLanguage === Language.JA
-                            ? '16px'
-                            : '18.225px',
-                      }}
+                      className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                     >
                       {line}
                     </span>
@@ -716,12 +581,10 @@ const HomeCarousel = () => {
               alt="Boss task management feature"
               width={540}
               height={350}
-              className="w-full h-auto"
+              className="w-full h-auto md:shadow-2xl shadow"
               style={{
                 display: 'block',
                 borderRadius: '12px',
-                boxShadow:
-                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
               }}
             />
           </div>
@@ -730,28 +593,22 @@ const HomeCarousel = () => {
 
       {/* 卡片 5 - Goodbye Auto-Bill (重复) */}
       <div
-        className="flex-shrink-0 transition-all duration-200 hover:scale-105"
+        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
         style={{
-          width: '600px',
-          height: '570px',
-          borderRadius: '20px',
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
       >
-        <div className="w-full h-full flex flex-col" style={{ padding: '30px' }}>
+        <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
+            className={`md:text-[27px] text-[16px] font-bold ${t('goodbyeAutoBill').includes('\n') ? 'md:mb-7.5 mb-5' : 'md:mb-10 mb-7.5'}`}
             style={{
-              alignSelf: 'stretch',
               color: 'var(--06, #000)',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Inter',
-              fontSize: '27px',
               fontStyle: 'normal',
-              fontWeight: 700,
               lineHeight: '130%',
-              marginBottom: t('goodbyeAutoBill').includes('\n') ? '28px' : '40px',
             }}
           >
             {t('goodbyeAutoBill').includes('\n')
@@ -761,14 +618,7 @@ const HomeCarousel = () => {
                     <div key={index}>
                       {index === 0 ? (
                         <span
-                          style={{
-                            fontSize:
-                              selectedLanguage === Language.ZH_CN ||
-                              selectedLanguage === Language.ZH_TW ||
-                              selectedLanguage === Language.JA
-                                ? '16px'
-                                : '18.225px',
-                          }}
+                          className={`${selectedLanguage === Language.ZH_CN || selectedLanguage === Language.ZH_TW || selectedLanguage === Language.JA ? 'md:text-[16px] text-[13px]' : 'md:text-[18.225px] text-[15px]'}`}
                         >
                           {line}
                         </span>
@@ -787,12 +637,10 @@ const HomeCarousel = () => {
               alt="Subscription management feature"
               width={540}
               height={350}
-              className="w-full h-auto"
+              className="w-full h-auto md:shadow-2xl shadow"
               style={{
                 display: 'block',
                 borderRadius: '12px',
-                boxShadow:
-                  '0px 100px 80px 0px rgba(0, 0, 0, 0.01), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.01), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.01), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.02), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.02), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.03)',
               }}
             />
           </div>

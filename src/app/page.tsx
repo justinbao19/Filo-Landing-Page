@@ -19,7 +19,7 @@ const cookies = new Cookies()
 function Home() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isGetFiloDropdownOpen, setIsGetFiloDropdownOpen] = useState(false)
- 
+
   const [selectedLanguage, setSelectedLanguage] = useState(Language.EN)
   const [isGetFiloTodayHovered, setIsGetFiloTodayHovered] = useState(false)
 
@@ -84,7 +84,6 @@ function Home() {
     }
   }, [])
 
-  
   // 处理macOS下拉菜单鼠标进入
   const handleMouseEnter = useCallback(() => {
     if (timeoutRef.current) {
@@ -103,7 +102,7 @@ function Home() {
 
   // 处理macOS按钮点击
   const handleButtonClick = useCallback(() => {
-    setIsDropdownOpen(!isDropdownOpen)
+    setIsDropdownOpen((prev) => !prev)
   }, [])
 
   // 处理Get Filo Today下拉菜单鼠标进入
@@ -140,15 +139,11 @@ function Home() {
     })
   }, [])
 
-
-
-  console.log(visibleSections)
-
   return (
     <div className="min-h-screen bg-white overflow-x-hidden overflow-y-auto">
       {/* 主要背景框体 - 自适应宽度 x 610px with gradient */}
       <div
-        className="w-full h-[610px] flex-shrink-0 relative z-20"
+        className="w-full md:h-[610px] flex-shrink-0 relative z-20"
         style={{
           background: 'linear-gradient(180deg, #E7F5FF 1.04%, #FFF 98.7%)',
         }}
@@ -159,22 +154,21 @@ function Home() {
           <HomeLanguage />
 
           {/* 主要内容区域 */}
-          <main className="flex flex-col items-center text-center px-20">
+          <main className="flex flex-col items-center text-center md:px-20 px-7.5">
             {/* 主标题区域 - 调整垂直间距以适应610px高度 */}
-            <div className="mt-[120px] mb-[40px]">
+            <div className="md:mt-[120px] mt-[70px] md:mb-10 mb-7.5">
               <h1
-                className="text-center font-bold"
+                className="text-center font-bold md:text-[108px] text-[52px]"
                 style={{
                   alignSelf: 'stretch',
                   color: '#000',
                   textAlign: 'center',
                   fontFeatureSettings: '"liga" off, "clig" off',
                   fontFamily: 'var(--font-inter), Inter, sans-serif',
-                  fontSize: '108px',
                   fontStyle: 'normal',
                   fontWeight: 700,
                   lineHeight: '130%',
-                  letterSpacing: '-5px',
+                  letterSpacing: '-2px',
                 }}
               >
                 {t('slogan')}
@@ -182,16 +176,15 @@ function Home() {
             </div>
 
             {/* 副标题描述 - 应用设计规范 */}
-            <div className="mb-[80px]">
+            <div className="md:mb-[80px] mb-7.5">
               <p
-                className="text-center"
+                className="text-center md:text-[22px] text-[16px]"
                 style={{
                   alignSelf: 'stretch',
                   color: '#707070',
                   textAlign: 'center',
                   fontFeatureSettings: '"liga" off, "clig" off',
                   fontFamily: 'var(--font-inter), Inter, sans-serif',
-                  fontSize: '22px',
                   fontStyle: 'normal',
                   fontWeight: 400,
                   lineHeight: '150%',
@@ -204,13 +197,12 @@ function Home() {
             </div>
 
             {/* 下载按钮组 */}
-            <div className="flex gap-[30px] items-center">
+            <div className="flex gap-[30px] items-center md:flex-row flex-col">
               {/* App Store 按钮 - 使用提供的SVG */}
               <a
                 href="https://apple.co/43FINlq"
-                className="inline-block transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-200/50 hover:brightness-110"
+                className="inline-flex md:rounded-[20px] rounded-2xl md:px-5 px-3 md:h-[74px] h-[54px] items-center transition-all gap-4 duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-200/50 hover:brightness-110"
                 style={{
-                  borderRadius: '20px',
                   border: '1.5px solid var(--14, rgba(0, 0, 0, 0.04))',
                   background: 'var(--06, #000)',
                   boxShadow:
@@ -220,12 +212,16 @@ function Home() {
                 target="_blank"
               >
                 <Image
-                  src="/icons/ui/ui-appstore-download.svg"
-                  alt={t('downloadOnAppStore')}
-                  width={258}
-                  height={74}
-                  className="w-auto h-[74px]"
+                  className="md:h-10 h-8"
+                  src="/icons/apple-logo.svg"
+                  alt="Apple Logo"
+                  width={41}
+                  height={50}
                 />
+                <p className="text-white flex items-center flex-col font-bold md:h-10 h-9 justify-between">
+                  <span className="md:text-[20px] text-[13px] leading-1">Download on the </span>
+                  <span className="md:text-[34px] text-[23px] leading-5">App Store</span>
+                </p>
               </a>
 
               {/* macOS 按钮 - 使用新的SVG with dropdown */}
@@ -236,30 +232,23 @@ function Home() {
               >
                 <button
                   onClick={handleButtonClick}
-                  className="transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-200/50 hover:brightness-110"
+                  className="transition-all md:rounded-[20px] rounded-2xl md:h-[73px] h-[54px] text-white md:px-7.5 px-3 gap-2 flex items-center justify-center duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-200/50 hover:brightness-110"
                   style={{
-                    borderRadius: '20px',
                     border: '1.5px solid var(--14, rgba(0, 0, 0, 0.04))',
                     background: 'var(--02, #22A0FB)',
                     boxShadow:
                       '0px 100px 80px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.03), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.04), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.05), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.07)',
                   }}
                 >
-                  <Image
-                    src="/icons/ui/ui_desktop_download.svg"
-                    alt={t('downloadFormacOS')}
-                    width={359}
-                    height={74}
-                    className="w-auto h-[74px]"
-                  />
+                  <p className="md:text-[20px] leading-1 font-bold">Download for macOS</p>
+                  <p className="px-2 py-1 rounded-lg bg-white/15 text-xs">Beta</p>
                 </button>
 
                 {/* Dropdown 菜单 */}
                 {isDropdownOpen && (
                   <div
-                    className="absolute top-full left-0 mt-2 z-30 dropdown-animate"
+                    className="absolute top-full left-0 mt-2 z-30 dropdown-animate w-full"
                     style={{
-                      width: '359px',
                       display: 'flex',
                       padding: '20px',
                       flexDirection: 'column',
@@ -351,7 +340,7 @@ function Home() {
 
       {/* Sample Emails 区域 */}
       <section
-        className={`w-full bg-white pt-[200px] pb-32 scroll-animate relative z-10 visible`}
+        className={`w-full bg-white pt-15 md:pt-[200px] md:pb-32 mb-20 scroll-animate relative z-10 visible`}
       >
         <div className="w-full">
           {/* 卡片自动滚动容器 */}
@@ -362,60 +351,46 @@ function Home() {
       </section>
 
       {/* A Closer Look 区域 */}
-      <section
-        className="w-full pt-24 pb-0 overflow-hidden"
-        style={{ marginBottom: '-104px' }}
-      >
+      <section className="w-full overflow-hidden">
         <HomeCloser />
       </section>
 
       {/* Never Miss a Task 区域 */}
       <div
-        className={`scroll-animate ${visibleSections.has('email-task') ? 'visible' : ''}`}
+        className={`scroll-animate md:pt-[120px] pt-[70px] md:pb-[160px] pb-[80px] ${visibleSections.has('email-task') ? 'visible' : ''}`}
         data-section="email-task"
         style={{
           width: '100%',
-          padding: '120px 0px 160px 0px',
           background: 'var(--09, #FCFAFA)',
           display: 'flex',
           justifyContent: 'center',
         }}
       >
-        <HomeFloat selectedLanguage={selectedLanguage} />
+        <HomeFloat />
       </div>
 
       {/* Respond the tone you want 区域 */}
       <div
-        className={`scroll-animate ${visibleSections.has('tone') ? 'visible' : ''}`}
+        className={`scroll-animate md:gap-30 gap-15 md:pt-[120px] pt-[70px] md:pb-[160px] pb-[100px] ${visibleSections.has('tone') ? 'visible' : ''}`}
         data-section="tone"
         style={{
           display: 'flex',
           width: '100%',
-          paddingTop: '120px',
-          paddingBottom: '160px',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '120px',
           background: 'var(--09, #FCFAFA)',
         }}
       >
         {/* 这里将添加新板块的内容 */}
         <div style={{ width: '100%' }}>
           <h2
+            className="md:text-[70px] text-[56px] font-bold flex flex-col justify-center md:flex-row"
             style={{
               alignSelf: 'stretch',
               color: 'var(--06, #000)',
               textAlign: 'center',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontFamily: 'Inter',
-              fontSize:
-                selectedLanguage === Language.ZH_CN ||
-                selectedLanguage === Language.ZH_TW ||
-                selectedLanguage === Language.JA
-                  ? '60px'
-                  : selectedLanguage === Language.ES
-                    ? '70px'
-                    : '80px',
               fontStyle: 'normal',
               fontWeight: 700,
               lineHeight: '120%',
@@ -423,18 +398,17 @@ function Home() {
               margin: 0,
             }}
           >
-            {t('respondTheToneYouWant')}
+            <p>{t('respondTheToneYouWant1')}</p>
+            <p>{t('respondTheToneYouWant2')}</p>
           </h2>
         </div>
 
         {/* 三个语调选项区域 */}
         <div
+          className="flex md:flex-row flex-col md:gap-30 gap-7.5 md:justify-between"
           style={{
-            display: 'flex',
-            justifyContent: 'space-between',
             width: '100%',
             maxWidth: '1200px',
-            gap: '100px',
           }}
         >
           {/* Positive */}
@@ -806,13 +780,12 @@ function Home() {
 
       {/* Or Write with AI 区域 */}
       <div
-        className={`scroll-animate ${visibleSections.has('write-ai') ? 'visible' : ''}`}
+        className={`scroll-animate md:pb-[260px] pb-[80px] ${visibleSections.has('write-ai') ? 'visible' : ''}`}
         data-section="write-ai"
         style={{
           display: 'flex',
           width: '100%',
           paddingTop: '0px',
-          paddingBottom: '260px',
           marginTop: '-10px',
           flexDirection: 'column',
           alignItems: 'center',
@@ -828,38 +801,37 @@ function Home() {
               textAlign: 'center',
               margin: 0,
             }}
+            className="flex md:flex-row flex-col gap-2 justify-center items-center"
           >
-            <>
-              <span
-                style={{
-                  color: 'var(--06, #000)',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Georgia',
-                  fontSize: '40px',
-                  fontStyle: 'normal',
-                  fontWeight: 400,
-                  lineHeight: '130%',
-                  letterSpacing: '-1px',
-                  marginRight: '20px',
-                }}
-              >
-                Or
-              </span>
-              <span
-                style={{
-                  color: 'var(--06, #000)',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Inter',
-                  fontSize: '50px',
-                  fontStyle: 'normal',
-                  fontWeight: 700,
-                  lineHeight: '130%',
-                  letterSpacing: '-1px',
-                }}
-              >
-                Write with AI
-              </span>
-            </>
+            <span
+              style={{
+                color: 'var(--06, #000)',
+                fontFeatureSettings: '"liga" off, "clig" off',
+                fontFamily: 'Georgia',
+                fontSize: '40px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '130%',
+                letterSpacing: '-1px',
+                marginRight: '20px',
+              }}
+            >
+              Or
+            </span>
+            <span
+              style={{
+                color: 'var(--06, #000)',
+                fontFeatureSettings: '"liga" off, "clig" off',
+                fontFamily: 'Inter',
+                fontSize: '50px',
+                fontStyle: 'normal',
+                fontWeight: 700,
+                lineHeight: '130%',
+                letterSpacing: '-1px',
+              }}
+            >
+              Write with AI
+            </span>
           </h2>
         </div>
 
@@ -869,17 +841,14 @@ function Home() {
 
       {/* Powered by top-tier AI 区域 */}
       <div
-        className={`scroll-animate ${visibleSections.has('ai-powered') ? 'visible' : ''}`}
+        className={`scroll-animate md:py-25 py-20 ${visibleSections.has('ai-powered') ? 'visible' : ''}`}
         data-section="ai-powered"
         style={{
           display: 'flex',
           width: '100%',
-          height: '700px',
           justifyContent: 'center',
           alignItems: 'center',
           background: '#FFFFFF',
-          paddingTop: '100px',
-          paddingBottom: '100px',
         }}
       >
         <div
@@ -890,9 +859,8 @@ function Home() {
             height: '100%',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '120px',
-            padding: '0 60px',
           }}
+          className="flex md:flex-row flex-col md:px-15 px-5 justify-center items-center md:gap-30 gap-10"
         >
           {/* 左侧内容 */}
           <div
@@ -912,20 +880,13 @@ function Home() {
                 textAlign: 'center',
                 fontFeatureSettings: '"liga" off, "clig" off',
                 fontFamily: 'Inter',
-                fontSize:
-                  selectedLanguage === Language.ZH_CN ||
-                  selectedLanguage === Language.ZH_TW ||
-                  selectedLanguage === Language.JA
-                    ? '60px'
-                    : selectedLanguage === Language.ES
-                      ? '70px'
-                      : '80px',
                 fontStyle: 'normal',
                 fontWeight: 700,
                 lineHeight: '120%',
                 letterSpacing: '-3px',
                 margin: 0,
               }}
+              className="md:text-[70px] text-[56px]"
             >
               {t('poweredByTopTierAILine1')}
               <br />
@@ -939,20 +900,20 @@ function Home() {
                 textAlign: 'center',
                 fontFeatureSettings: '"liga" off, "clig" off',
                 fontFamily: 'Inter',
-                fontSize: '18px',
                 fontStyle: 'normal',
                 fontWeight: 400,
                 lineHeight: '150%',
                 margin: 0,
                 maxWidth: '520px',
               }}
+              className="md:text-[18px] text-[16px]"
             >
               {t('poweredByTopTierAIDescription')}
             </p>
 
             {/* Get Filo Today 按钮 */}
             <div
-              className="relative"
+              className="relative hidden md:block"
               onMouseEnter={handleGetFiloMouseEnter}
               onMouseLeave={handleGetFiloMouseLeave}
             >
@@ -1150,20 +1111,163 @@ function Home() {
               />
             </div>
           </div>
+          <div
+            className="relative block md:hidden mb-20 mt-20"
+            onMouseEnter={handleGetFiloMouseEnter}
+            onMouseLeave={handleGetFiloMouseLeave}
+          >
+            <button
+              onClick={handleGetFiloButtonClick}
+              style={{
+                display: 'flex',
+                padding: '8px 22px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '10px',
+                borderRadius: '100px',
+                border: '1px solid var(--06, #000)',
+                background: 'transparent',
+                color: 'var(--06, #000)',
+                fontFeatureSettings: '"liga" off, "clig" off',
+                fontFamily: 'Inter',
+                fontSize: '18px',
+                fontStyle: 'normal',
+                fontWeight: 500,
+                lineHeight: '150%',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                colorScheme: 'light',
+              }}
+              className="md:hover:bg-black md:hover:text-white"
+            >
+              {t('getFiloToday2')}
+            </button>
+
+            {/* Dropdown 菜单 */}
+            {isGetFiloDropdownOpen && (
+              <div
+                className="absolute top-full z-50 dropdown-animate"
+                style={{
+                  width: '300px',
+                  left: '30px',
+                  marginTop: '20px',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '8px',
+                }}
+              >
+                {/* Single line */}
+                <div
+                  style={{
+                    width: '1px',
+                    height: '110px', // Height to cover all 3 options: 24px * 3 + 20px * 2 spacing
+                    background: 'var(--06, #000)',
+                    flexShrink: 0,
+                    marginTop: '0px',
+                  }}
+                />
+
+                {/* Options container */}
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '20px',
+                    width: '100%',
+                  }}
+                >
+                  {/* iOS & iPadOS 选项 */}
+                  <a
+                    href="https://apple.co/43FINlq"
+                    style={{
+                      color: 'var(--06, #000)',
+                      fontFeatureSettings: '"liga" off, "clig" off',
+                      fontFamily: 'Inter',
+                      fontSize: '16px',
+                      fontStyle: 'normal',
+                      fontWeight: 500,
+                      lineHeight: '150%',
+                      textDecoration: 'none',
+                      transition: 'opacity 0.3s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.opacity = '0.7'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.opacity = '1'
+                    }}
+                    target="_blank"
+                  >
+                    {t('iosIpadOS')}
+                  </a>
+
+                  {/* macOS Apple Silicon 选项 */}
+                  <a
+                    href="https://download.filomail.com/mac_upgrade/versions/latest/prod/arm64/Filo-arm64.dmg"
+                    style={{
+                      color: 'var(--06, #000)',
+                      fontFeatureSettings: '"liga" off, "clig" off',
+                      fontFamily: 'Inter',
+                      fontSize: '16px',
+                      fontStyle: 'normal',
+                      fontWeight: 500,
+                      lineHeight: '150%',
+                      textDecoration: 'none',
+                      transition: 'opacity 0.3s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.opacity = '0.7'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.opacity = '1'
+                    }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download
+                  >
+                    {t('macOSAppleSilicon')}
+                  </a>
+
+                  {/* macOS Intel 选项 */}
+                  <a
+                    href="https://download.filomail.com/mac_upgrade/versions/latest/prod/x64/Filo-x64.dmg"
+                    style={{
+                      color: 'var(--06, #000)',
+                      fontFeatureSettings: '"liga" off, "clig" off',
+                      fontFamily: 'Inter',
+                      fontSize: '16px',
+                      fontStyle: 'normal',
+                      fontWeight: 500,
+                      lineHeight: '150%',
+                      textDecoration: 'none',
+                      transition: 'opacity 0.3s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.opacity = '0.7'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.opacity = '1'
+                    }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download
+                  >
+                    {t('macOSIntel')}
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       {/* 隐私安全区域 */}
       <div
-        className={`scroll-animate ${visibleSections.has('privacy') ? 'visible' : ''}`}
+        className={`scroll-animate flex md:h-[700px] py-10 items-center justify-center flex-col md:flex-row ${visibleSections.has('privacy') ? 'visible' : ''}`}
         data-section="privacy"
         style={{
           width: '100%',
-          height: '700px',
           background: '#F4ECE2',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
         }}
       >
         <div
@@ -1174,18 +1278,17 @@ function Home() {
             height: '100%',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '120px',
-            padding: '0 60px',
           }}
+          className="md:px-15 md:gap-30 gap-10 flex md:flex-row flex-col justify-center items-center"
         >
           {/* 左侧储物柜图片 */}
           <div
             style={{
               flex: '1',
-              display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
             }}
+            className="md:flex hidden"
           >
             <Image
               src="/icons/ui/ui_locker_image.png"
@@ -1213,6 +1316,7 @@ function Home() {
               alignItems: 'center',
               gap: '40px',
             }}
+            className="gap-10 px-10 w-full"
           >
             {/* 大标题 */}
             <h2
@@ -1220,20 +1324,13 @@ function Home() {
                 color: 'var(--06, #000)',
                 textAlign: 'center',
                 fontFamily: 'Inter',
-                fontSize:
-                  selectedLanguage === Language.ZH_CN ||
-                  selectedLanguage === Language.ZH_TW ||
-                  selectedLanguage === Language.JA
-                    ? '60px'
-                    : selectedLanguage === Language.ES
-                      ? '70px'
-                      : '80px',
                 fontStyle: 'normal',
                 fontWeight: 700,
                 lineHeight: '120%',
                 letterSpacing: '-2.4px',
                 margin: 0,
               }}
+              className="md:text-[70px] text-[56px]"
             >
               {t('noPeeking')}
               <br />
@@ -1243,18 +1340,17 @@ function Home() {
             {/* 中间 tagline */}
             <p
               style={{
-                width: '380px',
                 color: '#9B601A',
                 textAlign: 'center',
                 fontFeatureSettings: '"liga" off, "clig" off',
                 fontFamily: 'Georgia',
-                fontSize: '20px',
                 fontStyle: 'normal',
                 fontWeight: 400,
                 lineHeight: '150%',
                 letterSpacing: '0.5px',
                 margin: 0,
               }}
+              className="md:w-[380px] w-[310px] md:text-[20px] text-[16px]"
             >
               {t('privacyTagline')}
             </p>
@@ -1262,17 +1358,16 @@ function Home() {
             {/* 第三段文字 */}
             <p
               style={{
-                width: '520px',
                 color: 'var(--07, #707070)',
                 textAlign: 'center',
                 fontFeatureSettings: '"liga" off, "clig" off',
                 fontFamily: 'Inter',
-                fontSize: '18px',
                 fontStyle: 'normal',
                 fontWeight: 400,
                 lineHeight: '150%',
                 margin: 0,
               }}
+              className="md:w-[520px] w-[310px] md:text-[18px] text-[16px]"
             >
               {t('privacyDescriptionStart')}
               <a
@@ -1296,7 +1391,50 @@ function Home() {
             {/* See Our Data Promise 按钮 */}
             <Link
               href="/terms-privacy?section=data"
-              className="flex py-2 px-5.5 items-center hover:bg-black hover:text-white justify-center rounded-full border-black border text-black cursor-pointer transition-colors duration-300"
+              className="md:flex hidden py-2 px-5.5 items-center hover:bg-black hover:text-white justify-center rounded-full border-black border text-black cursor-pointer transition-colors duration-300"
+              target="_blank"
+            >
+              <span
+                style={{
+                  color: 'inherit',
+                  fontFeatureSettings: '"liga" off, "clig" off',
+                  fontFamily: 'Inter',
+                  fontSize: '18px',
+                  fontStyle: 'normal',
+                  fontWeight: 500,
+                  lineHeight: '150%',
+                }}
+              >
+                {t('seeOurDataPromise')}
+              </span>
+            </Link>
+          </div>
+          <div
+            style={{
+              flex: '1',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            className="flex md:hidden px-10 relative"
+          >
+            <Image
+              src="/icons/ui/ui_locker_image.png"
+              alt="Secure storage lockers"
+              width={491}
+              height={364}
+              className="w-auto h-auto"
+              style={{
+                width: '491px',
+                height: '364px',
+                objectFit: 'contain',
+                borderRadius: '30px',
+                aspectRatio: '491/364',
+                transform: 'scale(1.1)',
+              }}
+            />
+            <Link
+              href="/terms-privacy?section=data"
+              className="flex md:hidden py-2 px-5.5 bg-white/10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-white border text-white cursor-pointer transition-colors duration-300"
               target="_blank"
             >
               <span
@@ -1319,7 +1457,7 @@ function Home() {
 
       {/* FAQ 区域 */}
       <div
-        className={`scroll-animate visible`}
+        className={`scroll-animate visible will-change-[height] md:py-[160px] py-[80px] md:px-15 px-5`}
         data-section="faq"
         style={{
           width: '100%',
@@ -1328,7 +1466,6 @@ function Home() {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: '160px 60px',
         }}
       >
         <div
@@ -1348,20 +1485,13 @@ function Home() {
               color: '#FFF',
               textAlign: 'center',
               fontFamily: 'Inter',
-              fontSize:
-                selectedLanguage === Language.ZH_CN ||
-                selectedLanguage === Language.ZH_TW ||
-                selectedLanguage === Language.JA
-                  ? '60px'
-                  : selectedLanguage === Language.ES
-                    ? '70px'
-                    : '80px',
               fontStyle: 'normal',
               fontWeight: 700,
               lineHeight: '120%',
               letterSpacing: '-3px',
               margin: 0,
             }}
+            className="md:text-[70px] text-[56px]"
           >
             {t('faqTitle')}
           </h2>
@@ -1406,7 +1536,6 @@ function Home() {
                     onClick={() => handleFaqToggle(index)}
                     style={{
                       width: '100%',
-                      padding: '30px',
                       background: 'transparent',
                       border: 'none',
                       display: 'flex',
@@ -1416,24 +1545,19 @@ function Home() {
                       transition: 'all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                       position: 'relative',
                     }}
+                    className="md:p-7.5 p-5"
                   >
                     <span
                       style={{
                         color: '#FFF',
                         textAlign: 'center',
                         fontFamily: 'Inter',
-                        fontSize: '24px',
                         fontStyle: 'normal',
                         fontWeight: 600,
                         lineHeight: '130%',
                         transition: 'opacity 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                       }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.opacity = '0.7'
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.opacity = '1'
-                      }}
+                      className="md:text-[24px] text-[20px] md:hover:opacity-70"
                     >
                       {faq.question}
                     </span>
@@ -1525,48 +1649,37 @@ function Home() {
       </div>
 
       {/* 底部图像区域 */}
-      <div style={{ background: '#E9F6FF', paddingTop: '140px', paddingBottom: '40px' }}>
+      <div className="md:pt-[140px] pt-20" style={{ background: '#E9F6FF', paddingBottom: '40px' }}>
         <div className="max-w-[1280px] mx-auto">
           {/* 主容器 - 左右布局 */}
           <div
+            className="px-2 md:flex-row flex-col md:gap-30 gap-10 md:items-start items-center"
             style={{
               display: 'flex',
               width: '100%',
-              alignItems: 'flex-start',
-              gap: '120px',
             }}
           >
             {/* 左侧：标题、文本和按钮容器 */}
             <div
               style={{
                 display: 'flex',
-                width: '575px',
                 flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: '40px',
               }}
+              className="md:w-[575px] w-full md:gap-10 gap-4 items-center md:items-start"
             >
               {/* 标题 */}
               <h2
                 style={{
                   color: 'var(--06, #000)',
-                  textAlign: 'left',
                   fontFeatureSettings: '"liga" off, "clig" off',
                   fontFamily: 'Inter',
-                  fontSize:
-                    selectedLanguage === Language.ZH_CN ||
-                    selectedLanguage === Language.ZH_TW ||
-                    selectedLanguage === Language.JA
-                      ? '60px'
-                      : selectedLanguage === Language.ES
-                        ? '70px'
-                        : '80px',
                   fontStyle: 'normal',
                   fontWeight: 700,
                   lineHeight: '130%',
                   letterSpacing: '-3px',
                   margin: 0,
                 }}
+                className="md:text-[70px] text-[54px] md:text-left text-center md:px-0 px-5"
               >
                 {t('theStartOfFilo')}
               </h2>
@@ -1574,17 +1687,16 @@ function Home() {
               {/* 文本 */}
               <div
                 style={{
-                  width: '417px',
                   color: 'var(--07, #707070)',
                   textAlign: 'left',
                   fontFeatureSettings: '"liga" off, "clig" off',
                   fontFamily: 'Inter',
-                  fontSize: '18px',
                   fontStyle: 'normal',
                   fontWeight: 400,
                   lineHeight: '150%',
                   margin: 0,
                 }}
+                className="md:w-[417px] w-full md:text-[18px] text-[16px] md:px-0 px-10"
               >
                 {t('theStartOfFiloDescription')
                   .split('\n\n')
@@ -1600,16 +1712,32 @@ function Home() {
                   ))}
               </div>
 
+              <div
+                style={{
+                  flex: '1',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                className="md:hidden flex mb-10"
+              >
+                <Image
+                  src="/icons/feature/team.svg"
+                  alt="Team working in office"
+                  width={500}
+                  height={300}
+                  style={{
+                    width: 'auto',
+                    height: 'auto',
+                    maxWidth: '100%',
+                  }}
+                />
+              </div>
               {/* 按钮区域 */}
               <div className="flex gap-[30px] items-start">
                 {/* Mobile 按钮 - Rainbow Button */}
-                <div
-                  className="inline-block"
-                  onMouseEnter={() => setIsGetFiloTodayHovered(true)}
-                  onMouseLeave={() => setIsGetFiloTodayHovered(false)}
-                >
+                <div className="inline-block group">
                   <RainbowButton
-                    className="text-white font-semibold text-base whitespace-nowrap"
+                    className="text-white h-[53px] font-semibold text-base whitespace-nowrap md:group-hover:px-5 md:px-0 md:group-hover:w-[380px] md:w-[150px]"
                     style={{
                       fontFamily: 'Inter',
                       transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -1617,11 +1745,7 @@ function Home() {
                       flexDirection: 'row',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      padding: isGetFiloTodayHovered ? '0 20px' : '0',
-                      width: isGetFiloTodayHovered ? '380px' : '150px',
-                      height: '53px',
                       minWidth: '150px',
-                      overflow: 'hidden',
                     }}
                   >
                     <div
@@ -1629,31 +1753,29 @@ function Home() {
                         position: 'relative',
                         width: '100%',
                         height: '100%',
-                        display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                       }}
+                      className="flex"
                     >
                       <div
                         style={{
                           position: 'absolute',
-                          opacity: isGetFiloTodayHovered ? 0 : 1,
                           transition: 'opacity 0.3s ease-in-out',
                           whiteSpace: 'nowrap',
                         }}
+                        className={`md:group-hover:opacity-0 md:opacity-100 md:pointer-events-none`}
+                        onClick={() => setIsGetFiloTodayHovered(!isGetFiloTodayHovered)}
                       >
                         {t('getFiloToday')}
                       </div>
                       <div
                         style={{
                           position: 'absolute',
-                          opacity: isGetFiloTodayHovered ? 1 : 0,
-                          display: 'flex',
-                          flexDirection: 'row',
                           alignItems: 'center',
-                          transform: isGetFiloTodayHovered ? 'translateX(0)' : 'translateX(20px)',
                           transition: 'all 0.3s ease-in-out 0.2s',
                         }}
+                        className={`bg-black h-[150px] md:h-[53px] justify-between md:justify-start py-4 md:py-0 rounded-xl md:bg-transparent md:group-hover:flex md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 top-full left-1/2 -translate-x-1/2 md:hidden md:flex-row flex-col md:opacity-0 md:group-hover:opacity-100 md:pointer-events-auto ${isGetFiloTodayHovered ? 'opacity-100 flex pointer-events-auto' : 'opacity-0 hidden pointer-events-none'}`}
                       >
                         <a
                           href="https://apple.co/43FINlq"
@@ -1666,24 +1788,18 @@ function Home() {
                             whiteSpace: 'nowrap',
                             padding: '0 15px',
                           }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.opacity = '0.8'
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.opacity = '1'
-                          }}
+                          className="md:hover:opacity-80"
                           target="_blank"
                         >
                           {t('ios')}
                         </a>
                         <div
                           style={{
-                            width: '1px',
-                            height: '16px',
                             background: 'rgba(255, 255, 255, 0.3)',
                             margin: '0',
                           }}
-                        ></div>
+                          className="md:w-[1px] md:h-4 h-[1px] w-full"
+                        />
                         <a
                           href="https://download.filomail.com/mac_upgrade/versions/latest/prod/arm64/Filo-arm64.dmg"
                           style={{
@@ -1695,12 +1811,7 @@ function Home() {
                             whiteSpace: 'nowrap',
                             padding: '0 15px',
                           }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.opacity = '0.8'
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.opacity = '1'
-                          }}
+                          className="md:hover:opacity-80"
                           target="_blank"
                           rel="noopener noreferrer"
                           download
@@ -1709,12 +1820,11 @@ function Home() {
                         </a>
                         <div
                           style={{
-                            width: '1px',
-                            height: '16px',
                             background: 'rgba(255, 255, 255, 0.3)',
                             margin: '0',
                           }}
-                        ></div>
+                          className="md:w-[1px] md:h-4 h-[1px] w-full my-4 md:my-0"
+                        />
                         <a
                           href="https://download.filomail.com/mac_upgrade/versions/latest/prod/x64/Filo-x64.dmg"
                           style={{
@@ -1726,12 +1836,7 @@ function Home() {
                             whiteSpace: 'nowrap',
                             padding: '0 15px',
                           }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.opacity = '0.8'
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.opacity = '1'
-                          }}
+                          className="md:hover:opacity-80"
                           target="_blank"
                           rel="noopener noreferrer"
                           download
@@ -1782,10 +1887,10 @@ function Home() {
             <div
               style={{
                 flex: '1',
-                display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
+              className="md:flex hidden"
             >
               <Image
                 src="/icons/feature/team.svg"
@@ -1832,9 +1937,9 @@ function Home() {
           padding: '30px 20px 110px 20px',
         }}
       >
-        <div className="max-w-[1280px] mx-auto w-full flex justify-between items-center">
+        <div className="max-w-[1280px] mx-auto w-full flex md:flex-row flex-col justify-between items-center">
           {/* 左侧链接 */}
-          <div className="flex items-center" style={{ gap: '24px' }}>
+          <div className="items-center md:flex hidden" style={{ gap: '24px' }}>
             <Link
               href="/terms-privacy?section=terms"
               style={{
@@ -1920,7 +2025,7 @@ function Home() {
           </div>
 
           {/* 右侧社交媒体图标 */}
-          <div className="flex items-center" style={{ gap: '30px' }}>
+          <div className="items-center flex gap-7.5">
             <a
               href="https://discord.gg/filo-mail"
               className="transition-all duration-300 hover:scale-110"
@@ -1995,6 +2100,91 @@ function Home() {
               />
             </a>
           </div>
+          <div className="items-center md:hidden flex gap-6 mt-5">
+            <Link
+              href="/terms-privacy?section=terms"
+              style={{
+                color: 'var(--06, #000)',
+                fontFamily: 'Inter',
+                fontSize: '13px',
+                fontStyle: 'normal',
+                fontWeight: 500,
+                lineHeight: '130%',
+                letterSpacing: '-0.3px',
+                textDecoration: 'none',
+                transition: 'opacity 0.3s ease',
+              }}
+              onMouseEnter={(e: any) => {
+                e.currentTarget.style.opacity = '0.7'
+              }}
+              onMouseLeave={(e: any) => {
+                e.currentTarget.style.opacity = '1'
+              }}
+              target="_blank"
+            >
+              {t('termsOfService')}
+            </Link>
+            <Link
+              href="/terms-privacy?section=privacy"
+              style={{
+                color: 'var(--06, #000)',
+                fontFamily: 'Inter',
+                fontSize: '13px',
+                fontStyle: 'normal',
+                fontWeight: 500,
+                lineHeight: '130%',
+                letterSpacing: '-0.3px',
+                textDecoration: 'none',
+                transition: 'opacity 0.3s ease',
+              }}
+              onMouseEnter={(e: any) => {
+                e.currentTarget.style.opacity = '0.7'
+              }}
+              onMouseLeave={(e: any) => {
+                e.currentTarget.style.opacity = '1'
+              }}
+              target="_blank"
+            >
+              {t('privacyPolicy')}
+            </Link>
+            <Link
+              href="/terms-privacy?section=data"
+              style={{
+                color: 'var(--06, #000)',
+                fontFamily: 'Inter',
+                fontSize: '13px',
+                fontStyle: 'normal',
+                fontWeight: 500,
+                lineHeight: '130%',
+                letterSpacing: '-0.3px',
+                textDecoration: 'none',
+                transition: 'opacity 0.3s ease',
+              }}
+              onMouseEnter={(e: any) => {
+                e.currentTarget.style.opacity = '0.7'
+              }}
+              onMouseLeave={(e: any) => {
+                e.currentTarget.style.opacity = '1'
+              }}
+              target="_blank"
+            >
+              {t('dataProtection')}
+            </Link>
+          </div>
+          <span
+            style={{
+              color: 'var(--07, #707070)',
+              fontFamily: 'Inter',
+              fontSize: '13px',
+              fontStyle: 'normal',
+              fontWeight: 500,
+              lineHeight: '130%',
+              letterSpacing: '-0.3px',
+            }}
+            className="md:hidden flex items-center justify-center mt-5"
+          >
+            {t('copyright')}
+          </span>
         </div>
       </div>
     </div>
