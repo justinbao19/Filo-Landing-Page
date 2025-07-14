@@ -123,8 +123,19 @@ button,
   width: max-content;
 }
 
+
+
 .sample-cards-scroll:hover {
   animation-play-state: paused;
+}
+
+@media (max-width: 768px) {
+  .sample-cards-scroll:hover {
+    animation-play-state: running;
+  }
+  .sample-cards-scroll.stop {
+    animation-play-state: paused;
+  }
 }
 
 .stop {

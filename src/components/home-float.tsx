@@ -46,9 +46,9 @@ const HomeFloat = () => {
         
       >
         {/* 左侧文字 */}
-        <div className="w-[224px] space-y-10">
-          <h2
-            className="md:text-[40px] text-[36px] font-normal text-center"
+        <div className="w-[224px] flex gap-5 flex-col">
+          <p
+            className="md:text-[40px] text-[36px] font-normal text-center block "
             style={{
               color: 'var(--06, #000)',
               fontFeatureSettings: '"liga" off, "clig" off',
@@ -58,10 +58,10 @@ const HomeFloat = () => {
             }}
           >
             {t('neverMissATask')}
-          </h2>
+          </p>
 
           <p
-            className="md:text-[20px] text-[16px] font-normal text-center"
+            className="md:text-[20px] text-[16px] font-normal text-center block"
             style={{
               color: 'var(--07, #707070)',
               fontFeatureSettings: '"liga" off, "clig" off',
@@ -69,7 +69,6 @@ const HomeFloat = () => {
               fontStyle: 'normal',
               lineHeight: '150%',
               alignSelf: 'stretch',
-              margin: 0,
               width: '100%',
             }}
           >

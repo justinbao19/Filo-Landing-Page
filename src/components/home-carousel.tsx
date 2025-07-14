@@ -40,6 +40,18 @@ const HomeCarousel = () => {
     }
   }, [])
 
+  const [activeIndex, setActiveIndex] = useState(-1)
+
+  const mobileOnClick = (index: number) => {
+    if (activeIndex === index) {
+      document.querySelector('.sample-cards-scroll')?.classList.remove('stop')
+      setActiveIndex(-1)
+      return
+    }
+    setActiveIndex(index)
+    document.querySelector('.sample-cards-scroll')?.classList.add('stop')
+  }
+
   return (
     <div
       className={`sample-cards-scroll flex gap-5 md:gap-10 ${!isSampleCardsVisible ? 'stop' : ''}`}
@@ -52,12 +64,13 @@ const HomeCarousel = () => {
     >
       {/* 卡片 1 - Understand It All */}
       <div
-        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
+        className={`flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105 ${activeIndex === 0 ? 'scale-105' : ''}`}
         style={{
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
+        onClick={() => mobileOnClick(0)}
       >
         <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
@@ -68,6 +81,7 @@ const HomeCarousel = () => {
               fontFamily: 'Inter',
               fontStyle: 'normal',
               lineHeight: '130%',
+              letterSpacing: '-0.5px',
             }}
           >
             {t('understandItAll').includes('\n')
@@ -93,13 +107,13 @@ const HomeCarousel = () => {
           <div className="flex-1 flex items-end">
             <div className="relative w-full h-full">
               {/* Japanese email */}
-              <div className="w-[90%] h-[90%] absolute top-0 left-0">
+              <div className="w-[90%] h-[90%] absolute top-0 left-0 md:shadow-xl shadow rounded-3xl">
                 <Image
                   src="/icons/feature/sample1_jp.png"
                   alt="Japanese email example"
                   width={258}
                   height={350}
-                  className="w-full h-auto md:shadow-xl shadow"
+                  className="w-full h-auto "
                   style={{
                     display: 'block',
                     borderRadius: '12px',
@@ -107,13 +121,13 @@ const HomeCarousel = () => {
                 />
               </div>
               {/* English translation */}
-              <div className="w-[80%] h-[80%] absolute top-[15%] left-[20%]">
+              <div className="w-[80%] h-[80%] absolute top-[15%] left-[20%] rounded-3xl md:shadow-xl shadow">
                 <Image
                   src="/icons/feature/sample1_en.png"
                   alt="English translation example"
                   width={258}
                   height={350}
-                  className="w-full h-auto md:shadow-xl shadow"
+                  className="w-full h-auto "
                   style={{
                     display: 'block',
                     borderRadius: '12px',
@@ -127,12 +141,13 @@ const HomeCarousel = () => {
 
       {/* 卡片 2 - Promo, Condensed */}
       <div
-        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
+        className={`flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105 ${activeIndex === 1 ? 'scale-105' : ''}`}
         style={{
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
+        onClick={() => mobileOnClick(1)}
       >
         <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
@@ -143,6 +158,7 @@ const HomeCarousel = () => {
               fontFamily: 'Inter',
               fontStyle: 'normal',
               lineHeight: '130%',
+              letterSpacing: '-0.5px',
             }}
           >
             {t('promoCondensed').includes('\n')
@@ -183,12 +199,13 @@ const HomeCarousel = () => {
 
       {/* 卡片 3 - What do I say? */}
       <div
-        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
+        className={`flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105 ${activeIndex === 2 ? 'scale-105' : ''}`}
         style={{
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
+        onClick={() => mobileOnClick(2)}
       >
         <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
@@ -199,6 +216,7 @@ const HomeCarousel = () => {
               fontFamily: 'Inter',
               fontStyle: 'normal',
               lineHeight: '130%',
+              letterSpacing: '-0.5px',
             }}
           >
             {t('whatDoISay').includes('\n')
@@ -239,12 +257,13 @@ const HomeCarousel = () => {
 
       {/* 卡片 4 - Boss Bomb Defused */}
       <div
-        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
+        className={`flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105 ${activeIndex === 3 ? 'scale-105' : ''}`}
         style={{
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
+        onClick={() => mobileOnClick(3)}
       >
         <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
@@ -255,6 +274,7 @@ const HomeCarousel = () => {
               fontFamily: 'Inter',
               fontStyle: 'normal',
               lineHeight: '130%',
+              letterSpacing: '-0.5px',
             }}
           >
             {t('bossBombDefused').includes('\n')
@@ -295,12 +315,13 @@ const HomeCarousel = () => {
 
       {/* 卡片 5 - Goodbye Auto-Bill */}
       <div
-        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
+        className={`flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105 ${activeIndex === 4 ? 'scale-105' : ''}`}
         style={{
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
+        onClick={() => mobileOnClick(4)}
       >
         <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
@@ -311,6 +332,7 @@ const HomeCarousel = () => {
               fontFamily: 'Inter',
               fontStyle: 'normal',
               lineHeight: '130%',
+              letterSpacing: '-0.5px',
             }}
           >
             {t('goodbyeAutoBill').includes('\n')
@@ -352,12 +374,13 @@ const HomeCarousel = () => {
       {/* 重复卡片以实现无缝循环 */}
       {/* 卡片 1 - Understand It All (重复) */}
       <div
-        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
+        className={`flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105 ${activeIndex === 5 ? 'scale-105' : ''}`}
         style={{
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
+        onClick={() => mobileOnClick(5)}
       >
         <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
@@ -368,6 +391,7 @@ const HomeCarousel = () => {
               fontFamily: 'Inter',
               fontStyle: 'normal',
               lineHeight: '130%',
+              letterSpacing: '-0.5px',
             }}
           >
             {t('understandItAll').includes('\n')
@@ -393,13 +417,13 @@ const HomeCarousel = () => {
           <div className="flex-1 flex items-end">
             <div className="relative w-full h-full">
               {/* Japanese email */}
-              <div className="w-[90%] h-[90%] absolute top-0 left-0">
+              <div className="w-[90%] h-[90%] absolute top-0 left-0 md:shadow-xl shadow rounded-3xl">
                 <Image
                   src="/icons/feature/sample1_jp.png"
                   alt="Japanese email example"
                   width={258}
                   height={350}
-                  className="w-full h-auto md:shadow-xl shadow"
+                  className="w-full h-auto"
                   style={{
                     display: 'block',
                     borderRadius: '12px',
@@ -407,13 +431,13 @@ const HomeCarousel = () => {
                 />
               </div>
               {/* English translation */}
-              <div className="w-[80%] h-[80%] absolute top-[15%] left-[20%]">
+              <div className="w-[80%] h-[80%] absolute top-[15%] left-[20%] md:shadow-xl shadow rounded-3xl">
                 <Image
                   src="/icons/feature/sample1_en.png"
                   alt="English translation example"
                   width={258}
                   height={350}
-                  className="w-full h-auto md:shadow-xl shadow"
+                  className="w-full h-auto"
                   style={{
                     display: 'block',
                     borderRadius: '12px',
@@ -427,12 +451,13 @@ const HomeCarousel = () => {
 
       {/* 卡片 2 - Promo, Condensed (重复) */}
       <div
-        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
+        className={`flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105 ${activeIndex === 6 ? 'scale-105' : ''}`}
         style={{
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
+        onClick={() => mobileOnClick(6)}
       >
         <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
@@ -443,6 +468,7 @@ const HomeCarousel = () => {
               fontFamily: 'Inter',
               fontStyle: 'normal',
               lineHeight: '130%',
+              letterSpacing: '-0.5px',
             }}
           >
             {t('promoCondensed').includes('\n')
@@ -483,12 +509,13 @@ const HomeCarousel = () => {
 
       {/* 卡片 3 - What do I say? (重复) */}
       <div
-        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
+        className={`flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105 ${activeIndex === 7 ? 'scale-105' : ''}`}
         style={{
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
+        onClick={() => mobileOnClick(7)}
       >
         <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
@@ -499,6 +526,7 @@ const HomeCarousel = () => {
               fontFamily: 'Inter',
               fontStyle: 'normal',
               lineHeight: '130%',
+              letterSpacing: '-0.5px',
             }}
           >
             {t('whatDoISay').includes('\n')
@@ -539,12 +567,13 @@ const HomeCarousel = () => {
 
       {/* 卡片 4 - Boss Bomb Defused (重复) */}
       <div
-        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
+        className={`flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105 ${activeIndex === 8 ? 'scale-105' : ''}`}
         style={{
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
+        onClick={() => mobileOnClick(8)}
       >
         <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
@@ -555,6 +584,7 @@ const HomeCarousel = () => {
               fontFamily: 'Inter',
               fontStyle: 'normal',
               lineHeight: '130%',
+              letterSpacing: '-0.5px',
             }}
           >
             {t('bossBombDefused')
@@ -593,12 +623,13 @@ const HomeCarousel = () => {
 
       {/* 卡片 5 - Goodbye Auto-Bill (重复) */}
       <div
-        className="flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105"
+        className={`flex-shrink-0 md:rounded-[20px] rounded-2xl md:h-[570px] h-[352px] w-[372px] md:w-[600px] transition-all duration-200 hover:scale-105 ${activeIndex === 9 ? 'scale-105' : ''}`}
         style={{
           border: '0.5px solid rgba(0, 0, 0, 0.04)',
           background: 'var(--09, #FCFAFA)',
           position: 'relative',
         }}
+        onClick={() => mobileOnClick(9)}
       >
         <div className="w-full h-full flex flex-col md:p-7.5 p-4">
           <h3
@@ -609,6 +640,7 @@ const HomeCarousel = () => {
               fontFamily: 'Inter',
               fontStyle: 'normal',
               lineHeight: '130%',
+              letterSpacing: '-0.5px',
             }}
           >
             {t('goodbyeAutoBill').includes('\n')

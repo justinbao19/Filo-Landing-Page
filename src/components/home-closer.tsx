@@ -193,7 +193,7 @@ const HomeCloser = () => {
        
         {/* Mobile 视图 */}
         <div
-          className={`w-full shrink-0 inline-block h-fit transition-all duration-700 translate-y-0 will-change-[transform,opacity] ${
+          className={`w-full shrink-0 inline-block h-fit transition-all duration-300 md:duration-700 translate-y-0 will-change-[transform,opacity] ${
             selectedView === 'mobile'
               ? 'translate-x-0 opacity-100 scale-100'
               : '-translate-x-full opacity-0 scale-95'
@@ -314,7 +314,7 @@ const HomeCloser = () => {
 
         {/* Desktop 视图 */}
         <div
-          className={`w-full shrink-0 inline-block h-fit translate-y-40 md:translate-y-0 transition-all duration-700 will-change-[transform,opacity] ${
+          className={`w-full shrink-0 inline-block h-fit translate-y-40 md:translate-y-0 transition-all duration-300 md:duration-700 will-change-[transform,opacity] ${
             selectedView === 'desktop'
               ? '-translate-x-full opacity-100 scale-100'
               : 'translate-x-0 opacity-0 scale-95'

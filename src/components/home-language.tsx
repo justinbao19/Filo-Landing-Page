@@ -83,7 +83,7 @@ const HomeLanguage = () => {
         {/* 语言下拉菜单 */}
         {isLanguageDropdownOpen && (
           <div
-            className="absolute md:bg-[rgba(0,0,0,0.04)] bg-[rgba(255,255,255,0.8)] top-full right-0 mt-2 z-40 dropdown-animate pl-3 py-3 pr-5 inline-flex gap-4 rounded-2xl flex-col items-start"
+            className="absolute md:bg-[rgba(0,0,0,0.04)] bg-[rgba(255,255,255,1)] top-full right-0 mt-2 z-40 dropdown-animate pl-3 py-3 pr-5 inline-flex gap-4 rounded-2xl flex-col items-start"
             style={{
               width: '140px',
               whiteSpace: 'nowrap',

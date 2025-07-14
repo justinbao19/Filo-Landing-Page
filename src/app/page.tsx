@@ -168,7 +168,7 @@ function Home() {
                   fontStyle: 'normal',
                   fontWeight: 700,
                   lineHeight: '130%',
-                  letterSpacing: '-2px',
+                  letterSpacing: '-3px',
                 }}
               >
                 {t('slogan')}
@@ -201,27 +201,18 @@ function Home() {
               {/* App Store 按钮 - 使用提供的SVG */}
               <a
                 href="https://apple.co/43FINlq"
-                className="inline-flex md:rounded-[20px] rounded-2xl md:px-5 px-3 md:h-[74px] h-[54px] items-center transition-all gap-4 duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-200/50 hover:brightness-110"
-                style={{
-                  border: '1.5px solid var(--14, rgba(0, 0, 0, 0.04))',
-                  background: 'var(--06, #000)',
-                  boxShadow:
-                    '0px 100px 80px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.03), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.04), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.05), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.07)',
-                  colorScheme: 'light',
-                }}
+                className="inline-flex md:px-5 px-3 md:h-[74px] h-[54px] items-center transition-all gap-4 duration-300 hover:-translate-y-1"
                 target="_blank"
               >
                 <Image
-                  className="md:h-10 h-8"
-                  src="/icons/apple-logo.svg"
+                  className="md:w-[258px] w-[175px] md:rounded-3xl rounded-2xl"
+                  src="/icons/feature/mobile-apple-download-btn.png"
                   alt="Apple Logo"
-                  width={41}
-                  height={50}
+                  width={525}
+                  height={162}
+                  style={{boxShadow:
+                    '0px 100px 80px 0px rgba(0, 0, 0, 0.02), 0px 41.778px 33.422px 0px rgba(0, 0, 0, 0.03), 0px 22.336px 17.869px 0px rgba(0, 0, 0, 0.04), 0px 12.522px 10.017px 0px rgba(0, 0, 0, 0.04), 0px 6.65px 5.32px 0px rgba(0, 0, 0, 0.05), 0px 2.767px 2.214px 0px rgba(0, 0, 0, 0.07)',}}
                 />
-                <p className="text-white flex items-center flex-col font-bold md:h-10 h-9 justify-between">
-                  <span className="md:text-[20px] text-[13px] leading-1">Download on the </span>
-                  <span className="md:text-[34px] text-[23px] leading-5">App Store</span>
-                </p>
               </a>
 
               {/* macOS 按钮 - 使用新的SVG with dropdown */}
@@ -340,7 +331,7 @@ function Home() {
 
       {/* Sample Emails 区域 */}
       <section
-        className={`w-full bg-white pt-15 md:pt-[200px] md:pb-32 mb-20 scroll-animate relative z-10 visible`}
+        className={`w-full bg-white pt-15 md:pt-[120px] md:pb-32 mb-20 scroll-animate relative z-10 visible`}
       >
         <div className="w-full">
           {/* 卡片自动滚动容器 */}
@@ -371,7 +362,7 @@ function Home() {
 
       {/* Respond the tone you want 区域 */}
       <div
-        className={`scroll-animate md:gap-30 gap-15 md:pt-[120px] pt-[70px] md:pb-[160px] pb-[100px] ${visibleSections.has('tone') ? 'visible' : ''}`}
+        className={`scroll-animate md:gap-30 gap-15 md:pt-[50px] pt-[70px] md:pb-[160px] pb-[100px] ${visibleSections.has('tone') ? 'visible' : ''}`}
         data-section="tone"
         style={{
           display: 'flex',
@@ -384,7 +375,7 @@ function Home() {
         {/* 这里将添加新板块的内容 */}
         <div style={{ width: '100%' }}>
           <h2
-            className="md:text-[70px] text-[56px] font-bold flex flex-col justify-center md:flex-row"
+            className="md:text-[70px] text-[56px] font-bold flex flex-col justify-center"
             style={{
               alignSelf: 'stretch',
               color: 'var(--06, #000)',
@@ -398,8 +389,8 @@ function Home() {
               margin: 0,
             }}
           >
-            <p>{t('respondTheToneYouWant1')}</p>
-            <p>{t('respondTheToneYouWant2')}</p>
+             <p>{`${t('respondTheToneYouWant1')}`}</p>
+             <p>{t('respondTheToneYouWant2')}</p>
           </h2>
         </div>
 
@@ -780,7 +771,7 @@ function Home() {
 
       {/* Or Write with AI 区域 */}
       <div
-        className={`scroll-animate md:pb-[260px] pb-[80px] ${visibleSections.has('write-ai') ? 'visible' : ''}`}
+        className={`scroll-animate md:pb-[180px] pb-[80px] ${visibleSections.has('write-ai') ? 'visible' : ''}`}
         data-section="write-ai"
         style={{
           display: 'flex',
@@ -1279,7 +1270,7 @@ function Home() {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}
-          className="md:px-15 md:gap-30 gap-10 flex md:flex-row flex-col justify-center items-center"
+          className=" md:gap-30 gap-10 flex md:flex-row flex-col justify-center items-center"
         >
           {/* 左侧储物柜图片 */}
           <div
