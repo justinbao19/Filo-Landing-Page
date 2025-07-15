@@ -1,3 +1,4 @@
+'use client'
 import { useTranslations } from 'next-intl'
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
 
