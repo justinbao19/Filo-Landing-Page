@@ -1,4 +1,5 @@
-import { Language } from '@/lib/locale'
+'use client'
+
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { memo, useCallback, useState } from 'react'

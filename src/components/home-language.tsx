@@ -1,3 +1,4 @@
+'use client'
 import { Language, LANGUAGE_OPTIONS } from '@/lib/locale'
 import Image from 'next/image'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'

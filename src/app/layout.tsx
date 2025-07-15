@@ -32,6 +32,26 @@ export const metadata: Metadata = {
     shortcut: '/favicon-16.png',
     apple: '/favicon-48.png',
   },
+  openGraph: {
+    title: 'Filo - Inbox to Done',
+    description:
+      'Turn overwhelming emails into crystal-clear summaries, quick replies and AI-generated to-dos in one sec.',
+    siteName: 'Filo',
+    type: 'website',
+    url: 'https://filo.ai',
+    images: [
+      { url: '/og-image.png', width: 1200, height: 630, alt: 'Filo - Inbox to Done' },
+    ],
+  },
+  twitter: {
+    site: '@Filo_Mail',
+    title: 'Filo - Inbox to Done',
+    card: 'summary_large_image',
+    description: 'Turn overwhelming emails into crystal-clear summaries, quick replies and AI-generated to-dos in one sec.',
+    images: [
+      { url: '/og-image.png', width: 1200, height: 630, alt: 'Filo - Inbox to Done' },
+    ],
+  }
 }
 
 export default async function RootLayout({
