@@ -38,7 +38,7 @@ export const metadata: Metadata = {
       'Turn overwhelming emails into crystal-clear summaries, quick replies and AI-generated to-dos in one sec.',
     siteName: 'Filo',
     type: 'website',
-    url: 'https://filo.ai',
+    url: 'https://www.filomail.com/',
     images: [
       { url: '/og-image.png', width: 1200, height: 630, alt: 'Filo - Inbox to Done' },
     ],
@@ -46,6 +46,7 @@ export const metadata: Metadata = {
   twitter: {
     site: '@Filo_Mail',
     title: 'Filo - Inbox to Done',
+    creator: '@Filo_Mail',
     card: 'summary_large_image',
     description: 'Turn overwhelming emails into crystal-clear summaries, quick replies and AI-generated to-dos in one sec.',
     images: [
