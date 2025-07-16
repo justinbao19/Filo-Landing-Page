@@ -20,7 +20,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Filo - Inbox to Done',
+  title: 'Filo Mail - AI Email & To-dos',
   description:
     'Turn overwhelming emails into crystal-clear summaries, quick replies and AI-generated to-dos in one sec.',
   icons: {
@@ -33,24 +33,24 @@ export const metadata: Metadata = {
     apple: '/favicon-48.png',
   },
   openGraph: {
-    title: 'Filo - Inbox to Done',
+    title: 'Filo Mail - AI Email & To-dos',
     description:
       'Turn overwhelming emails into crystal-clear summaries, quick replies and AI-generated to-dos in one sec.',
     siteName: 'Filo',
     type: 'website',
     url: 'https://www.filomail.com/',
     images: [
-      { url: '/og-image.png', width: 1200, height: 630, alt: 'Filo - Inbox to Done' },
+      { url: '/og-image.png', width: 1200, height: 630, alt: 'Filo Mail - AI Email & To-dos' },
     ],
   },
   twitter: {
     site: '@Filo_Mail',
-    title: 'Filo - Inbox to Done',
+    title: 'Filo Mail - AI Email & To-dos',
     creator: '@Filo_Mail',
     card: 'summary_large_image',
     description: 'Turn overwhelming emails into crystal-clear summaries, quick replies and AI-generated to-dos in one sec.',
     images: [
-      { url: '/og-image.png', width: 1200, height: 630, alt: 'Filo - Inbox to Done' },
+      { url: '/og-image.png', width: 1200, height: 630, alt: 'Filo Mail - AI Email & To-dos' },
     ],
   }
 }
