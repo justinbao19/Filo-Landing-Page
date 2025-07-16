@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import HomeFloat from './home-float'
 import HomeTyping from './home-typing'
 import Image from 'next/image'
@@ -8,7 +8,7 @@ import Link from 'next/link'
 
 const HomeSection = () => {
   const t = useTranslations('home')
-
+  const locale = useLocale()
   const getFiloTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [isGetFiloDropdownOpen, setIsGetFiloDropdownOpen] = useState(false)
   const [expandedFaqs, setExpandedFaqs] = useState<Set<number>>(new Set())
@@ -66,39 +66,39 @@ const HomeSection = () => {
     const sections = new Set<string>()
   }, [])
 
-    // 处理Get Filo Today下拉菜单鼠标进入
-    const handleGetFiloMouseEnter = useCallback(() => {
-      if (getFiloTimeoutRef.current) {
-        clearTimeout(getFiloTimeoutRef.current)
-        getFiloTimeoutRef.current = null
-      }
-      setIsGetFiloDropdownOpen(true)
-    }, [])
-  
-    // 处理Get Filo Today下拉菜单鼠标离开
-    const handleGetFiloMouseLeave = useCallback(() => {
-      getFiloTimeoutRef.current = setTimeout(() => {
-        setIsGetFiloDropdownOpen(false)
-      }, 100) // 100ms 延迟，给用户时间移动到下拉菜单
-    }, [])
-  
-    // 处理Get Filo Today按钮点击
-    const handleGetFiloButtonClick = () => {
-      setIsGetFiloDropdownOpen(!isGetFiloDropdownOpen)
+  // 处理Get Filo Today下拉菜单鼠标进入
+  const handleGetFiloMouseEnter = useCallback(() => {
+    if (getFiloTimeoutRef.current) {
+      clearTimeout(getFiloTimeoutRef.current)
+      getFiloTimeoutRef.current = null
     }
-  
-    // 处理FAQ折叠展开
-    const handleFaqToggle = useCallback((index: number) => {
-      setExpandedFaqs((prev) => {
-        const newSet = new Set(prev)
-        if (newSet.has(index)) {
-          newSet.delete(index)
-        } else {
-          newSet.add(index)
-        }
-        return newSet
-      })
-    }, [])
+    setIsGetFiloDropdownOpen(true)
+  }, [])
+
+  // 处理Get Filo Today下拉菜单鼠标离开
+  const handleGetFiloMouseLeave = useCallback(() => {
+    getFiloTimeoutRef.current = setTimeout(() => {
+      setIsGetFiloDropdownOpen(false)
+    }, 100) // 100ms 延迟，给用户时间移动到下拉菜单
+  }, [])
+
+  // 处理Get Filo Today按钮点击
+  const handleGetFiloButtonClick = () => {
+    setIsGetFiloDropdownOpen(!isGetFiloDropdownOpen)
+  }
+
+  // 处理FAQ折叠展开
+  const handleFaqToggle = useCallback((index: number) => {
+    setExpandedFaqs((prev) => {
+      const newSet = new Set(prev)
+      if (newSet.has(index)) {
+        newSet.delete(index)
+      } else {
+        newSet.add(index)
+      }
+      return newSet
+    })
+  }, [])
 
   return (
     <>
@@ -131,7 +131,7 @@ const HomeSection = () => {
         {/* 这里将添加新板块的内容 */}
         <div style={{ width: '100%' }}>
           <h2
-            className="md:text-[70px] text-[56px] font-bold flex flex-col justify-center"
+            className={`text-[56px] font-bold flex flex-col justify-center ${locale === 'ja' || locale === 'zh-TW' || locale === 'zh-CN' || locale === 'ko' ? 'md:text-[60px]' : 'md:text-[70px]'}`}
             style={{
               alignSelf: 'stretch',
               color: 'var(--06, #000)',
@@ -633,7 +633,7 @@ const HomeSection = () => {
                 letterSpacing: '-3px',
                 margin: 0,
               }}
-              className="md:text-[70px] text-[56px]"
+              className={`text-[56px] ${locale === 'ja' || locale === 'zh-TW' || locale === 'zh-CN' || locale === 'ko' ? 'md:text-[60px]' : 'md:text-[70px]'}`}
             >
               {t('poweredByTopTierAILine1')}
               <br />
@@ -1077,7 +1077,7 @@ const HomeSection = () => {
                 letterSpacing: '-2.4px',
                 margin: 0,
               }}
-              className="md:text-[70px] text-[56px]"
+              className={`text-[56px] ${locale === 'ja' || locale === 'zh-TW' || locale === 'zh-CN' || locale === 'ko' ? 'md:text-[60px]' : 'md:text-[70px]'}`}
             >
               {t('noPeeking')}
               <br />
@@ -1239,7 +1239,7 @@ const HomeSection = () => {
               letterSpacing: '-3px',
               margin: 0,
             }}
-            className="md:text-[70px] text-[56px]"
+            className={`text-[56px] ${locale === 'ja' || locale === 'zh-TW' || locale === 'zh-CN' || locale === 'ko' ? 'md:text-[60px]' : 'md:text-[70px]'}`}
           >
             {t('faqTitle')}
           </h2>

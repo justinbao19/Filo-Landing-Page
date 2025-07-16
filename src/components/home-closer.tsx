@@ -1,11 +1,11 @@
 'use client'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import Image from 'next/image'
 import { memo, useCallback, useEffect, useState } from 'react'
 
 const HomeCloser = () => {
   const t = useTranslations('home')
-
+  const locale = useLocale()
   const [selectedView, setSelectedView] = useState<'mobile' | 'desktop'>('mobile')
   const [hasPlayedLineAnimation, setHasPlayedLineAnimation] = useState(false)
 
@@ -38,7 +38,6 @@ const HomeCloser = () => {
     }
   }, [handleViewToggle])
 
-
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -62,11 +61,7 @@ const HomeCloser = () => {
 
   // A Closer Look Mobile 线条动画触发 - 只在页面加载时触发一次
   useEffect(() => {
-    if (
-      !hasPlayedLineAnimation &&
-      selectedView === 'mobile' &&
-      isVisible
-    ) {
+    if (!hasPlayedLineAnimation && selectedView === 'mobile' && isVisible) {
       // 延迟触发动画，确保页面已加载
       const initialDelay = setTimeout(() => {
         // 重置动画状态
@@ -117,16 +112,14 @@ const HomeCloser = () => {
             lineHeight: '130%',
             letterSpacing: '-2px',
           }}
-          className={`md:text-[70px] text-[56px]`}
+          className={`text-[56px] ${locale === 'ja' || locale === 'zh-TW' || locale === 'zh-CN' || locale === 'ko' ? 'md:text-[60px]' : 'md:text-[70px]'}`}
         >
           {t('aCloserLook')}
         </h2>
       </div>
 
       {/* Mobile/Desktop 切换按钮 */}
-      <div
-        className="flex justify-center mb-15 relative z-20 will-change-transform md:mb-20"
-      >
+      <div className="flex justify-center mb-15 relative z-20 will-change-transform md:mb-20">
         <div
           className="relative grid grid-cols-2 items-center justify-center md:shadow-2xl shadow-xl md:w-[368px] w-[276px] md:h-[58px] h-[46px] py-1 px-1"
           style={{
@@ -187,10 +180,7 @@ const HomeCloser = () => {
       </div>
 
       {/* 展示区域容器 */}
-      <div
-        className="relative flex flex-nowrap z-10 md:mb-30 overflow-hidden w-full"
-      >
-       
+      <div className="relative flex flex-nowrap z-10 md:mb-30 overflow-hidden w-full">
         {/* Mobile 视图 */}
         <div
           className={`w-full shrink-0 inline-block h-fit transition-all duration-300 md:duration-700 translate-y-0 will-change-[transform,opacity] ${

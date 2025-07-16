@@ -8,6 +8,7 @@ import HomeLanguage from '@/components/home-language'
 import HomeSection from '@/components/home-section'
 import HomeRainbowBtn from '@/components/home-rainbow-btn'
 import HomeDownloadDropdown from '@/components/home-download-dropdown'
+import HomeTitle from '@/components/home-title'
 
 export default async function Home() {
 
@@ -137,21 +138,7 @@ export default async function Home() {
               className="md:w-[575px] w-full md:gap-10 gap-4 items-center md:items-start"
             >
               {/* 标题 */}
-              <h2
-                style={{
-                  color: 'var(--06, #000)',
-                  fontFeatureSettings: '"liga" off, "clig" off',
-                  fontFamily: 'Inter',
-                  fontStyle: 'normal',
-                  fontWeight: 700,
-                  lineHeight: '130%',
-                  letterSpacing: '-3px',
-                  margin: 0,
-                }}
-                className="md:text-[70px] text-[54px] md:text-left text-center md:px-0 px-5"
-              >
-                {t('theStartOfFilo')}
-              </h2>
+              <HomeTitle title={t('theStartOfFilo')} />
 
               {/* 文本 */}
               <div
